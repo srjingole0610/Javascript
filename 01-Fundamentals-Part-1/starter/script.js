@@ -76,3 +76,30 @@ console.log(year);
 console.log(typeof year);
 
 console.log(typeof null); //null is an object; typeof returns object ; javascript bug but never corrected due to legacy reasons
+
+
+// ****************************************** VAR, LET, CONST **************************************
+
+// 1. Let
+let myAge = 29;  //declaration and initialization
+myAge = 30; //reassignment
+console.log(myAge);
+
+let currentYear;  //declaration
+currentYear = 2025; //initialization
+console.log(currentYear);
+
+// 2.Const
+const birthYear = 1991; //declaration and initialization
+// birthYear = 1990; //error: assignment to constant variable; cannot reassign
+console.log(birthYear);
+
+
+// 3. Var
+var myJob = "Programmer"; //declaration and initialization
+myJob = "Teacher"; //reassignment
+console.log(myJob);
+
+// No need to declare variable with any keyword but it is not recommended. It is called implicit declaration
+favSport = "Cricket"; //declaration and initialization
+console.log(favSport);
