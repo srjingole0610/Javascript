@@ -18,8 +18,6 @@ console.log(firstName);
 console.log(firstName);
 
 // // let 3year = 3;  //Variable name cannot start with numbers
-// // let $function = 27;  //Variable name cannot start with $ and _ (Dollar and underscore are not valid in JS)
-
 // let first&last = "Suraj Ingole";  //Variable name cannot contain & (Ampersand)
 // let new = 27;  //Variable name cannot be a reserved keyword (new is a reserved keyword)
 let _function = 27; //Variable name can contain _ (underscore)
