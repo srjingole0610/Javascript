@@ -145,3 +145,32 @@ console.log(ageSarah >= 18); // greater than or equal to
 console.log(ageSuraj < ageSarah); // less than
 console.log(ageSarah <= 18); // less than or equal to
 
+// ************************** operator precedence ****************************
+
+const now = 2025;
+const ageSuraj1 = now - 1995;
+const ageSarah1 = now - 2003;
+
+// Math operators have higher precedence than comparison operators
+console.log(now - 1995 > now - 2003); // true
+
+// Multiple operations - left to right
+let x1, y;
+x1 = y = 25 - 10 - 5; // x = y = 10
+console.log(x1, y); // 10, 10
+
+// Parentheses have highest precedence
+const averageAge = (ageSuraj1 + ageSarah1) / 2;
+console.log(averageAge);
+
+// Operator precedence examples
+console.log(3 + 4 * 5); // 23 (multiplication before addition)
+console.log((3 + 4) * 5); // 35 (parentheses first)
+console.log(2 ** 3 ** 2); // 512 (exponentiation right-to-left)
+console.log((2 ** 3) ** 2); // 64 (parentheses first)
+
+// Assignment operators have lowest precedence
+let a = 5;
+let b = 10;
+let c = a + b * 2; // multiplication before addition
+console.log(c); // 25
