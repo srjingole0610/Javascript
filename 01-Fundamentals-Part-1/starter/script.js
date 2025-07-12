@@ -75,15 +75,14 @@ console.log(typeof year);
 
 console.log(typeof null); //null is an object; typeof returns object ; javascript bug but never corrected due to legacy reasons
 
-
 // ****************************************** VAR, LET, CONST **************************************
 
 // 1. Let
-let myAge = 29;  //declaration and initialization
+let myAge = 29; //declaration and initialization
 myAge = 30; //reassignment
 console.log(myAge);
 
-let currentYear;  //declaration
+let currentYear; //declaration
 currentYear = 2025; //initialization
 console.log(currentYear);
 
@@ -91,7 +90,6 @@ console.log(currentYear);
 const birthYear = 1991; //declaration and initialization
 // birthYear = 1990; //error: assignment to constant variable; cannot reassign
 console.log(birthYear);
-
 
 // 3. Var
 var myJob = "Programmer"; //declaration and initialization
@@ -107,12 +105,12 @@ console.log(favSport);
 // 1. Arithmetic Operators
 
 const yearNow = 2025;
- const ageSuraj = yearNow - 1995;
- const ageSarah = yearNow - 2003;
- console.log(ageSuraj, ageSarah);
+const ageSuraj = yearNow - 1995;
+const ageSarah = yearNow - 2003;
+console.log(ageSuraj, ageSarah);
 
- console.log(ageSuraj *2);
- console.log(ageSuraj / 7);
+console.log(ageSuraj * 2);
+console.log(ageSuraj / 7);
 console.log(2 ** 3); // 2 to the power of 3 (2^3)
 
 const myFirstName = "Suraj";
@@ -122,7 +120,7 @@ console.log(myFirstName + " " + myLastName); //concatenation
 
 // 2. Assignment Operators
 
-let myAssign = 10 + 5;  // addition assignment
+let myAssign = 10 + 5; // simple assignment
 console.log(myAssign);
 myAssign += 10; // addition assignment
 console.log(myAssign);
@@ -166,7 +164,7 @@ console.log(averageAge);
 // Operator precedence examples
 console.log(3 + 4 * 5); // 23 (multiplication before addition)
 console.log((3 + 4) * 5); // 35 (parentheses first)
-console.log(2 ** 3 ** 2); // 512 (exponentiation right-to-left)
+console.log(2 ** (3 ** 2)); // 512 (exponentiation right-to-left)
 console.log((2 ** 3) ** 2); // 64 (parentheses first)
 
 // Assignment operators have lowest precedence
