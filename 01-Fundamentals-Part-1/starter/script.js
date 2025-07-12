@@ -101,3 +101,47 @@ console.log(myJob);
 // No need to declare variable with any keyword but it is not recommended. It is called implicit declaration
 favSport = "Cricket"; //declaration and initialization
 console.log(favSport);
+
+//****************************************** JavaScript Operators **************************************
+
+// 1. Arithmetic Operators
+
+const yearNow = 2025;
+ const ageSuraj = yearNow - 1995;
+ const ageSarah = yearNow - 2003;
+ console.log(ageSuraj, ageSarah);
+
+ console.log(ageSuraj *2);
+ console.log(ageSuraj / 7);
+console.log(2 ** 3); // 2 to the power of 3 (2^3)
+
+const myFirstName = "Suraj";
+const myLastName = "Ingole";
+
+console.log(myFirstName + " " + myLastName); //concatenation
+
+// 2. Assignment Operators
+
+let myAssign = 10 + 5;  // addition assignment
+console.log(myAssign);
+myAssign += 10; // addition assignment
+console.log(myAssign);
+myAssign *= 4; // multiplication assignment
+console.log(myAssign);
+
+// 3. Increment and Decrement Operators
+
+let z = 10;
+console.log(z);
+z++;
+console.log(z);
+z--;
+console.log(z);
+
+// 4. Comparison Operators
+
+console.log(ageSuraj > ageSarah); // greater than
+console.log(ageSarah >= 18); // greater than or equal to
+console.log(ageSuraj < ageSarah); // less than
+console.log(ageSarah <= 18); // less than or equal to
+
