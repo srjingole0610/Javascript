@@ -250,14 +250,52 @@ console.log(Boolean(0));
 
 //2. Type Coercion
 
-console.log("I am " + 23 + " years old");  // Number converted to string
-console.log("23" - "10" - 3);  // String converted to number
-console.log("23" + "10" + 3);  // String concatenation
-console.log("23" * "2");  // String converted to number and multiplication
-console.log(23 + "2");  // Number converted to string and concatenation
-console.log(23 + "2" * 2);  // String concatenation and multiplication
+console.log("I am " + 23 + " years old"); // Number converted to string
+console.log("23" - "10" - 3); // String converted to number
+console.log("23" + "10" + 3); // String concatenation
+console.log("23" * "2"); // String converted to number and multiplication
+console.log(23 + "2"); // Number converted to string and concatenation
+console.log(23 + "2" * 2); // String concatenation and multiplication
 
 let n = "1" + 1;
 console.log(typeof n, n);
 n = n - 1;
 console.log(typeof n, n);
+
+//******************** Truthy and Falsy Values *************************
+
+// 1. Falsy Values
+console.log(Boolean(0));
+console.log(Boolean(undefined));
+console.log(Boolean(""));
+console.log(Boolean(null));
+console.log(Boolean(NaN));
+
+// 2. Truthy Values
+console.log(Boolean(23));
+console.log(Boolean("Suraj"));
+console.log(Boolean({}));
+console.log(Boolean([]));
+console.log(Boolean(function () {}));
+
+const moneyHave = 100;
+if (moneyHave) {
+  console.log("Don't spend money");
+} else {
+  console.log("Get a job");
+}
+
+let height;
+if (height) {
+  console.log("Yay! Height is defined");
+} else {
+  console.log("Height is UNDEFINED");
+}
+
+//This is a bug
+let weight = 0;
+if (weight) {
+  console.log("Yay! Weight is defined");
+} else {
+  console.log("Weight is UNDEFINED");
+}
