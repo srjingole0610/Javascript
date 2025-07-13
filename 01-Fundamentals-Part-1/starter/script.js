@@ -206,7 +206,7 @@ console.log(`String
 multiple
 lines`);
 
-//************************ conditional Statements ************************
+//************************ If-else Statement  ************************
 
 // 1. if/else statements
 
@@ -234,3 +234,30 @@ if (newBirthYear <= 2000) {
   whichCentury = 21;
 }
 console.log(`The century of birth year is ${whichCentury}`);
+
+// ************************** Type Conversion and Coercion ******************************
+
+// 1. Type Conversion
+const inputYear = "1991";
+console.log(Number(inputYear), inputYear);
+console.log(inputYear + 18);
+console.log(Number(inputYear) + 18);
+console.log(Number("Suraj"));
+console.log(typeof NaN);
+console.log(String(23), 23);
+console.log(Boolean("Suraj"));
+console.log(Boolean(0));
+
+//2. Type Coercion
+
+console.log("I am " + 23 + " years old");  // Number converted to string
+console.log("23" - "10" - 3);  // String converted to number
+console.log("23" + "10" + 3);  // String concatenation
+console.log("23" * "2");  // String converted to number and multiplication
+console.log(23 + "2");  // Number converted to string and concatenation
+console.log(23 + "2" * 2);  // String concatenation and multiplication
+
+let n = "1" + 1;
+console.log(typeof n, n);
+n = n - 1;
+console.log(typeof n, n);
