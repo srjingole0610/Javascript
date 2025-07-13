@@ -299,3 +299,40 @@ if (weight) {
 } else {
   console.log("Weight is UNDEFINED");
 }
+
+//************************** Equality Operators ******************************
+const equalAge = 18; //This is assignment
+if (equalAge === 18) {
+  //This is equality operator
+  console.log("You just became an adult");
+} else {
+  console.log("You are still young");
+}
+
+console.log(equalAge === 18); //strict equality
+console.log(equalAge === "18"); //strict equality
+console.log(equalAge == 18); //loose equality
+console.log(equalAge == "18"); //loose equality
+
+const favouriteNumber = prompt("What's your favourite number?");
+console.log(favouriteNumber);
+console.log(typeof favouriteNumber);
+
+//Example of nested if-else and equality operator
+if (favouriteNumber === 23) {
+  console.log("Cool! 23 is an amazing number!");
+} else if (favouriteNumber === 7) {
+  console.log("7 is also a cool number");
+} else {
+  console.log("Number is not 23 or 7");
+}
+
+//Example of strict not equality
+if (favouriteNumber !== 23) {
+  console.log("Why not 23?");
+}
+
+//Example of loose not equality
+if (favouriteNumber != 23) {
+  console.log("Why not 23?");
+}
