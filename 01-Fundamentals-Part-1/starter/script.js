@@ -172,3 +172,167 @@ let a = 5;
 let b = 10;
 let c = a + b * 2; // multiplication before addition
 console.log(c); // 25
+
+//******************************** Strings *******************************
+
+const iAmFirstString = "Suraj";
+const iAmSecondString = "Ingole";
+const myBirthYear = 1996;
+const currentYearNow = 2025;
+const myCurrentworkProfile = "Developer";
+console.log(iAmFirstString + " " + iAmSecondString);
+
+const suraj =
+  "I'm " +
+  iAmFirstString +
+  ", a " +
+  (currentYearNow - myBirthYear) +
+  " year old " +
+  myCurrentworkProfile;
+console.log(suraj);
+
+// Template Literal
+
+const surajNew = `I'm ${iAmFirstString} ${iAmSecondString}, a ${
+  currentYearNow - myBirthYear
+} year old ${myCurrentworkProfile}`;
+console.log(surajNew);
+
+console.log(`Just a regular string...`);
+
+console.log("String with \nescape sequences");
+
+console.log(`String
+multiple
+lines`);
+
+//************************ If-else Statement  ************************
+
+// 1. if/else statements
+
+const driverAge = 15;
+const isOldEnough = driverAge >= 18;
+
+//1.1 if
+if (isOldEnough) {
+  console.log("Suraj can drive a car 🏎️");
+}
+
+// 1.2 if-else
+if (isOldEnough) {
+  console.log("Suraj can drive a car 🏎️");
+} else {
+  const yearLeft = 18 - driverAge;
+  console.log(`Suraj is too young. Wait another ${yearLeft} years.`);
+}
+
+const newBirthYear = 2015;
+let whichCentury;
+if (newBirthYear <= 2000) {
+  whichCentury = 20;
+} else {
+  whichCentury = 21;
+}
+console.log(`The century of birth year is ${whichCentury}`);
+
+// ************************** Type Conversion and Coercion ******************************
+
+// 1. Type Conversion
+const inputYear = "1991";
+console.log(Number(inputYear), inputYear);
+console.log(inputYear + 18);
+console.log(Number(inputYear) + 18);
+console.log(Number("Suraj"));
+console.log(typeof NaN);
+console.log(String(23), 23);
+console.log(Boolean("Suraj"));
+console.log(Boolean(0));
+
+//2. Type Coercion
+
+console.log("I am " + 23 + " years old"); // Number converted to string
+console.log("23" - "10" - 3); // String converted to number
+console.log("23" + "10" + 3); // String concatenation
+console.log("23" * "2"); // String converted to number and multiplication
+console.log(23 + "2"); // Number converted to string and concatenation
+console.log(23 + "2" * 2); // String concatenation and multiplication
+
+let n = "1" + 1;
+console.log(typeof n, n);
+n = n - 1;
+console.log(typeof n, n);
+
+//******************** Truthy and Falsy Values *************************
+
+// 1. Falsy Values
+console.log(Boolean(0));
+console.log(Boolean(undefined));
+console.log(Boolean(""));
+console.log(Boolean(null));
+console.log(Boolean(NaN));
+
+// 2. Truthy Values
+console.log(Boolean(23));
+console.log(Boolean("Suraj"));
+console.log(Boolean({}));
+console.log(Boolean([]));
+console.log(Boolean(function () {}));
+
+const moneyHave = 100;
+if (moneyHave) {
+  console.log("Don't spend money");
+} else {
+  console.log("Get a job");
+}
+
+let height;
+if (height) {
+  console.log("Yay! Height is defined");
+} else {
+  console.log("Height is UNDEFINED");
+}
+
+//This is a bug
+let weight = 0;
+if (weight) {
+  console.log("Yay! Weight is defined");
+} else {
+  console.log("Weight is UNDEFINED");
+}
+
+//************************** Equality Operators ******************************
+const equalAge = 18; //This is assignment
+if (equalAge === 18) {
+  //This is equality operator
+  console.log("You just became an adult");
+} else {
+  console.log("You are still young");
+}
+
+console.log(equalAge === 18); //strict equality
+console.log(equalAge === "18"); //strict equality
+console.log(equalAge == 18); //loose equality
+console.log(equalAge == "18"); //loose equality
+
+const favouriteNumber = prompt("What's your favourite number?");
+console.log(favouriteNumber);
+console.log(typeof favouriteNumber);
+
+//Example of nested if-else and equality operator
+if (favouriteNumber === 23) {
+  console.log("Cool! 23 is an amazing number!");
+} else if (favouriteNumber === 7) {
+  console.log("7 is also a cool number");
+} else {
+  console.log("Number is not 23 or 7");
+}
+
+//Example of strict not equality
+if (favouriteNumber !== 23) {
+  console.log("Why not 23?");
+}
+
+//Example of loose not equality
+if (favouriteNumber != 23) {
+  console.log("Why not 23?");
+}
