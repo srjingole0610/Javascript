@@ -172,3 +172,30 @@ let a = 5;
 let b = 10;
 let c = a + b * 2; // multiplication before addition
 console.log(c); // 25
+
+
+//******************************** Strings *******************************
+
+const iAmFirstString = 'Suraj';
+const iAmSecondString = "Ingole";
+const myBirthYear = 1996;
+const currentYearNow = 2025;
+const myCurrentworkProfile = "Developer";
+console.log(iAmFirstString + ' ' + iAmSecondString);
+
+const suraj = "I'm " + iAmFirstString + ", a " + (currentYearNow - myBirthYear) + " year old " + myCurrentworkProfile;
+console.log(suraj);
+
+
+// Template Literal
+
+const surajNew = `I'm ${iAmFirstString} ${iAmSecondString}, a ${currentYearNow - myBirthYear} year old ${myCurrentworkProfile}`;
+console.log(surajNew);
+
+console.log(`Just a regular string...`);
+
+console.log('String with \n\escape sequences');
+
+console.log(`String
+multiple
+lines`);
