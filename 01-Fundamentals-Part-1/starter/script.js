@@ -173,29 +173,64 @@ let b = 10;
 let c = a + b * 2; // multiplication before addition
 console.log(c); // 25
 
-
 //******************************** Strings *******************************
 
-const iAmFirstString = 'Suraj';
+const iAmFirstString = "Suraj";
 const iAmSecondString = "Ingole";
 const myBirthYear = 1996;
 const currentYearNow = 2025;
 const myCurrentworkProfile = "Developer";
-console.log(iAmFirstString + ' ' + iAmSecondString);
+console.log(iAmFirstString + " " + iAmSecondString);
 
-const suraj = "I'm " + iAmFirstString + ", a " + (currentYearNow - myBirthYear) + " year old " + myCurrentworkProfile;
+const suraj =
+  "I'm " +
+  iAmFirstString +
+  ", a " +
+  (currentYearNow - myBirthYear) +
+  " year old " +
+  myCurrentworkProfile;
 console.log(suraj);
-
 
 // Template Literal
 
-const surajNew = `I'm ${iAmFirstString} ${iAmSecondString}, a ${currentYearNow - myBirthYear} year old ${myCurrentworkProfile}`;
+const surajNew = `I'm ${iAmFirstString} ${iAmSecondString}, a ${
+  currentYearNow - myBirthYear
+} year old ${myCurrentworkProfile}`;
 console.log(surajNew);
 
 console.log(`Just a regular string...`);
 
-console.log('String with \n\escape sequences');
+console.log("String with \nescape sequences");
 
 console.log(`String
 multiple
 lines`);
+
+//************************ conditional Statements ************************
+
+// 1. if/else statements
+
+const driverAge = 15;
+const isOldEnough = driverAge >= 18;
+
+//1.1 if
+if (isOldEnough) {
+  console.log("Suraj can drive a car 🏎️");
+}
+
+// 1.2 if-else
+if (isOldEnough) {
+  console.log("Suraj can drive a car 🏎️");
+} else {
+  const yearLeft = 18 - driverAge;
+  console.log(`Suraj is too young. Wait another ${yearLeft} years.`);
+}
+
+const newBirthYear = 2015;
+let whichCentury;
+if (newBirthYear <= 2000) {
+  whichCentury = 20;
+} else {
+  whichCentury = 21;
+}
+console.log(`The century of birth year is ${whichCentury}`);
