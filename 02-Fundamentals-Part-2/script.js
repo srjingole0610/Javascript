@@ -92,13 +92,14 @@ console.log(yearsUntilRetirement(1985, "Bob"));
 
 //Function Calling Other Functions
 
+function cutFruitPieces(fruit) {
+  return fruit * 4;
+}
+
 const fruitProcessorNew = function (apples, oranges) {
   const applesPieces = cutFruitPieces(apples);
   const orangesPieces = cutFruitPieces(oranges);
   const juice = `Juice with ${applesPieces} apples pieces and ${orangesPieces} oranges pieces.`;
   return juice;
 };
-function cutFruitPieces(fruit) {
-  return fruit * 4;
-}
 console.log(fruitProcessorNew(2, 3));
