@@ -34,11 +34,35 @@ function fruitProcessor(apples, oranges) {
   return juice;
 }
 
-const appleJuice = fruitProcessor(5,0); // Passing arguments to the function
+const appleJuice = fruitProcessor(5, 0); // Passing arguments to the function
 console.log(appleJuice);
 
-const orangeJuice = fruitProcessor(0,4);
+const orangeJuice = fruitProcessor(0, 4);
 console.log(orangeJuice);
 
-const mixedJuice = fruitProcessor(2,4);
+const mixedJuice = fruitProcessor(2, 4);
 console.log(mixedJuice);
+
+//Function Declaration can be called before it is declared but function expression cannot be called before it is declared
+
+/**
+ * Calculates the age of a person based on their birth year
+ * @param {number} birthYear the year of birth
+ * @returns {number} the age of the person
+ */
+function calcAge(birthYear) {
+  const currentAge = 2025 - birthYear;
+  return currentAge;
+}
+
+const surajAge = calcAge(1996);
+console.log(surajAge);
+
+//Function Expression
+const calcAgeNew = function (birthYear) {
+  const currentAge = 2025 - birthYear;
+  return currentAge;
+};
+
+const surajAgeNew = calcAgeNew(1996);
+console.log(surajAgeNew);
