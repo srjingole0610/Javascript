@@ -336,3 +336,94 @@ if (favouriteNumber !== 23) {
 if (favouriteNumber != 23) {
   console.log("Why not 23?");
 }
+
+//********************************* Boolean Logic and Logical Operators ******************************
+
+const hasDriversLicense = true;
+const hasGoodVision = true;
+
+console.log(hasDriversLicense && hasGoodVision);
+console.log(hasDriversLicense || hasGoodVision);
+console.log(!hasDriversLicense);
+console.log(!hasGoodVision);
+
+const shouldDrive = hasDriversLicense && hasGoodVision;
+if (shouldDrive) {
+  console.log("Suraj is able to drive!");
+} else {
+  console.log("Someone else should drive..............");
+}
+
+const isTired = true;
+console.log(hasDriversLicense || hasGoodVision || isTired);
+
+if (hasDriversLicense && hasGoodVision && !isTired) {
+  console.log("Suraj is able to drive!");
+} else {
+  console.log("Someone else should drive..............");
+}
+
+//************************************* Switch Statements **************************************
+
+const day = "Monday";
+
+switch (day) {
+  case "Monday":
+    console.log("Plan course structure");
+    console.log("Go to coding meetup");
+    break;
+  case "Tuesday":
+    console.log("Prepare theory videos");
+    break;
+  case "Wednesday":
+  case "Thursday":
+    console.log("Write code examples");
+    break;
+  case "Friday":
+    console.log("Record videos");
+    break;
+  case "Saturday":
+  case "Sunday":
+    console.log("Enjoy the weekend");
+    break;
+  default:
+    console.log("Not a valid day");
+}
+
+//*************************************** Statements and Expressions ******************************
+
+// 1. Expressions
+
+3 + 4; // 7
+1991; // 1991
+true && false && !false; // false
+console.log(`Suraj is ${2037 - 1991} years old`);
+
+// 2. Statements
+if (23 > 10) {
+  const str = "23 is bigger";
+}
+
+//********************************************* Ternary Operators **************************************
+const checkAge = 24;
+const message =
+  checkAge >= 18
+    ? "I am an adult, I like to drink wine🍷"
+    : "I am a child, I like to drink juice🍊";
+console.log(message);
+
+//Example with if-else statement
+let messageNew;
+if (checkAge >= 18) {
+  messageNew = "I am an adult, I like to drink wine🍷";
+} else {
+  messageNew = "I am a child, I like to drink juice🍊";
+}
+console.log(messageNew);
+
+// Example of ternary operator with template literal
+console.log(
+  `I am ${checkAge >= 18 ? "an adult" : "a child"}, I like to drink ${
+    checkAge >= 18 ? "wine🍷" : "juice🍊"
+  }`
+);
