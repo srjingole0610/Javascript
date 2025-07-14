@@ -344,22 +344,22 @@ const hasGoodVision = true;
 
 console.log(hasDriversLicense && hasGoodVision);
 console.log(hasDriversLicense || hasGoodVision);
-console.log(!hasDriversLicense)
-console.log(!hasGoodVision)
+console.log(!hasDriversLicense);
+console.log(!hasGoodVision);
 
-const shouldDrive  = hasDriversLicense && hasGoodVision;
-if(shouldDrive){
+const shouldDrive = hasDriversLicense && hasGoodVision;
+if (shouldDrive) {
   console.log("Suraj is able to drive!");
-}else{
+} else {
   console.log("Someone else should drive..............");
 }
 
 const isTired = true;
 console.log(hasDriversLicense || hasGoodVision || isTired);
 
-if(hasDriversLicense && hasGoodVision && !isTired){
+if (hasDriversLicense && hasGoodVision && !isTired) {
   console.log("Suraj is able to drive!");
-}else{
+} else {
   console.log("Someone else should drive..............");
 }
 
@@ -367,25 +367,39 @@ if(hasDriversLicense && hasGoodVision && !isTired){
 
 const day = "Monday";
 
-switch (day){
+switch (day) {
   case "Monday":
     console.log("Plan course structure");
     console.log("Go to coding meetup  ");
     break;
-    case "Tuesday":
+  case "Tuesday":
     console.log("Prepare theory videos");
     break;
-    case "Wednesday":
-    case "Thursday":
+  case "Wednesday":
+  case "Thursday":
     console.log("Write code examples");
     break;
-    case "Friday":
+  case "Friday":
     console.log("Record videos");
     break;
-    case "Saturday":
-    case "Sunday":
+  case "Saturday":
+  case "Sunday":
     console.log("Enjoy the weekend");
     break;
-    default:
+  default:
     console.log("Not a valid day");
+}
+
+//*************************************** Statements and Expressions ******************************
+
+// 1. Expressions
+
+3 + 4; // 7
+1991; // 1991
+true && false && !false; // false
+console.log(`Suraj is ${2037 - 1991} years old`);
+
+// 2. Statements
+if (23 > 10) {
+  const str = "23 is bigger";
 }
