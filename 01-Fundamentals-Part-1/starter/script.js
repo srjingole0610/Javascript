@@ -370,7 +370,7 @@ const day = "Monday";
 switch (day) {
   case "Monday":
     console.log("Plan course structure");
-    console.log("Go to coding meetup  ");
+    console.log("Go to coding meetup");
     break;
   case "Tuesday":
     console.log("Prepare theory videos");
