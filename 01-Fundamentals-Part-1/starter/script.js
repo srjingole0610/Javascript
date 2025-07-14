@@ -336,3 +336,29 @@ if (favouriteNumber !== 23) {
 if (favouriteNumber != 23) {
   console.log("Why not 23?");
 }
+
+//********************************* Boolean Logic and Logical Operators ******************************
+
+const hasDriversLicense = true;
+const hasGoodVision = true;
+
+console.log(hasDriversLicense && hasGoodVision);
+console.log(hasDriversLicense || hasGoodVision);
+console.log(!hasDriversLicense)
+console.log(!hasGoodVision)
+
+const shouldDrive  = hasDriversLicense && hasGoodVision;
+if(shouldDrive){
+  console.log("Suraj is able to drive!");
+}else{
+  console.log("Someone else should drive..............");
+}
+
+const isTired = true;
+console.log(hasDriversLicense || hasGoodVision || isTired);
+
+if(hasDriversLicense && hasGoodVision && !isTired){
+  console.log("Suraj is able to drive!");
+}else{
+  console.log("Someone else should drive..............");
+}
