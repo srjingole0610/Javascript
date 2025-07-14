@@ -403,3 +403,27 @@ console.log(`Suraj is ${2037 - 1991} years old`);
 if (23 > 10) {
   const str = "23 is bigger";
 }
+
+//********************************************* Ternary Operators **************************************
+const checkAge = 24;
+const message =
+  checkAge >= 18
+    ? "I am an adult, I like to drink wine🍷"
+    : "I am a child, I like to drink juice🍊";
+console.log(message);
+
+//Example with if-else statement
+let messageNew;
+if (checkAge >= 18) {
+  messageNew = "I am an adult, I like to drink wine🍷";
+} else {
+  messageNew = "I am a child, I like to drink juice🍊";
+}
+console.log(messageNew);
+
+// Example of ternary operator with template literal
+console.log(
+  `I am ${checkAge >= 18 ? "an adult" : "a child"}, I like to drink ${
+    checkAge >= 18 ? "wine🍷" : "juice🍊"
+  }`
+);
