@@ -380,3 +380,20 @@ for (let exercise = 1; exercise<=3; exercise++){
     console.log(`Exercise ${exercise} : Lifting weights repetition ${rep}🏋️‍♀`);
  }
 }
+
+// 2. While Loop
+
+console.log("-------- WHILE LOOP ---------");
+let rep = 1;
+while(rep<=10){
+    console.log(`Lifting weights repetition ${rep}🏋️‍♀`)
+    rep++;
+}
+
+// Rolling a dice with while loop
+let rolledDice = Math.trunc(Math.random() * 6) + 1 ;
+while(rolledDice !== 6){
+    console.log(`You rolled a ${rolledDice}`);
+    rolledDice = Math.trunc(Math.random() * 6) + 1 ;
+    if(rolledDice === 6) console.log("Loop is about to end...");
+}
