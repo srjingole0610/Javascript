@@ -103,3 +103,65 @@ const fruitProcessorNew = function (apples, oranges) {
   return juice;
 };
 console.log(fruitProcessorNew(2, 3));
+
+//****************************************** ARRAYS **************************************
+
+//Array Declaration
+const myFriends = ["Michael", "Peter", "Steven"];
+console.log(myFriends);
+
+//Array Methods to create an array
+const years = new Array(1991, 1984, 2008, 2020);
+console.log(years);
+
+//Accessing Array Elements
+console.log(myFriends[0]);
+console.log(myFriends[2]);
+
+//Array length
+console.log(myFriends.length);
+console.log(years.length);
+
+//Last Array Element
+console.log(myFriends[myFriends.length - 1]);
+console.log(years[years.length - 1]);
+
+//Replacing Array Elements
+myFriends[1] = "John";
+console.log(myFriends);
+
+// Uncaught TypeError: Assignment to constant variable
+// myFriends = ["Bob", "Alice"];
+// console.log(myFriends);
+
+//Array with personal data
+const suraj = ["Suraj", "Ingole", 2025 - 1996, "Developer", myFriends];
+console.log(suraj);
+console.log(suraj.length);
+
+// Exercise
+
+const calcAgeArray = function (birthYear) {
+  return 2025 - birthYear;
+};
+
+const birthYears = [1990, 1967, 2002, 2010, 2018];
+const birthAges = calcAgeArray(birthYears);
+// Will output NaN because it's expecting a single value
+console.log(birthAges);
+
+//Need to pass each array element to the function
+const birthAge1 = calcAgeArray(birthYears[0]);
+console.log(birthAge1);
+const birthAge2 = calcAgeArray(birthYears[1]);
+console.log(birthAge2);
+const birthAge3 = calcAgeArray(birthYears[birthYears.length - 1]);
+console.log(birthAge3);
+
+//Storing the results in an array
+const birthAgesArray = [
+  calcAgeArray(birthYears[0]),
+  calcAgeArray(birthYears[1]),
+  calcAgeArray(birthYears[birthYears.length - 1]),
+];
+console.log(birthAgesArray);
