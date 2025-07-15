@@ -206,3 +206,16 @@ if (myFriendsNew.includes("Bob")) {
 } else {
   console.log("You don't have a friend named Bob");
 }
+
+//******************************************** OBJECTS **************************************
+
+//Object Literal Syntax
+const surajObj = {
+  firstName: "suraj",
+  lastName: "ingole",
+  age: 2025 - 1996,
+  job: "developer",
+  friends: ["michael", "peter", "steven"],
+};
+
+console.log(surajObj);
