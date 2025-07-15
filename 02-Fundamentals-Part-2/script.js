@@ -280,13 +280,19 @@ const surajObjNew = {
   },
 
   calcAgeThis2: function () {
-    this.age = 2025 - this.birthYear;
+    if (!this.age) {
+      this.age = 2025 - this.birthYear;
+    }
     return this.age;
   },
   //Challenge
   getSummary: function () {
-    return `${this.firstName} is a ${this.calcAgeThis2()} year old ${this.job}, and he ${this.hasDriversLicense ? "has" : "doesn't have"} a driver's license`;
-  },    
+    return `${this.firstName} is a ${this.calcAgeThis2()} year old ${
+      this.job
+    }, and he ${
+      this.hasDriversLicense ? "has" : "doesn't have"
+    } a driver's license`;
+  },
 };
 
 console.log(surajObjNew);
@@ -310,5 +316,3 @@ console.log(surajObjNew.age); // Now age property exists
 // "Suraj is a 46 year old developer, and he has a driver's license"
 
 console.log(surajObjNew.getSummary());
-
-

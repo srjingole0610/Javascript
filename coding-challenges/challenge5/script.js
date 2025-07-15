@@ -17,10 +17,10 @@ const scoreKoalas = calcAverage(23, 34, 27);
  * @returns {string} - the winner message
  */
 const checkWinner = function (avgDolphins, avgKoalas) {
-  if (avgDolphins > 2 * avgKoalas) {
+  if (avgDolphins >= 2 * avgKoalas) {
     const winnerMessage = `Dolphins win (${avgDolphins} vs. ${avgKoalas})`;
     return winnerMessage;
-  } else if (avgKoalas > 2 * avgDolphins) {
+  } else if (avgKoalas >= 2 * avgDolphins) {
     const winnerMessage = `Koalas win (${avgKoalas} vs. ${avgDolphins})`;
     return winnerMessage;
   } else {
