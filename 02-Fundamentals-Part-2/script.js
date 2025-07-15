@@ -260,3 +260,55 @@ console.log(messageDot);
 
 const messageBracket = `${surajObj["firstName"]} has ${surajObj["friends"].length} friends, and his best friend is called ${surajObj["friends"][0]}`;
 console.log(messageBracket);
+
+//Object Methods
+const surajObjNew = {
+  firstName: "suraj",
+  lastName: "ingole",
+  birthYear: 1996,
+  job: "developer",
+  friends: ["michael", "peter", "steven"],
+  hasDriversLicense: false,
+
+  calcAgeNormal: function (birthYear) {
+    return 2025 - birthYear;
+  },
+
+  calcAgeThis: function () {
+    console.log(this);
+    return 2025 - this.birthYear;
+  },
+
+  calcAgeThis2: function () {
+    this.age = 2025 - this.birthYear;
+    return this.age;
+  },
+  //Challenge
+  getSummary: function () {
+    return `${this.firstName} is a ${this.calcAgeThis2()} year old ${this.job}, and he ${this.hasDriversLicense ? "has" : "doesn't have"} a driver's license`;
+  },    
+};
+
+console.log(surajObjNew);
+// Code required if this key is not present in the object
+const ageDot1 = surajObjNew.calcAgeNormal(1996);
+console.log(ageDot1);
+const ageBracket1 = surajObjNew["calcAgeNormal"](1996);
+console.log(ageBracket1);
+
+// Code required if this key is present in the object
+const ageDot2 = surajObjNew.calcAgeThis();
+console.log(ageDot2);
+
+const ageBracket2 = surajObjNew["calcAgeThis"]();
+console.log(ageBracket2);
+
+console.log(surajObjNew.calcAgeThis2()); // Calculate age first
+console.log(surajObjNew.age); // Now age property exists
+
+//Challenege
+// "Suraj is a 46 year old developer, and he has a driver's license"
+
+console.log(surajObjNew.getSummary());
+
+
