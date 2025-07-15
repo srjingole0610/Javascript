@@ -165,3 +165,44 @@ const birthAgesArray = [
   calcAgeArray(birthYears[birthYears.length - 1]),
 ];
 console.log(birthAgesArray);
+
+//Array Methods
+const myFriendsNew = ["Michael", "Peter", "Steven"];
+console.log(myFriendsNew);
+console.log(myFriendsNew.length);
+//Add Elements
+// 1. push() - adds an element to the end of an array and mutates the original array and returns the new length
+myFriendsNew.push("Bob");
+console.log(myFriendsNew);
+console.log(myFriendsNew.length);
+
+//2.unshift() - adds an element to the beginning of an array and mutates the original array and returns the new length
+myFriendsNew.unshift("John");
+console.log(myFriendsNew);
+console.log(myFriendsNew.length);
+
+//Remove Elements
+//1. pop() - removes the last element from an array and mutates the original array and returns the removed element
+const poppedFriend = myFriendsNew.pop();
+console.log(poppedFriend);
+console.log(myFriendsNew);
+console.log(myFriendsNew.length);
+
+//2. shift() - removes the first element from an array and mutates the original array and returns the removed element
+const shiftedFriend = myFriendsNew.shift();
+console.log(shiftedFriend);
+console.log(myFriendsNew);
+console.log(myFriendsNew.length);
+
+// indexOf() - returns the index of the first element in an array that matches the specified value and returns -1 if not found
+console.log(myFriendsNew.indexOf("Steven"));
+console.log(myFriendsNew.indexOf("Bob"));
+
+//includes() - returns true if the specified value is found in the array and returns false if not found and use strict equality (===) for comparison
+console.log(myFriendsNew.includes("Steven"));
+console.log(myFriendsNew.includes("Bob"));
+if (myFriendsNew.includes("Bob")) {
+  console.log("You have a friend named Bob");
+} else {
+  console.log("You don't have a friend named Bob");
+}
