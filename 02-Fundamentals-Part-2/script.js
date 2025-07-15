@@ -354,15 +354,29 @@ console.log(currentAgeNew);
 
 //Break and continue
 //continue - skips to the next iteration of the loop and doesn't break the loop
-console.log("--- ONLY STRINGS ---");
+console.log("------- ONLY STRINGS --------");
 for (let i = 0; i<surajArray.length; i++) {
   if(typeof surajArray[i] !== 'string') continue;
   console.log(surajArray[i], typeof surajArray[i]);
 }
 
 //break - breaks the loop
-console.log("--- BREAK WITH NUMBER ---");
+console.log("-------- BREAK WITH NUMBER --------");
 for (let i = 0; i<surajArray.length; i++) {
   if(typeof surajArray[i] === 'number') break;
   console.log(surajArray[i], typeof surajArray[i]);
+}
+
+// Looping over an array backwards
+console.log("-------- BACKWARDS ---------");
+for (let i = surajArray.length-1; i>=0;i--){
+  console.log(i, surajArray[i]);
+}
+
+//Loop inside a loop
+for (let exercise = 1; exercise<=3; exercise++){
+ console.log(`--------- Starting exercise ${exercise} ---------------`)
+ for (let rep =1; rep<=5; rep++){
+    console.log(`Exercise ${exercise} : Lifting weights repetition ${rep}🏋️‍♀`);
+ }
 }
