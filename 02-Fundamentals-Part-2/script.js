@@ -316,3 +316,53 @@ console.log(surajObjNew.age); // Now age property exists
 // "Suraj is a 46 year old developer, and he has a driver's license"
 
 console.log(surajObjNew.getSummary());
+
+//****************************** LOOPS ******************************
+
+// 1. FOR LOOP
+// For loop keeps running while condition is TRUE
+for (let rep = 1; rep <= 10; rep++) {
+  console.log(`Lifting weights repetition ${rep}🏋️‍♀`);
+}
+
+//For loop with array
+const surajArray = [
+  "Suraj",
+  "ingole",
+  2025 - 1996,
+  "developer",
+  ["michael", "peter", "steven"],
+  true,
+];
+
+const surajArrayTypes = [];
+for (let i = 0; i < surajArray.length; i++) {
+  console.log(surajArray[i], typeof surajArray[i]);
+  //   surajArrayTypes[i] = typeof surajArray[i];
+  surajArrayTypes.push(typeof surajArray[i]);
+}
+console.log(surajArrayTypes);
+
+//example
+const birthYearsNew = [1991, 1996, 2002, 2010];
+const currentAgeNew = [];
+
+for (let i = 0; i < birthYearsNew.length; i++) {
+  currentAgeNew.push(2025 - birthYearsNew[i]);
+}
+console.log(currentAgeNew);
+
+//Break and continue
+//continue - skips to the next iteration of the loop and doesn't break the loop
+console.log("--- ONLY STRINGS ---");
+for (let i = 0; i<surajArray.length; i++) {
+  if(typeof surajArray[i] !== 'string') continue;
+  console.log(surajArray[i], typeof surajArray[i]);
+}
+
+//break - breaks the loop
+console.log("--- BREAK WITH NUMBER ---");
+for (let i = 0; i<surajArray.length; i++) {
+  if(typeof surajArray[i] === 'number') break;
+  console.log(surajArray[i], typeof surajArray[i]);
+}
