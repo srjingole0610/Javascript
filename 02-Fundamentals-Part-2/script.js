@@ -219,3 +219,44 @@ const surajObj = {
 };
 
 console.log(surajObj);
+
+//Accessing Object Properties
+
+// 1. dot notation
+console.log(surajObj.firstName);
+console.log(surajObj.friends);
+
+// 2. bracket notation
+console.log(surajObj["lastName"]);
+console.log(surajObj["friends"]);
+
+const nameKey = "Name";
+console.log(surajObj["first" + nameKey]);
+console.log(surajObj["last" + nameKey]);
+
+//Example for bracket notation
+const interestedIn = prompt(
+  "What do you want to know about Suraj? Choose between firstName, lastName, age, job, and friends"
+);
+console.log(surajObj[interestedIn]);
+
+if (surajObj[interestedIn]) {
+  console.log(surajObj[interestedIn]);
+} else {
+  console.log(
+    "Wrong request! Choose between firstName, lastName, age, job, and friends"
+  );
+}
+
+//Adding new Object Properties
+surajObj.location = "Pune";
+surajObj["twitter"] = "@srjrockzz";
+console.log(surajObj);
+
+//Challenge
+// "Suraj has 3 friends, and his best friend is called Michael"
+const messageDot = `${surajObj.firstName} has ${surajObj.friends.length} friends, and his best friend is called ${surajObj.friends[0]}`;
+console.log(messageDot);
+
+const messageBracket = `${surajObj["firstName"]} has ${surajObj["friends"].length} friends, and his best friend is called ${surajObj["friends"][0]}`;
+console.log(messageBracket);
