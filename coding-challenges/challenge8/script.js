@@ -1,4 +1,4 @@
-calcTip = function (bills) {
+const calcTip = function (bills) {
   return bills >= 50 && bills  <= 300 ? bills * 0.15 : bills * 0.2;
 }
 
@@ -16,6 +16,7 @@ console.log('Tips array:', tips);
 console.log('Total amounts (bill + tip):', totals);
 
 const calcAverage = function(arr){
+    if(arr.length === 0) return 0;
     let sum = 0;
     for(let i = 0; i<arr.length; i++){
         sum += arr[i];
