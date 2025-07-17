@@ -1,5 +1,5 @@
 // *********************************** Strict Mode **************************************
-"use strict";
+'use strict';
 
 let hasDriversLicense = false;
 const passTest = true;
@@ -8,7 +8,7 @@ if (passTest) {
   hasDriversLicense = true;
 }
 if (hasDriversLicense) {
-  console.log("I can drive");
+  console.log('I can drive');
 }
 
 //Strict Mode will throw an error if we try to declare a variable with a reserved keyword
@@ -19,7 +19,7 @@ if (hasDriversLicense) {
 
 //Function Declaration
 function logger() {
-  console.log("I am logger function!");
+  console.log('I am logger function!');
 }
 
 //Invoke Function or Call Function or Run Function
@@ -69,12 +69,12 @@ console.log(surajAgeNew);
 
 //Arrow Function
 //simple Arrow Function with one parameter
-const calcAgeArrow = (birthYear) => 2025 - birthYear;
+const calcAgeArrow = birthYear => 2025 - birthYear;
 const surajAgeArrow = calcAgeArrow(1996);
 console.log(surajAgeArrow);
 
 //Arrow Function with multiple lines of code and return value
-const yearUntilRetirement = (birthYear) => {
+const yearUntilRetirement = birthYear => {
   const age = 2025 - birthYear;
   const retirement = 65 - age;
   return retirement;
@@ -87,8 +87,8 @@ const yearsUntilRetirement = (birthYear, firstName) => {
   const retirement = 65 - age;
   return `${firstName} retires in ${retirement} years`;
 };
-console.log(yearsUntilRetirement(1996, "Suraj"));
-console.log(yearsUntilRetirement(1985, "Bob"));
+console.log(yearsUntilRetirement(1996, 'Suraj'));
+console.log(yearsUntilRetirement(1985, 'Bob'));
 
 //Function Calling Other Functions
 
@@ -107,7 +107,7 @@ console.log(fruitProcessorNew(2, 3));
 //****************************************** ARRAYS **************************************
 
 //Array Declaration
-const myFriends = ["Michael", "Peter", "Steven"];
+const myFriends = ['Michael', 'Peter', 'Steven'];
 console.log(myFriends);
 
 //Array Methods to create an array
@@ -127,7 +127,7 @@ console.log(myFriends[myFriends.length - 1]);
 console.log(years[years.length - 1]);
 
 //Replacing Array Elements
-myFriends[1] = "John";
+myFriends[1] = 'John';
 console.log(myFriends);
 
 // Uncaught TypeError: Assignment to constant variable
@@ -135,7 +135,7 @@ console.log(myFriends);
 // console.log(myFriends);
 
 //Array with personal data
-const suraj = ["Suraj", "Ingole", 2025 - 1996, "Developer", myFriends];
+const suraj = ['Suraj', 'Ingole', 2025 - 1996, 'Developer', myFriends];
 console.log(suraj);
 console.log(suraj.length);
 
@@ -167,17 +167,17 @@ const birthAgesArray = [
 console.log(birthAgesArray);
 
 //Array Methods
-const myFriendsNew = ["Michael", "Peter", "Steven"];
+const myFriendsNew = ['Michael', 'Peter', 'Steven'];
 console.log(myFriendsNew);
 console.log(myFriendsNew.length);
 //Add Elements
 // 1. push() - adds an element to the end of an array and mutates the original array and returns the new length
-myFriendsNew.push("Bob");
+myFriendsNew.push('Bob');
 console.log(myFriendsNew);
 console.log(myFriendsNew.length);
 
 //2.unshift() - adds an element to the beginning of an array and mutates the original array and returns the new length
-myFriendsNew.unshift("John");
+myFriendsNew.unshift('John');
 console.log(myFriendsNew);
 console.log(myFriendsNew.length);
 
@@ -195,14 +195,14 @@ console.log(myFriendsNew);
 console.log(myFriendsNew.length);
 
 // indexOf() - returns the index of the first element in an array that matches the specified value and returns -1 if not found
-console.log(myFriendsNew.indexOf("Steven"));
-console.log(myFriendsNew.indexOf("Bob"));
+console.log(myFriendsNew.indexOf('Steven'));
+console.log(myFriendsNew.indexOf('Bob'));
 
 //includes() - returns true if the specified value is found in the array and returns false if not found and use strict equality (===) for comparison
-console.log(myFriendsNew.includes("Steven"));
-console.log(myFriendsNew.includes("Bob"));
-if (myFriendsNew.includes("Bob")) {
-  console.log("You have a friend named Bob");
+console.log(myFriendsNew.includes('Steven'));
+console.log(myFriendsNew.includes('Bob'));
+if (myFriendsNew.includes('Bob')) {
+  console.log('You have a friend named Bob');
 } else {
   console.log("You don't have a friend named Bob");
 }
@@ -211,11 +211,11 @@ if (myFriendsNew.includes("Bob")) {
 
 //Object Literal Syntax
 const surajObj = {
-  firstName: "suraj",
-  lastName: "ingole",
+  firstName: 'suraj',
+  lastName: 'ingole',
   age: 2025 - 1996,
-  job: "developer",
-  friends: ["michael", "peter", "steven"],
+  job: 'developer',
+  friends: ['michael', 'peter', 'steven'],
 };
 
 console.log(surajObj);
@@ -227,16 +227,16 @@ console.log(surajObj.firstName);
 console.log(surajObj.friends);
 
 // 2. bracket notation
-console.log(surajObj["lastName"]);
-console.log(surajObj["friends"]);
+console.log(surajObj['lastName']);
+console.log(surajObj['friends']);
 
-const nameKey = "Name";
-console.log(surajObj["first" + nameKey]);
-console.log(surajObj["last" + nameKey]);
+const nameKey = 'Name';
+console.log(surajObj['first' + nameKey]);
+console.log(surajObj['last' + nameKey]);
 
 //Example for bracket notation
 const interestedIn = prompt(
-  "What do you want to know about Suraj? Choose between firstName, lastName, age, job, and friends"
+  'What do you want to know about Suraj? Choose between firstName, lastName, age, job, and friends',
 );
 console.log(surajObj[interestedIn]);
 
@@ -244,13 +244,13 @@ if (surajObj[interestedIn]) {
   console.log(surajObj[interestedIn]);
 } else {
   console.log(
-    "Wrong request! Choose between firstName, lastName, age, job, and friends"
+    'Wrong request! Choose between firstName, lastName, age, job, and friends',
   );
 }
 
 //Adding new Object Properties
-surajObj.location = "Pune";
-surajObj["twitter"] = "@srjrockzz";
+surajObj.location = 'Pune';
+surajObj['twitter'] = '@srjrockzz';
 console.log(surajObj);
 
 //Challenge
@@ -258,16 +258,16 @@ console.log(surajObj);
 const messageDot = `${surajObj.firstName} has ${surajObj.friends.length} friends, and his best friend is called ${surajObj.friends[0]}`;
 console.log(messageDot);
 
-const messageBracket = `${surajObj["firstName"]} has ${surajObj["friends"].length} friends, and his best friend is called ${surajObj["friends"][0]}`;
+const messageBracket = `${surajObj['firstName']} has ${surajObj['friends'].length} friends, and his best friend is called ${surajObj['friends'][0]}`;
 console.log(messageBracket);
 
 //Object Methods
 const surajObjNew = {
-  firstName: "suraj",
-  lastName: "ingole",
+  firstName: 'suraj',
+  lastName: 'ingole',
   birthYear: 1996,
-  job: "developer",
-  friends: ["michael", "peter", "steven"],
+  job: 'developer',
+  friends: ['michael', 'peter', 'steven'],
   hasDriversLicense: false,
 
   calcAgeNormal: function (birthYear) {
@@ -290,7 +290,7 @@ const surajObjNew = {
     return `${this.firstName} is a ${this.calcAgeThis2()} year old ${
       this.job
     }, and he ${
-      this.hasDriversLicense ? "has" : "doesn't have"
+      this.hasDriversLicense ? 'has' : "doesn't have"
     } a driver's license`;
   },
 };
@@ -299,14 +299,14 @@ console.log(surajObjNew);
 // Code required if this key is not present in the object
 const ageDot1 = surajObjNew.calcAgeNormal(1996);
 console.log(ageDot1);
-const ageBracket1 = surajObjNew["calcAgeNormal"](1996);
+const ageBracket1 = surajObjNew['calcAgeNormal'](1996);
 console.log(ageBracket1);
 
 // Code required if this key is present in the object
 const ageDot2 = surajObjNew.calcAgeThis();
 console.log(ageDot2);
 
-const ageBracket2 = surajObjNew["calcAgeThis"]();
+const ageBracket2 = surajObjNew['calcAgeThis']();
 console.log(ageBracket2);
 
 console.log(surajObjNew.calcAgeThis2()); // Calculate age first
@@ -327,11 +327,11 @@ for (let rep = 1; rep <= 10; rep++) {
 
 //For loop with array
 const surajArray = [
-  "Suraj",
-  "ingole",
+  'Suraj',
+  'ingole',
   2025 - 1996,
-  "developer",
-  ["michael", "peter", "steven"],
+  'developer',
+  ['michael', 'peter', 'steven'],
   true,
 ];
 
@@ -354,46 +354,46 @@ console.log(currentAgeNew);
 
 //Break and continue
 //continue - skips to the next iteration of the loop and doesn't break the loop
-console.log("------- ONLY STRINGS --------");
-for (let i = 0; i<surajArray.length; i++) {
-  if(typeof surajArray[i] !== 'string') continue;
+console.log('------- ONLY STRINGS --------');
+for (let i = 0; i < surajArray.length; i++) {
+  if (typeof surajArray[i] !== 'string') continue;
   console.log(surajArray[i], typeof surajArray[i]);
 }
 
 //break - breaks the loop
-console.log("-------- BREAK WITH NUMBER --------");
-for (let i = 0; i<surajArray.length; i++) {
-  if(typeof surajArray[i] === 'number') break;
+console.log('-------- BREAK WITH NUMBER --------');
+for (let i = 0; i < surajArray.length; i++) {
+  if (typeof surajArray[i] === 'number') break;
   console.log(surajArray[i], typeof surajArray[i]);
 }
 
 // Looping over an array backwards
-console.log("-------- BACKWARDS ---------");
-for (let i = surajArray.length-1; i>=0;i--){
+console.log('-------- BACKWARDS ---------');
+for (let i = surajArray.length - 1; i >= 0; i--) {
   console.log(i, surajArray[i]);
 }
 
 //Loop inside a loop
-for (let exercise = 1; exercise<=3; exercise++){
- console.log(`--------- Starting exercise ${exercise} ---------------`)
- for (let rep =1; rep<=5; rep++){
+for (let exercise = 1; exercise <= 3; exercise++) {
+  console.log(`--------- Starting exercise ${exercise} ---------------`);
+  for (let rep = 1; rep <= 5; rep++) {
     console.log(`Exercise ${exercise} : Lifting weights repetition ${rep}🏋️‍♀`);
- }
+  }
 }
 
 // 2. While Loop
 
-console.log("-------- WHILE LOOP ---------");
+console.log('-------- WHILE LOOP ---------');
 let rep = 1;
-while(rep<=10){
-    console.log(`Lifting weights repetition ${rep}🏋️‍♀`)
-    rep++;
+while (rep <= 10) {
+  console.log(`Lifting weights repetition ${rep}🏋️‍♀`);
+  rep++;
 }
 
 // Rolling a dice with while loop
-let rolledDice = Math.trunc(Math.random() * 6) + 1 ;
-while(rolledDice !== 6){
-    console.log(`You rolled a ${rolledDice}`);
-    rolledDice = Math.trunc(Math.random() * 6) + 1 ;
-    if(rolledDice === 6) console.log("Loop is about to end...");
+let rolledDice = Math.trunc(Math.random() * 6) + 1;
+while (rolledDice !== 6) {
+  console.log(`You rolled a ${rolledDice}`);
+  rolledDice = Math.trunc(Math.random() * 6) + 1;
+  if (rolledDice === 6) console.log('Loop is about to end...');
 }
