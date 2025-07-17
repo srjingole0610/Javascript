@@ -28,3 +28,17 @@ btn.addEventListener('click', () => {
     ? 'Click For Solution'
     : 'Hide Solution';
 });
+
+const printForecast = function (arr) {
+  let output = '';
+  for (let i = 0; i < arr.length; i++) {
+    output += `... ${arr[i]}ºC in ${i + 1} day${i === 0 ? '' : 's'} `;
+  }
+  output += '...';
+  console.log(output);
+  return output;
+};
+
+// Example calls
+printForecast([17, 21, 23]);
+printForecast([12, 5, -5, 0, 4]);
