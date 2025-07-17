@@ -49,7 +49,6 @@ btn.addEventListener('click', () => {
 });
 
 /* --- Actual working logic --- */
-('use strict');
 
 function analyzeWeeklyHours(hoursArray) {
   const days = [
