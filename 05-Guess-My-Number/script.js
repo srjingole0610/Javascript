@@ -11,9 +11,9 @@
 const toggleBtn = document.getElementById('themeToggle');
 const body = document.body;
 const btnCheck = document.querySelector('.check');
+const btnAgain = document.querySelector('.again');
 let score = 20;
-const secretNumber = Math.trunc(Math.random() * 20) + 1;
-document.querySelector('.number').textContent = secretNumber;
+let secretNumber = Math.trunc(Math.random() * 20) + 1;
 
 // Check button logic
 btnCheck.addEventListener('click', () => {
@@ -27,10 +27,25 @@ btnCheck.addEventListener('click', () => {
   //   document.querySelector('.message').textContent =
   //     'Enter the Number below 20 ⛔';
   // }
+
+  //When Player wins
   else if (guessValue === secretNumber) {
+    document.body.classList.remove('dark-mode');
+    document.body.classList.remove('loser');
+    document.body.classList.add('winner');
+    document.querySelector('.number').style.width = '24rem';
     document.querySelector('.message').textContent =
-      'Corect Number!🎉. You Win The Game';
-  } else if (guessValue > secretNumber) {
+      'Correct Number. You Won the Game! 🎉';
+    document.querySelector('.number').textContent = secretNumber;
+    toggleBtn.textContent = '🌙 Dark Mode';
+    localStorage.setItem('theme', 'light');
+  }
+  //When Guess is too high
+  else if (guessValue > secretNumber) {
+    body.classList.remove('dark-mode');
+    body.classList.add('loser');
+    toggleBtn.textContent = '🌙 Dark Mode';
+    localStorage.setItem('theme', 'light');
     if (score > 1) {
       document.querySelector('.message').textContent =
         'The Guess Number is Tooo High! 📈';
@@ -40,7 +55,13 @@ btnCheck.addEventListener('click', () => {
       document.querySelector('.message').textContent = 'You Lost The Game 💥';
       document.querySelector('.score').textContent = 0;
     }
-  } else if (guessValue < secretNumber) {
+  }
+  //When Guess is too Low
+  else if (guessValue < secretNumber) {
+  body.classList.remove('dark-mode');
+   body.classList.add('loser');
+    toggleBtn.textContent = '🌙 Dark Mode';
+    localStorage.setItem('theme', 'light');
     if (score > 1) {
       document.querySelector('.message').textContent =
         'The Guess Number is Tooo Low! 📉';
@@ -56,6 +77,9 @@ btnCheck.addEventListener('click', () => {
 // Theme toggle logic
 toggleBtn.addEventListener('click', () => {
   body.classList.toggle('dark-mode');
+  body.classList.remove('winner'); // ← add this line
+  body.classList.remove('loser');
+  body.style.background = '';
   const isDark = body.classList.contains('dark-mode');
   toggleBtn.textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
 
