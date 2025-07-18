@@ -74,6 +74,20 @@ btnCheck.addEventListener('click', () => {
   }
 });
 
+// Play Again Button Logic which will reset the game
+btnAgain.addEventListener('click', () => {
+  score = 20;
+  secretNumber = Math.trunc(Math.random() * 20) + 1;
+  body.classList.remove('dark-mode');
+  body.classList.remove('loser');
+  body.classList.remove('winner');
+  document.querySelector('.score').textContent = score;
+  document.querySelector('.number').textContent = '?';
+  document.querySelector('.guess').value = '';
+  document.querySelector('.message').textContent = 'Start guessing...';
+  document.querySelector('.number').style.width = '12rem';
+})
+
 // Theme toggle logic
 toggleBtn.addEventListener('click', () => {
   body.classList.toggle('dark-mode');
