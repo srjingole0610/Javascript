@@ -1,5 +1,39 @@
 'use strict';
 
+// Modal functionality
+const modal = document.querySelector('.modal');
+const overlay = document.querySelector('.overlay');
+const btnCloseModal = document.querySelector('.close-modal');
+const btnsOpenModal = document.querySelectorAll('.show-modal');
+
+const openModal = function () {
+  modal.classList.remove('hidden');
+  overlay.classList.remove('hidden');
+
+  // Trigger animations
+  setTimeout(() => {
+    modal.classList.add('show');
+    overlay.classList.add('show');
+  }, 100);
+};
+
+const closeModal = function () {
+  modal.classList.remove('show');
+  overlay.classList.remove('show');
+
+  // Hide after animation
+  setTimeout(() => {
+    modal.classList.add('hidden');
+    overlay.classList.add('hidden');
+  }, 300);
+};
+
+// Event listeners for modal
+btnsOpenModal.forEach(btn => btn.addEventListener('click', openModal));
+btnCloseModal.addEventListener('click', closeModal);
+overlay.addEventListener('click', closeModal);
+
+
 // Dark mode functionality
 let isDarkMode = localStorage.getItem('darkMode') === 'true';
 
@@ -28,12 +62,3 @@ function updateTheme() {
 // Initialize theme on page load
 updateTheme();
 
-const modal = document.querySelector('.modal');
-const btnCloseModal = document.querySelector('.close-modal');
-const overlay = document.querySelector('.overlay');
-const btnsOpenModel = document.querySelectorAll('.show-modal');
-console.log(btnsOpenModel);
-
-for(let i=0; i<btnsOpenModel.length;i++){
-    console.log(btnsOpenModel[i].textContent)
-}
