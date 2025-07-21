@@ -68,3 +68,83 @@ document.addEventListener('keydown', function (e) {
     closeModal();
   }
 });
+
+// Responsive and device-specific interactions
+document.addEventListener('DOMContentLoaded', function () {
+  // Detect touch device
+  const isTouchDevice =
+    'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+  // Only add hover effects for non-touch devices
+  if (!isTouchDevice) {
+    btnsOpenModal.forEach(btn => {
+      btn.addEventListener('mouseenter', function () {
+        this.style.transform = 'translateY(-3px)';
+      });
+
+      btn.addEventListener('mouseleave', function () {
+        this.style.transform = 'translateY(0)';
+      });
+    });
+  } else {
+    // Add touch-specific interactions
+    btnsOpenModal.forEach(btn => {
+      btn.addEventListener('touchstart', function () {
+        this.style.transform = 'scale(0.95)';
+      });
+
+      btn.addEventListener('touchend', function () {
+        this.style.transform = 'scale(1)';
+      });
+    });
+  }
+
+  // Handle orientation changes
+  function handleOrientationChange() {
+    // Close modal on orientation change to prevent layout issues
+    if (!modal.classList.contains('hidden')) {
+      closeModal();
+    }
+  }
+
+  window.addEventListener('orientationchange', handleOrientationChange);
+  window.addEventListener('resize', handleOrientationChange);
+
+  // Prevent zoom on double tap for iOS
+  let lastTouchEnd = 0;
+  document.addEventListener(
+    'touchend',
+    function (event) {
+      const now = new Date().getTime();
+      if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+      }
+      lastTouchEnd = now;
+    },
+    false,
+  );
+
+  // Handle viewport changes for mobile browsers
+  function handleViewportChange() {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  }
+
+  handleViewportChange();
+  window.addEventListener('resize', handleViewportChange);
+
+  // Smooth scrolling prevention when modal is open
+  function preventScroll(e) {
+    if (!modal.classList.contains('hidden')) {
+      e.preventDefault();
+    }
+  }
+
+  // Add touch event listeners for better mobile experience
+  document.addEventListener('touchmove', preventScroll, { passive: false });
+
+  // Enhanced modal accessibility for mobile
+  modal.addEventListener('focus', function () {
+    this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+});
