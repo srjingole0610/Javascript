@@ -2,7 +2,7 @@
 const body = document.body;
 const toggleButton = document.querySelector('.toggle-btn');
 const diceEl = document.querySelector('.dice');
-const btnNew = document.querySelector('.tn--new');
+const btnNew = document.querySelector('.btn--new');
 const btnRoll = document.querySelector('.btn--roll');
 const btnHold = document.querySelector('.btn--hold');
 const player0El = document.querySelector('.player--0');
@@ -105,7 +105,24 @@ const loadSavedTheme = function () {
   themeIcon.textContent = savedTheme === 'dark' ? '🌙' : '☀️';
 };
 
+const resetGame = function () {
+  playing = true;
+  currentScore = 0;
+  activePlayer = 0;
+  scores[0] = 0;
+  scores[1] = 0;
+  currentScore0El.textContent = 0;
+  currentScore1El.textContent = 0;
+  score0El.textContent = 0;
+  score1El.textContent = 0;
+  player0El.classList.remove('player--winner');
+  player1El.classList.remove('player--winner');
+  player0El.classList.add('player--active');
+  player1El.classList.remove('player--active');
+};
+
 toggleButton.addEventListener('click', toggleTheme);
 btnRoll.addEventListener('click', rollDice);
 btnHold.addEventListener('click', holdScore);
+btnNew.addEventListener('click', resetGame);
 document.addEventListener('DOMContentLoaded', loadSavedTheme);
