@@ -62,3 +62,9 @@ function updateTheme() {
 // Initialize theme on page load
 updateTheme();
 
+// Close modal with Escape key
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+    closeModal();
+  }
+});
