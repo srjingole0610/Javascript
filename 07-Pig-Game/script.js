@@ -18,6 +18,7 @@ const themeIcon = document.getElementById('theme-icon');
 const scores = [0, 0];
 let currentScore = 0;
 let activePlayer = 0;
+let playing = true;
 
 //Starting conditions for the Game
 score0El.textContent = 0;
@@ -30,8 +31,18 @@ const GenerateRandomDice = function () {
   return diceValue;
 };
 
+//Switching Player
+const switchPlayer = function () {
+  document.getElementById(`current--${activePlayer}`).textContent = 0;
+  currentScore = 0;
+  activePlayer = activePlayer === 0 ? 1 : 0;
+  player0El.classList.toggle('player--active');
+  player1El.classList.toggle('player--active');
+};
+
 //Rolling Dice condition
-btnRoll.addEventListener('click', function () {
+const rollDice = function () {
+  if (!playing) return;
   // Generate a random dice roll
   const dice = GenerateRandomDice();
   //Display dice
@@ -46,13 +57,31 @@ btnRoll.addEventListener('click', function () {
       currentScore;
   } else {
     //Switch to next player
-    document.getElementById(`current--${activePlayer}`).textContent = 0;
-    currentScore = 0;
-    activePlayer = activePlayer === 0 ? 1 : 0;
-    player0El.classList.toggle('player--active');
-    player1El.classList.toggle('player--active');
+    switchPlayer();
   }
-});
+};
+
+const holdScore = function () {
+  if (!playing) return;
+  // 1. Add current score to active player's score
+  scores[activePlayer] += currentScore;
+  document.getElementById(`score--${activePlayer}`).textContent =
+    scores[activePlayer];
+  // 2. check if player's score is >=100
+  if (scores[activePlayer] >= 10) {
+    playing = false;
+    diceEl.classList.add('hidden');
+    document
+      .querySelector(`.player--${activePlayer}`)
+      .classList.add('player--winner');
+    document
+      .querySelector(`.player--${activePlayer}`)
+      .classList.remove('player--active');
+  } else {
+    // if score < 100 switch the player
+    switchPlayer();
+  }
+};
 
 // Theme Management
 function toggleTheme() {
@@ -67,13 +96,16 @@ function toggleTheme() {
   }
 }
 
-toggleButton.addEventListener('click', toggleTheme);
-
 // Load saved theme
-document.addEventListener('DOMContentLoaded', function () {
+const loadSavedTheme = function () {
   const savedTheme = localStorage.getItem('theme') || 'light';
   const themeIcon = document.getElementById('theme-icon');
 
   document.body.setAttribute('data-theme', savedTheme);
   themeIcon.textContent = savedTheme === 'dark' ? '🌙' : '☀️';
-});
+};
+
+toggleButton.addEventListener('click', toggleTheme);
+btnRoll.addEventListener('click', rollDice);
+btnHold.addEventListener('click', holdScore);
+document.addEventListener('DOMContentLoaded', loadSavedTheme);
