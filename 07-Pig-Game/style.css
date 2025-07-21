@@ -352,6 +352,11 @@ main {
   transform: translateX(-50%) scale(0);
 }
 
+.hidden {
+  opacity: 0;
+  transform: translateX(-50%) scale(0);
+}
+
 /* Winner Styles */
 .player--winner {
   background: linear-gradient(135deg, var(--text-accent) 0%, #c53030 100%);

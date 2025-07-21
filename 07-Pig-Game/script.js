@@ -2,6 +2,19 @@
 const body = document.body;
 const themeIcon = document.getElementById('theme-icon');
 const toggleButton = document.querySelector('.toggle-btn');
+const score0El = document.getElementById('score--0');
+const score1El = document.getElementById('score--1');
+const name0El = document.getElementById('name--0');
+const name1El = document.getElementById('name--1');
+const diceEl = document.querySelector('.dice')
+
+score0El.textContent = 0;
+score1El.textContent = 0;
+diceEl.classList.add('hidden');
+
+
+
+
 // Theme Management
 function toggleTheme() {
   if (body.getAttribute('data-theme') === 'light') {
