@@ -403,3 +403,132 @@ const timerFixed = {
 */
 
 //////////////////////////////////////////////////////////////////////////
+// -------- Object References in Practice (Shallow vs. Deep Copies) --------
+
+// Original object
+const jessica = {
+  firstName: 'jessica',
+  lastName: 'williams',
+  age: 27,
+};
+
+console.log(jessica); 
+// Outputs: {firstName: "jessica", lastName: "williams", age: 27}
+
+
+// Assigning an object to a new variable copies the REFERENCE, NOT the object itself
+const marriedJessica = jessica;
+
+// Changing property on 'marriedJessica' also changes 'jessica' because both point to the SAME object in memory
+marriedJessica.lastName = 'Davis';
+
+console.log('Before: ', jessica); 
+// Outputs: {firstName: "jessica", lastName: "Davis", age: 27}
+
+console.log('After: ', marriedJessica);
+// Outputs: {firstName: "jessica", lastName: "Davis", age: 27}
+
+
+// Function that modifies object's property directly affects original object, because object is passed by reference
+function marryPerson(originalPerson, newLastName) {
+  originalPerson.lastName = newLastName;
+  return originalPerson;
+}
+
+const marriedJessicaNew = marryPerson(jessica, 'Davidson');
+
+console.log(jessica);          
+// Outputs: {firstName: "jessica", lastName: "Davidson", age: 27}
+console.log(marriedJessica);   
+// Outputs: {firstName: "jessica", lastName: "Davidson", age: 27}
+console.log(marriedJessicaNew);
+// Outputs: {firstName: "jessica", lastName: "Davidson", age: 27}
+// All 3 variables point to the same object!
+
+
+const jessicaNew = {
+  firstName: 'jessica',
+  lastName: 'williams',
+  age: 27,
+  family: ['Alice', 'Bob'],  // Nested object (array)
+};
+
+// --- Shallow Copy ---
+
+// Using spread operator to create a shallow copy of the object
+const jessicaNewCopy = { ...jessicaNew };
+
+console.log(jessicaNew);      // Original object
+console.log(jessicaNewCopy);  // Shallow copy
+
+// Changing primitive property in copy does NOT affect original
+jessicaNewCopy.lastName = 'Hamm';
+
+console.log(jessicaNew);     
+// lastName remains "williams"
+
+console.log(jessicaNewCopy); 
+// lastName is changed to "Hamm"
+
+// However, nested objects (like the family array) are still shared BETWEEN the original and shallow copy
+
+// Mutating the nested array inside the copy affects the original as well:
+jessicaNewCopy.family.push('Mary');
+jessicaNewCopy.family.push('John');
+
+console.log(jessicaNew);     
+// family array now includes Mary and John! Shared reference.
+
+console.log(jessicaNewCopy); 
+// family array includes Mary and John as well.
+
+
+// --- Deep Copy or Deep Clone ---
+
+// To avoid shared nested references, create a DEEP clone using structuredClone() available in modern environments
+
+const jessicaDeepClone = structuredClone(jessicaNew);
+
+// Now mutate the deep clone's nested array
+jessicaDeepClone.family.push('James');
+jessicaDeepClone.family.push('Maria');
+
+console.log(jessicaNew);       
+// family remains unchanged: ["Alice", "Bob", "Mary", "John"]
+
+console.log(jessicaDeepClone); 
+// family: ["Alice", "Bob", "Mary", "John", "James", "Maria"]
+
+
+// --- Additional Examples ---
+
+// Example: shallow copy with nested object and JSON workaround (not recommended if methods or special types)
+const obj = {
+  a: 1,
+  b: { c: 2 }
+};
+const shallowCopy = { ...obj };
+shallowCopy.b.c = 42;
+console.log(obj.b.c); // 42 -> still affected because nested object shared
+
+// Deep clone using JSON methods — works only with pure data (no functions, undefined, etc.)
+const deepCloneJSON = JSON.parse(JSON.stringify(obj));
+deepCloneJSON.b.c = 99;
+console.log(obj.b.c); // 42 -> original unchanged
+
+
+/*
+  ===== SUMMARY =====
+
+  - Objects are assigned and passed by REFERENCE in JavaScript.
+  - Simple assignment copies reference, NOT the object.
+  - Shallow copy (e.g., spread operator) copies only the first level.
+    Nested objects/arrays are still shared references.
+  - Mutating nested objects in shallow copies affects the original.
+  - Deep copying creates a full clone: all nested objects are separately copied.
+  - Use 'structuredClone()' (modern, recommended), or JSON parse/stringify (limited).
+  - Be careful with methods or non-serializable properties when deep cloning with JSON.
+*/ 
+
+
+//////////////////////////////////////////////////////////////////////////
