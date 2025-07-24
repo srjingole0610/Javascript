@@ -64,7 +64,8 @@ A two-player dice game built with DOM manipulation.
 ### 07-Behind-the-Scenes
 
 Explores how JavaScript works under the hood.
--**Topics**: The JavaScript Engine and Runtime, Execution Contexts, The Scope Chain, Hoisting and the TDZ, The `this` Keyword, Regular vs. Arrow Functions and object Reference.
+
+-**Topics**: The JavaScript Engine and Runtime, Execution Contexts, The Scope Chain, Hoisting and the TDZ, The `this` Keyword, Regular vs. Arrow Functions, and Object References.
 
 ## Prerequisites
 
