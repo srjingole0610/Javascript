@@ -250,7 +250,7 @@ matilda.calcAge(); // 8; Here 'this' refers to matilda, so 'this.birthYear' is 2
  * This happens even though the original method used 'this'.
  */
 const f = suraj.calcAge;
-f(); // TypeError: Cannot read properties of undefined (reading 'birthYear') because 'this' is now undefined
+// f(); // TypeError: Cannot read properties of undefined (reading 'birthYear') because 'this' is now undefined
 
 /* 
   === SUMMARY OF "this" BEHAVIOR ===
@@ -261,6 +261,145 @@ f(); // TypeError: Cannot read properties of undefined (reading 'birthYear') bec
   - In a method (function inside an object): 'this' is the object that calls the method
   - When borrowing a method: 'this' is the object that calls the borrowed method
   - In a function called as a standalone (not attached to an object): 'this' is undefined (strict) or window (non-strict)
+*/
+
+//////////////////////////////////////////////////////////////////////////
+// -------- Regular Functions vs. Arrow Functions --------
+
+// Avoid using 'var' for global variables to prevent polluting the global object.
+var firstNameNew = 'matilda'; // This actually becomes a property of the global object (window.firstNameNew)
+
+// Object with methods using both regular function and arrow function to illustrate 'this' behavior
+const jonas = {
+  firstName: 'Jonas',
+  lastName: 'Schmedtmann',
+  birthYear: 1996,
+
+  // Regular function method: 'this' points to the object 'jonas' when called as a method
+  calcAge: function () {
+    console.log(this); // jonas object
+    console.log(2037 - this.birthYear); // Correctly prints 41
+  },
+
+  // Arrow function method: Arrow functions do NOT have their own 'this',
+  // so 'this' refers to lexical/surrounding scope — here likely the global object (window)
+  greet: () => console.log(`Hey ${this.firstName}`), // 'this.firstName' is undefined in global scope
+
+  // Regular function: 'this' correctly points to 'jonas'
+  greetNew: function () {
+    console.log(this); // jonas object
+    console.log(`Hey ${this.firstName}`); // 'Hey Jonas'
+  },
+};
+
+jonas.greet(); // Hey undefined
+console.log(this.firstNameNew); // matilda (global variable accessible on window)
+console.log(this.firstName); // undefined (no such global variable)
+jonas.greetNew(); // Hey Jonas
+
+const harry = {
+  firstName: 'Harry',
+  birthYear: 1996,
+  calcAge: function () {
+    console.log(this); // harry object
+    console.log(2037 - this.birthYear); // 41
+
+    // Solution 1: Preserve 'this' by using 'self' (classic workaround)
+    const self = this;
+    const isMillenial = function () {
+      console.log(this); // undefined (regular function, called as standalone)
+      // Cannot use 'this' here correctly, because it loses context
+
+      // Using 'self' correctly points to harry object
+      console.log(self); // harry object
+      console.log(self.birthYear >= 1981 && self.birthYear <= 1996); // true
+    };
+
+    // Solution 2: Use arrow function, which inherits 'this' lexically
+    const isMillenialArrow = () => {
+      console.log(this); // harry object (inherited from calcAge)
+      console.log(this.birthYear >= 1981 && this.birthYear <= 1996); // true
+    };
+
+    isMillenial();
+    isMillenialArrow();
+  },
+  greetNew: function () {
+    console.log(this); // harry object
+    console.log(`Hey ${this.firstName}`); // Hey Harry
+  },
+};
+
+harry.calcAge();
+
+// --- Arguments object ---
+
+// Regular function expressions have access to 'arguments' object containing all arguments passed
+const addExprNew = function (a, b) {
+  console.log(arguments); // prints all arguments passed
+  return a + b;
+};
+addExprNew(2, 5, 7, 9); // logs: [2, 5, 7, 9]
+addExprNew(2, 5); // logs: [2, 5]
+
+// Arrow functions do NOT have their own 'arguments' object
+const addArrowNew = (a, b) => {
+  // console.log(arguments); // Uncaught ReferenceError: arguments is not defined
+  return a + b;
+};
+
+// addArrowNew(2, 5, 8); // would throw ReferenceError if uncommented
+
+// --- Additional examples to reinforce ---
+
+// Example 1: Lexical 'this' in arrow functions inside objects
+const person = {
+  name: 'Alice',
+  greet: function () {
+    const innerArrow = () => {
+      // arrow inherits 'this' from greet() method, so 'this' points to 'person'
+      console.log(`Hello, ${this.name}`); // Hello, Alice
+    };
+    innerArrow();
+  },
+};
+
+person.greet();
+
+// Example 2: Using a regular function loses 'this' context inside callbacks:
+const timer = {
+  seconds: 0,
+  start: function () {
+    setInterval(function () {
+      this.seconds++; // 'this' here refers to global or undefined, NOT timer obj!
+      console.log(this.seconds); // NaN or error
+    }, 1000);
+  },
+};
+
+// Fix with arrow function:
+const timerFixed = {
+  seconds: 0,
+  start: function () {
+    setInterval(() => {
+      this.seconds++; // 'this' inherited from timerFixed object
+      console.log(this.seconds); // 1, 2, 3, ...
+    }, 1000);
+  },
+};
+
+// timer.start(); // buggy
+// timerFixed.start(); // works correctly
+
+/*
+  ===== SUMMARY =====
+  - Regular functions have their own 'this' and 'arguments'.
+  - Arrow functions do NOT have their own 'this' or 'arguments'.
+  - 'this' in regular functions depends on how the function is called.
+  - Arrow functions capture 'this' lexically from surrounding code.
+  - Avoid arrow functions as object methods if you need 'this' to point to the object.
+  - Use arrow functions to preserve 'this' inside callbacks or nested functions.
+  - The 'arguments' object exists ONLY in regular functions.
 */
 
 //////////////////////////////////////////////////////////////////////////
