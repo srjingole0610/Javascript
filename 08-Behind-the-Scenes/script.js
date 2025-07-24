@@ -157,7 +157,7 @@ var numProducts = 10; // Only the declaration is hoisted, not the initialization
 // Function declarations, like 'deleteShoppingCart', are also hoisted,
 // so this function can be called before its actual definition.
 function deleteShoppingCart() {
-  console.log('All product deleted!');
+  console.log('All products deleted!');
 }
 // Lesson: Be aware that var declarations are hoisted and initialized as undefined at the start of their scope, which can lead to unexpected behavior like this. To avoid such issues, use let or const, which are not initialized until their declaration is evaluated (temporal dead zone).
 
@@ -412,9 +412,8 @@ const jessica = {
   age: 27,
 };
 
-console.log(jessica); 
+console.log(jessica);
 // Outputs: {firstName: "jessica", lastName: "williams", age: 27}
-
 
 // Assigning an object to a new variable copies the REFERENCE, NOT the object itself
 const marriedJessica = jessica;
@@ -422,12 +421,11 @@ const marriedJessica = jessica;
 // Changing property on 'marriedJessica' also changes 'jessica' because both point to the SAME object in memory
 marriedJessica.lastName = 'Davis';
 
-console.log('Before: ', jessica); 
+console.log('Before: ', jessica);
 // Outputs: {firstName: "jessica", lastName: "Davis", age: 27}
 
 console.log('After: ', marriedJessica);
 // Outputs: {firstName: "jessica", lastName: "Davis", age: 27}
-
 
 // Function that modifies object's property directly affects original object, because object is passed by reference
 function marryPerson(originalPerson, newLastName) {
@@ -437,20 +435,19 @@ function marryPerson(originalPerson, newLastName) {
 
 const marriedJessicaNew = marryPerson(jessica, 'Davidson');
 
-console.log(jessica);          
+console.log(jessica);
 // Outputs: {firstName: "jessica", lastName: "Davidson", age: 27}
-console.log(marriedJessica);   
+console.log(marriedJessica);
 // Outputs: {firstName: "jessica", lastName: "Davidson", age: 27}
 console.log(marriedJessicaNew);
 // Outputs: {firstName: "jessica", lastName: "Davidson", age: 27}
 // All 3 variables point to the same object!
 
-
 const jessicaNew = {
   firstName: 'jessica',
   lastName: 'williams',
   age: 27,
-  family: ['Alice', 'Bob'],  // Nested object (array)
+  family: ['Alice', 'Bob'], // Nested object (array)
 };
 
 // --- Shallow Copy ---
@@ -458,16 +455,16 @@ const jessicaNew = {
 // Using spread operator to create a shallow copy of the object
 const jessicaNewCopy = { ...jessicaNew };
 
-console.log(jessicaNew);      // Original object
-console.log(jessicaNewCopy);  // Shallow copy
+console.log(jessicaNew); // Original object
+console.log(jessicaNewCopy); // Shallow copy
 
 // Changing primitive property in copy does NOT affect original
 jessicaNewCopy.lastName = 'Hamm';
 
-console.log(jessicaNew);     
+console.log(jessicaNew);
 // lastName remains "williams"
 
-console.log(jessicaNewCopy); 
+console.log(jessicaNewCopy);
 // lastName is changed to "Hamm"
 
 // However, nested objects (like the family array) are still shared BETWEEN the original and shallow copy
@@ -476,12 +473,11 @@ console.log(jessicaNewCopy);
 jessicaNewCopy.family.push('Mary');
 jessicaNewCopy.family.push('John');
 
-console.log(jessicaNew);     
+console.log(jessicaNew);
 // family array now includes Mary and John! Shared reference.
 
-console.log(jessicaNewCopy); 
+console.log(jessicaNewCopy);
 // family array includes Mary and John as well.
-
 
 // --- Deep Copy or Deep Clone ---
 
@@ -493,19 +489,18 @@ const jessicaDeepClone = structuredClone(jessicaNew);
 jessicaDeepClone.family.push('James');
 jessicaDeepClone.family.push('Maria');
 
-console.log(jessicaNew);       
+console.log(jessicaNew);
 // family remains unchanged: ["Alice", "Bob", "Mary", "John"]
 
-console.log(jessicaDeepClone); 
+console.log(jessicaDeepClone);
 // family: ["Alice", "Bob", "Mary", "John", "James", "Maria"]
-
 
 // --- Additional Examples ---
 
 // Example: shallow copy with nested object and JSON workaround (not recommended if methods or special types)
 const obj = {
   a: 1,
-  b: { c: 2 }
+  b: { c: 2 },
 };
 const shallowCopy = { ...obj };
 shallowCopy.b.c = 42;
@@ -515,7 +510,6 @@ console.log(obj.b.c); // 42 -> still affected because nested object shared
 const deepCloneJSON = JSON.parse(JSON.stringify(obj));
 deepCloneJSON.b.c = 99;
 console.log(obj.b.c); // 42 -> original unchanged
-
 
 /*
   ===== SUMMARY =====
@@ -528,7 +522,6 @@ console.log(obj.b.c); // 42 -> original unchanged
   - Deep copying creates a full clone: all nested objects are separately copied.
   - Use 'structuredClone()' (modern, recommended), or JSON parse/stringify (limited).
   - Be careful with methods or non-serializable properties when deep cloning with JSON.
-*/ 
-
+*/
 
 //////////////////////////////////////////////////////////////////////////
