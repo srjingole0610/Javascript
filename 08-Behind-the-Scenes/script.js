@@ -60,7 +60,7 @@ function calcAge(birthYear) {
 
     // 'millenial' declared with 'var' is function-scoped,
     // so it is accessible here, even outside the if block.
-    console.log(millenial); // true
+    console.log(millenial); // true if birthYear in range, otherwise undefined
 
     // 'output' is accessible and has been reassigned inside the 'if' block.
     console.log(output); // 'NEW OUTPUT!!' if birthYear in range
