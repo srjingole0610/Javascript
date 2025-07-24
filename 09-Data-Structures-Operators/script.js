@@ -11,6 +11,32 @@ const restaurant = {
     // This method returns an array consisting of a starter and a main dish
     return [this.starterMenu[starterIndex], this.mainMenu[mainIndex]];
   },
+  openingHours: {
+    thu: {
+      open: 12,
+      close: 22,
+    },
+    fri: {
+      open: 11,
+      close: 23,
+    },
+    sat: {
+      open: 0, // Open 24 hours
+      close: 24,
+    },
+  },
+
+  orderDelivery: function ({
+    starterIndex = 1, // default value if not provided in argument object
+    mainIndex = 0,
+    time = '20:00',
+    address,
+  }) {
+    console.log(starterIndex, mainIndex, time, address);
+    console.log(
+      `Order Received! ${this.starterMenu[starterIndex]} and ${this.mainMenu[mainIndex]} will be delivered to ${address} at ${time}`,
+    );
+  },
 };
 
 //////////////////////////////////////////
@@ -19,10 +45,10 @@ const restaurant = {
 const arr = [2, 3, 4];
 
 // Traditional way to extract array elements
-const a = arr[0];
-const b = arr[1];
-const c = arr[2];
-console.log(a, b, c); // 2 3 4
+const arr1 = arr[0];
+const arr2 = arr[1];
+const arr3 = arr[2];
+console.log(arr1, arr2, arr3); // 2 3 4
 
 // ES6 Destructuring syntax: extracts values from array into variables in one line!
 const [x, y, z] = arr;
@@ -31,18 +57,15 @@ console.log(x, y, z); // 2 3 4
 // Original array remains unchanged
 console.log(arr); // [2, 3, 4]
 
-
 // Destructuring example with restaurant categories array
 // Extract the first and second category into variables
 const [firstCategory, secondCategory] = restaurant.categories;
 console.log(firstCategory, secondCategory); // Italian Pizzeria
 
-
 // Skipping items:
 // Extract the first and third categories, skipping the second with a comma
 let [mainCategory, , secondaryCategory] = restaurant.categories;
 console.log(mainCategory, secondaryCategory); // Italian Vegetarian
-
 
 // SWITCHING VARIABLES BEFORE DESTRUCTURING (traditional way)
 // let temp = mainCategory;
@@ -54,11 +77,9 @@ console.log(mainCategory, secondaryCategory); // Italian Vegetarian
 [mainCategory, secondaryCategory] = [secondaryCategory, mainCategory];
 console.log(mainCategory, secondaryCategory); // Vegetarian Italian
 
-
 // Receiving multiple return values from a function via array destructuring
 const [starterFood, mainFood] = restaurant.orderFood(2, 0);
 console.log(starterFood, mainFood); // Garlic Bread Pizza
-
 
 // Nested Array Destructuring:
 // Example nested array
@@ -72,17 +93,16 @@ console.log(i, j); // 2 [5, 6]
 const [k, , [l, m]] = nestedArray;
 console.log(k, l, m); // 2 5 6
 
-
 // Default Values in Destructuring:
 // If the array has fewer elements than variables, defaults are used
 const [p = 1, q = 1, r = 1] = [8, 9];
 console.log(p, q, r); // 8 9 1 (r uses default as input has only 2 items)
 
-
 // --- ADDITIONAL EXAMPLES ---
 
 // Example: Swapping variables in one line using array destructuring
-let num1 = 10, num2 = 20;
+let num1 = 10,
+  num2 = 20;
 [num1, num2] = [num2, num1];
 console.log(num1, num2); // 20 10
 
@@ -92,7 +112,6 @@ function getCoordinates() {
 }
 const [latitude, longitude] = getCoordinates();
 console.log(latitude, longitude); // 25.2345 45.5678
-
 
 /*
   ===== SUMMARY OF ARRAY DESTRUCTURING =====
@@ -105,3 +124,98 @@ console.log(latitude, longitude); // 25.2345 45.5678
   - Supports rest pattern (...) to gather leftover elements into an array.
 */
 
+///////////////////////////////////////////////////////////////////////////////
+//--- Basic Object Destructuring ---
+// Extract properties 'name', 'openingHours', and 'categories' from restaurant object
+const { name, openingHours, categories } = restaurant;
+console.log(name, openingHours, categories);
+
+//--- Rename Variables While Destructuring ---
+// Assign properties to new variable names for clarity or to avoid naming conflicts
+const {
+  name: restaurantName,
+  openingHours: hours,
+  categories: tags,
+} = restaurant;
+console.log(restaurantName, hours, tags);
+
+//--- Setting Default Values ---
+// If a property doesn't exist on the object, use default value to avoid undefined
+const { menu = [], starterMenu: starters = [] } = restaurant;
+console.log(menu, starters); // menu is undefined in restaurant, so default [] is used
+
+//--- Mutating Existing Variables Using Destructuring ---
+// When reassigning variables via destructuring, wrap in parentheses to avoid syntax errors
+let a = 11;
+let b = 999;
+console.log(a, b);
+
+const obj = { a: 23, b: 7, c: 14 };
+// Without parentheses, JS expects a block, causing syntax error
+({ a, b } = obj);
+console.log(a, b); // a and b reassigned to obj.a and obj.b values
+
+//--- Nested Object Destructuring ---
+// Extract nested properties from openingHours object
+const { fri } = openingHours;
+console.log(fri); // entire 'fri' object: {open: 11, close: 23}
+
+const {
+  fri: { open, close },
+} = openingHours;
+console.log(open, close); // 11 23
+
+// Rename variables while destructuring nested object
+const {
+  sat: { open: o, close: c },
+} = openingHours;
+console.log(o, c); // 0 24
+
+//--- Using the orderDelivery Method with Object Destructuring in Parameters ---
+
+// Calling with all properties passed in argument object
+restaurant.orderDelivery({
+  time: '22:30',
+  address: 'Dehuroad,Pune',
+  mainIndex: 2,
+  starterIndex: 2,
+});
+
+// Calling with some properties omitted; defaults will be used
+restaurant.orderDelivery({
+  address: 'Dehuroad,Pune',
+  mainIndex: 2,
+  // starterIndex and time use default values from the parameter destructuring
+});
+
+// --- Additional Examples ---
+
+// Destructuring in function parameters to extract only needed properties
+function printCategories({ categories }) {
+  console.log('Categories:', categories.join(', '));
+}
+
+printCategories(restaurant); // Categories: Italian, Pizzeria, Vegetarian, Organic
+
+// Setting default values and renaming combined in nested destructuring
+const {
+  fri: { open: openFri = 10, close: closeFri = 22 },
+  mon: { open: openMon = 9, close: closeMon = 21 } = {}, // default empty object to avoid error
+} = openingHours;
+
+console.log('Friday:', openFri, closeFri); // Friday: 11 23
+console.log('Monday:', openMon, closeMon); // Monday: 9 21 (defaults used because no 'mon' property)
+
+// Key takeaways from object destructuring:
+
+// Extract properties from objects into standalone variables for clean, readable code.
+// Rename variables on extraction with propertyName: newVariableName.
+// Provide default values to avoid undefined variables.
+// Nested objects can be destructured deeply with syntax mirroring the object shape.
+// Mutate existing variables carefully with surrounding parentheses.
+// Use destructuring in function parameters to directly access properties of provided objects.
+// Combine destructuring with rest (...) operator to separate certain properties from the rest.
+// When calling functions that destructure parameters, any missing keys can use default values.
+// ✨ Object destructuring makes accessing and managing data from objects much easier and your code cleaner! Play around with these examples to gain comfort.
+
+/////////////////////////////////////////////////////////////////
