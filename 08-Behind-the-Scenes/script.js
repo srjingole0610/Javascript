@@ -1,66 +1,100 @@
 'use strict';
 
-//High-level
-// Garbage-collected
-//Interpreted or JIT complied
-//Multi-paradigm
-// Prototype-based object-oriented
-//First-class functions
-//Dynamic Typed
-//Single-threaded
-//Non-blocking event loop
-// //JavaScript Engine and runtime :
-// 	call stack :  execution context : variable Env, scope chain, this keyword
-// 	Heap
-// 	callback Queue
-//scoping, lexical scoping, scope and scope of variable
-
 ///////////////////////////////////////
-// Scoping in Practice
+// -------- Scoping in Practice --------
 
+/**
+ * Calculates the age of a person based on their birth year
+ * @param {number} birthYear the year of birth
+ * @returns {number} the age of the person
+ */
 function calcAge(birthYear) {
+  // 'age' is scoped to 'calcAge' (function scope)
   const age = 2025 - birthYear;
-  //Uncaught ReferenceError: lastName is not defined
+
+  // Uncommenting the line below will throw a ReferenceError, 
+  // because 'lastName' is not defined in any accessible scope.
   // console.log(lastName);
-  console.log(firstName);
+
+  // 'firstName' is declared in the global scope (see below)
+  console.log(firstName); // 'Suraj' (accessed via scope chain)
+
+/**
+ * Prints the age and birth year of a person, along with additional information
+ * if they are a millennial. The function accesses and modifies variables
+ * within its scope and demonstrates block scoping and shadowing.
+ * 
+ * It logs a message indicating the person's name and age, and if the birth year
+ * is between 1991 and 1996, it additionally logs a message indicating they are
+ * a millennial, using a shadowed variable for the name. It also demonstrates
+ * function-level scoping with `var` and block scoping of functions in strict mode.
+ */
 
   function printAge() {
+    // 'output' is scoped to 'printAge'
     let output = `${firstName} is ${age} years old, born in ${birthYear}`;
     console.log(output);
 
     if (birthYear >= 1991 && birthYear <= 1996) {
+      // 'millenial' uses 'var': function scoped (visible in entire 'printAge')
       var millenial = true;
 
-      //Creating NEW variale with same name as outer scope's variable
-      const firstName = 'Steven';
+      // 'firstName' (declared with 'const') is BLOCK scoped, 
+      // so it SHADOWS the outer 'firstName' within this block only.
+      const firstName = 'Steven';  
       const str = `Oh, and you're a millenial, ${firstName}`;
-      console.log(str);
+      console.log(str); // will print 'Steven'
 
+      // A function declaration: 'add' is block-scoped in ES6 ('strict mode')
       function add(a, b) {
         return a + b;
       }
-      // Reassigninng outer scope's variable
+
+      // reassigning 'output' from outer scope
       output = 'NEW OUTPUT!!';
     }
 
-    //Uncaught ReferenceError: str is not defined
-    //console.log(str);
-    console.log(millenial);
-    console.log(output);
+    // Uncommenting the line below will throw a ReferenceError, 
+    // because 'str' is block-scoped and not accessible here.
+    // console.log(str);
+
+    // 'millenial' declared with 'var' is function-scoped, 
+    // so it is accessible here, even outside the if block.
+    console.log(millenial); // true
+
+    // 'output' is accessible and has been reassigned inside the 'if' block.
+    console.log(output); // 'NEW OUTPUT!!' if birthYear in range
   }
-  //Uncaught ReferenceError: add is not defined. FUnctions are blocked scope in ES6, but only in strict mode
-  // add(2,3);
+
+  // Uncommenting the line below will throw a ReferenceError,
+  // in strict mode, because 'add' is block scoped within 'if'
+  // add(2, 3);
 
   printAge();
   return age;
 }
 
+// 'firstName' is declared in the global scope.
 const firstName = 'Suraj';
+
 calcAge(1996);
-// Uncaught ReferenceError: age is not defined
-// console.log(age);
-// Uncaught ReferenceError: printAge is not defined
-// printAge();
+
+// Uncommenting the lines below will throw ReferenceErrors:
+// because 'age' and 'printAge' are scoped to inside 'calcAge' and can't be accessed here outside.
+/*
+console.log(age);
+printAge();
+*/
+
+/*
+  --- Scoping Lessons ---
+  - Variables declared with let and const have block scope (exist only inside the block).
+  - Variables declared with var have function scope (exist throughout the function).
+  - Inner variables ('const firstName = "Steven"') can shadow outer variables of the same name.
+  - Function declarations inside blocks ({ ... }) are block-scoped in 'strict mode'.
+  - Variables and functions declared inside a function are NOT accessible outside.
+  - The scope chain determines how variable lookups work (upwards through nested scopes until found or undefined).
+*/
 
 ///////////////////////////////////////
 // Hoisting and TDZ in Practice
