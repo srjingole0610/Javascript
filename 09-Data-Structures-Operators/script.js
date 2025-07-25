@@ -43,6 +43,14 @@ const restaurant = {
       `Here is your delicious pasta with ${ing1},${ing2} and ${ing3}`,
     );
   },
+
+  orderPizza : function(mainIngredient, ...otherIngredients) {
+  console.log(`Main ingredient: ${mainIngredient}`);
+  if(otherIngredients.length > 0) {
+    console.log(`Other ingredients: ${otherIngredients.join(', ')}`);
+  }
+},
+
 };
 
 //////////////////////////////////////////
@@ -239,12 +247,11 @@ console.log(newArr); // [4, 5, 1, 2, 3]
 // Spread elements individually to a function or output (not as an array, but as separate values)
 console.log(...newArr); // 4 5 1 2 3
 
-
 // ---- COMMON USE CASES FOR ARRAYS ----
 
 // 1. Creating a new array by expanding another in place
 const newMenu = [...restaurant.mainMenu, 'Gnocci'];
-console.log(newMenu);           // ['Pizza', 'Pasta', 'Risotto', 'Gnocci']
+console.log(newMenu); // ['Pizza', 'Pasta', 'Risotto', 'Gnocci']
 console.log(restaurant.mainMenu); // Original array is NOT mutated
 
 // 2. Copying arrays (shallow copy, for new independent reference)
@@ -255,14 +262,12 @@ console.log(mainMenuCopyArr);
 const combineMenu = [...restaurant.mainMenu, ...restaurant.starterMenu];
 console.log(combineMenu);
 
-
 // 4. Using spread with strings
 const newStr = 'Suraj';
 // Strings are iterable, so spread turns each character into a separate element
 const letters = [...newStr, ' ', 'I.'];
-console.log(letters);       // ['S','u','r','a','j',' ','I.']
-console.log(...newStr);     // S u r a j (spreads characters)
-
+console.log(letters); // ['S','u','r','a','j',' ','I.']
+console.log(...newStr); // S u r a j (spreads characters)
 
 // ---- SPREAD OPERATOR IN FUNCTION CALLS ----
 
@@ -284,8 +289,8 @@ restaurant.orderPasta(...ingredients); // Cleaner and scalable!
 
 // Making a full (shallow) copy and adding/modifying properties
 const newRestaurant = {
-  ...restaurant,      // copies all properties
-  founder: 'Suraj Ingole',  // adds new property
+  ...restaurant, // copies all properties
+  founder: 'Suraj Ingole', // adds new property
   foundingYear: 1998, // note: corrected spelling from 'foudingYear'
 };
 console.log(newRestaurant);
@@ -296,8 +301,8 @@ console.log(restaurantCopy);
 
 // Changes to the copy do NOT affect the original
 restaurantCopy.name = 'Ristorante Roma';
-console.log(restaurant.name);       // 'Classico Italiano'
-console.log(restaurantCopy.name);   // 'Ristorante Roma'
+console.log(restaurant.name); // 'Classico Italiano'
+console.log(restaurantCopy.name); // 'Ristorante Roma'
 
 // But changing a nested object property will affect both (because of shallow copy)
 restaurantCopy.openingHours.fri.open = 10;
@@ -305,7 +310,10 @@ console.log(restaurant.openingHours.fri.open); // 10 (changed in both!)
 
 // ---- EXTRA EXAMPLES ----
 // 1. Spreading to create a shallow copy of a nested array
-const doubleArr = [[1,2], [3,4]];
+const doubleArr = [
+  [1, 2],
+  [3, 4],
+];
 const shallowCopyDouble = [...doubleArr];
 shallowCopyDouble[0][0] = 9;
 console.log(doubleArr); // [[9,2], [3,4]] — shallow copy, so nested arrays are shared!
@@ -331,5 +339,91 @@ console.log(Math.max(...numArr)); // 99
 
   ✨ Use spread for concise, clear, and modern JavaScript!
 */
+
+/////////////////////////////////////////////////////////////////
+// -------- REST Pattern and Parameters --------
+
+// The REST pattern uses "..." on the LEFT SIDE of assignment (=) or parameter lists
+// It collects the remaining elements into a new array (or object).
+
+// Array destructuring with REST: 
+// Collect all remaining items in the array after the first two into "others"
+const [first, second, ...others] = [1, 2, 3, 4, 5];
+console.log(first, second, others); // 1 2 [3, 4, 5]
+
+// Can only be used as the last element in a destructuring assignment!
+
+// Example with skipping elements using commas and combining destructuring with REST
+const [pizza, , rissoto, ...otherFoods] = [
+  ...restaurant.mainMenu,
+  ...restaurant.starterMenu,
+];
+// Skipping the second item with only a comma: the third goes to 'rissoto', and everything after goes to 'otherFoods'
+console.log(pizza, rissoto, otherFoods);
+
+// ----- REST with Object Destructuring ------
+// Collect all properties EXCEPT 'sat' into a separate object 'weekdays'
+const { sat, ...weekdays } = restaurant.openingHours;
+console.log(sat, weekdays);
+// sat = { open: 0, close: 24 }
+// weekdays = { thu: {open:12,close:22}, fri: {open:11,close:23} }
+
+// ----- REST Parameters in Functions -----
+// "..." in function parameter collects all remaining (multiple) arguments into a real array called 'numbers'
+const add = function (...numbers) {
+  console.log(numbers); // Array of arguments
+  let sum = 0;
+  for (let i = 0; i < numbers.length; i++) {
+    sum += numbers[i];
+  }
+  console.log(sum); // Print the sum of all provided arguments
+};
+
+add(2, 3, 4);                        // [2, 3, 4] => 9
+add(3, 5, 7, 2);                     // [3, 5, 7, 2] => 17
+add(3, 4, 5, 1, 3, 6, 7, 8, 1);      // [3, 4, 5, 1, 3, 6, 7, 8, 1] => 38
+
+// REST can combine with SPREAD to pass arrays as arguments to such a function
+const randomNum = [23, 5, 7];
+add(...randomNum);                    // [23, 5, 7] => 35
+
+// ---- Example: REST Parameters in Restaurant Method ----
+restaurant.orderPizza('mushrooms', 'onion', 'olives', 'spinach');
+restaurant.orderPizza('chicken');
+restaurant.orderPizza('chicken', 'pepporini', 'corn');
+
+// ========== EXTRA EXAMPLES ==========
+
+// 1. Mix REST pattern with default values
+const [head, ...tail] = [];
+console.log(head, tail); // undefined []
+
+// 2. Use REST parameters to create a function that accepts any number of names
+function greetAll(greeting, ...names) {
+  for(const name of names) {
+    console.log(`${greeting}, ${name}!`);
+  }
+}
+greetAll('Hello', 'Asha', 'Ben', 'Carl'); // Hello, Asha! etc.
+
+
+// =================== SUMMARY ===================
+/*
+REST PATTERN:
+- In destructuring (arrays or objects): ... on LEFT side gathers the "rest" of the elements/properties
+  - Arrays:     const [a, ...rest] = [1,2,3]; rest === [2,3]
+  - Objects:    const {x, ...rest} = {x:1, y:2, z:3}; rest === {y:2, z:3}
+- REST must be at the end of the destructuring assignment
+
+REST PARAMETERS:
+- In functions: ... in the parameter list collects all arguments into an array
+  - function f(...args) { ... }
+- Lets you define functions that can take any number of arguments (variadic functions)
+
+- REST pattern is different from SPREAD: 
+   - REST collects items into an array/object (destructuring or parameter)
+   - SPREAD expands array/object into individual values (as arguments or elements)
+*/
+
 
 /////////////////////////////////////////////////////////////////
