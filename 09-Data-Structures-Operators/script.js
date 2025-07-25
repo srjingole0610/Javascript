@@ -44,13 +44,12 @@ const restaurant = {
     );
   },
 
-  orderPizza : function(mainIngredient, ...otherIngredients) {
-  console.log(`Main ingredient: ${mainIngredient}`);
-  if(otherIngredients.length > 0) {
-    console.log(`Other ingredients: ${otherIngredients.join(', ')}`);
-  }
-},
-
+  orderPizza: function (mainIngredient, ...otherIngredients) {
+    console.log(`Main ingredient: ${mainIngredient}`);
+    if (otherIngredients.length > 0) {
+      console.log(`Other ingredients: ${otherIngredients.join(', ')}`);
+    }
+  },
 };
 
 //////////////////////////////////////////
@@ -342,11 +341,11 @@ console.log(Math.max(...numArr)); // 99
 
 /////////////////////////////////////////////////////////////////
 // -------- REST Pattern and Parameters --------
-
+console.log('-------- REST Pattern and Parameters --------');
 // The REST pattern uses "..." on the LEFT SIDE of assignment (=) or parameter lists
 // It collects the remaining elements into a new array (or object).
 
-// Array destructuring with REST: 
+// Array destructuring with REST:
 // Collect all remaining items in the array after the first two into "others"
 const [first, second, ...others] = [1, 2, 3, 4, 5];
 console.log(first, second, others); // 1 2 [3, 4, 5]
@@ -379,20 +378,22 @@ const add = function (...numbers) {
   console.log(sum); // Print the sum of all provided arguments
 };
 
-add(2, 3, 4);                        // [2, 3, 4] => 9
-add(3, 5, 7, 2);                     // [3, 5, 7, 2] => 17
-add(3, 4, 5, 1, 3, 6, 7, 8, 1);      // [3, 4, 5, 1, 3, 6, 7, 8, 1] => 38
+add(2, 3, 4); // [2, 3, 4] => 9
+add(3, 5, 7, 2); // [3, 5, 7, 2] => 17
+add(3, 4, 5, 1, 3, 6, 7, 8, 1); // [3, 4, 5, 1, 3, 6, 7, 8, 1] => 38
 
 // REST can combine with SPREAD to pass arrays as arguments to such a function
 const randomNum = [23, 5, 7];
-add(...randomNum);                    // [23, 5, 7] => 35
+add(...randomNum); // [23, 5, 7] => 35
 
 // ---- Example: REST Parameters in Restaurant Method ----
+console.log('---- Example: REST Parameters in Restaurant Method ----')
 restaurant.orderPizza('mushrooms', 'onion', 'olives', 'spinach');
 restaurant.orderPizza('chicken');
 restaurant.orderPizza('chicken', 'pepporini', 'corn');
 
 // ========== EXTRA EXAMPLES ==========
+console.log('========== EXTRA EXAMPLES ==========')
 
 // 1. Mix REST pattern with default values
 const [head, ...tail] = [];
@@ -400,12 +401,11 @@ console.log(head, tail); // undefined []
 
 // 2. Use REST parameters to create a function that accepts any number of names
 function greetAll(greeting, ...names) {
-  for(const name of names) {
+  for (const name of names) {
     console.log(`${greeting}, ${name}!`);
   }
 }
 greetAll('Hello', 'Asha', 'Ben', 'Carl'); // Hello, Asha! etc.
-
 
 // =================== SUMMARY ===================
 /*
@@ -423,6 +423,95 @@ REST PARAMETERS:
 - REST pattern is different from SPREAD: 
    - REST collects items into an array/object (destructuring or parameter)
    - SPREAD expands array/object into individual values (as arguments or elements)
+*/
+
+/////////////////////////////////////////////////////////////////
+// -------- SHORT-CIRCUITING (|| and &&) --------
+
+// The OR (||) operator returns the FIRST "truthy" value it finds, or the LAST value if none are truthy
+
+console.log('-----------------OR-------------------');
+console.log(3 || 'jonas');            // 3    (3 is truthy, returns 3 and stops evaluating further)
+console.log('' || 'jonas');           // 'jonas' ('' is falsy, so returns the next - 'jonas')
+console.log(true || 0);               // true (true is truthy)
+console.log(undefined || null);       // null (both falsy => returns the LAST value)
+console.log(undefined || null || 'Suraj'); // 'Suraj' (first two falsy, so 'Suraj' is returned)
+console.log(undefined || null || 'Hello' || 23 || 0); // 'Hello' (first truthy in chain)
+
+
+// --- Practical Use Case: providing default values ---
+
+// Before ES2020, used OR for fallback default
+const guest1 = restaurant.numGuests ? restaurant.numGuests : 10; // if undefined or 0, fallback to 10
+console.log(guest1); // 10 (if no property set on restaurant)
+
+// Setting a value and using short-circuit OR for fallback
+restaurant.numGuests = 50;
+const guest2 = restaurant.numGuests || 10;
+console.log(guest2); // 50 (truthy, so no fallback needed)
+
+
+// Note: If restaurant.numGuests = 0;
+// '0 || 10' would give 10 (because 0 is falsy!)
+// Use nullish coalescing (??) if you only want null or undefined as fallback! See example below
+
+console.log('----------------------AND------------------');
+// The AND (&&) operator returns the FIRST "falsy" value it finds, or the LAST value if all are truthy
+
+console.log(0 && 'jonas');         // 0 (0 is falsy, so returns immediately)
+console.log(3 && 'Suraj');         // 'Suraj' (3 is truthy, so returns last if all previous are truthy)
+console.log(3 && 'Suraj' && null); // null (first falsy encountered in chain)
+console.log(3 && 'Suraj' && 23 && undefined && 5 && null); // undefined (returned as soon as found, stops evaluating)
+
+
+// --- Practical Use Case: executing code ONLY if a property/method exists ---
+
+if (restaurant.orderPizza) {
+  restaurant.orderPizza('mushrooms', 'corn');
+}
+
+// The AND (&&) operator is often used as a shortcut for conditional execution:
+restaurant.orderPizza &&
+  restaurant.orderPizza('chicken', 'pepporni', 'corn', 'cheese');
+// If orderPizza exists (truthy), the function is called; if falsy, nothing happens
+
+
+// ----------- EXTRA EXAMPLES -----------
+console.log('----------- EXTRA EXAMPLES -----------')
+
+// OR chain for default fallback (first defined value)
+let val = '' || 0 || undefined || null || 'Default';
+console.log(val); // 'Default'
+
+// AND chain: stops at first falsy value
+console.log(true && 1 && 'hello' && [] && 0 && 'should not print'); // 0
+
+// Using AND to guard function calls (classic pattern)
+const user = {
+  name: 'Suraj',
+  greet: function() { console.log(`Hello, ${this.name}!`); }
+};
+user.greet && user.greet(); // Hello, Suraj!
+// If greet existed, it gets called
+
+const anonymous = {};
+anonymous.greet && anonymous.greet(); // (nothing happens, doesn't error!)
+
+
+/*
+    ==== SUMMARY: SHORT-CIRCUITING ====
+
+    - The OR (||) operator returns the first TRUTHY value, or the last value if none are truthy.
+    - Useful for: Providing default/fallback values.
+    - Beware: 0, '', false are all falsy (use ?? for better fallback if you want to allow 0 or ''!)
+
+    - The AND (&&) operator returns the first FALSY value, or the last value if all are truthy.
+    - Useful for: Conditional execution (act only if all prior conditions are true).
+    - If used as a guard, prevents errors when calling a method/property that may not exist.
+
+    - Both OR and AND short-circuit: they stop as soon as their outcome is determined.
+
+    === Practice combining them to streamline your logic! ===
 */
 
 
