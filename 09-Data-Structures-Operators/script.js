@@ -387,13 +387,13 @@ const randomNum = [23, 5, 7];
 add(...randomNum); // [23, 5, 7] => 35
 
 // ---- Example: REST Parameters in Restaurant Method ----
-console.log('---- Example: REST Parameters in Restaurant Method ----')
+console.log('---- Example: REST Parameters in Restaurant Method ----');
 restaurant.orderPizza('mushrooms', 'onion', 'olives', 'spinach');
 restaurant.orderPizza('chicken');
 restaurant.orderPizza('chicken', 'pepporini', 'corn');
 
 // ========== EXTRA EXAMPLES ==========
-console.log('========== EXTRA EXAMPLES ==========')
+console.log('========== EXTRA EXAMPLES ==========');
 
 // 1. Mix REST pattern with default values
 const [head, ...tail] = [];
@@ -431,13 +431,12 @@ REST PARAMETERS:
 // The OR (||) operator returns the FIRST "truthy" value it finds, or the LAST value if none are truthy
 
 console.log('-----------------OR-------------------');
-console.log(3 || 'jonas');            // 3    (3 is truthy, returns 3 and stops evaluating further)
-console.log('' || 'jonas');           // 'jonas' ('' is falsy, so returns the next - 'jonas')
-console.log(true || 0);               // true (true is truthy)
-console.log(undefined || null);       // null (both falsy => returns the LAST value)
+console.log(3 || 'jonas'); // 3    (3 is truthy, returns 3 and stops evaluating further)
+console.log('' || 'jonas'); // 'jonas' ('' is falsy, so returns the next - 'jonas')
+console.log(true || 0); // true (true is truthy)
+console.log(undefined || null); // null (both falsy => returns the LAST value)
 console.log(undefined || null || 'Suraj'); // 'Suraj' (first two falsy, so 'Suraj' is returned)
 console.log(undefined || null || 'Hello' || 23 || 0); // 'Hello' (first truthy in chain)
-
 
 // --- Practical Use Case: providing default values ---
 
@@ -450,7 +449,6 @@ restaurant.numGuests = 50;
 const guest2 = restaurant.numGuests || 10;
 console.log(guest2); // 50 (truthy, so no fallback needed)
 
-
 // Note: If restaurant.numGuests = 0;
 // '0 || 10' would give 10 (because 0 is falsy!)
 // Use nullish coalescing (??) if you only want null or undefined as fallback! See example below
@@ -458,11 +456,10 @@ console.log(guest2); // 50 (truthy, so no fallback needed)
 console.log('----------------------AND------------------');
 // The AND (&&) operator returns the FIRST "falsy" value it finds, or the LAST value if all are truthy
 
-console.log(0 && 'jonas');         // 0 (0 is falsy, so returns immediately)
-console.log(3 && 'Suraj');         // 'Suraj' (3 is truthy, so returns last if all previous are truthy)
+console.log(0 && 'jonas'); // 0 (0 is falsy, so returns immediately)
+console.log(3 && 'Suraj'); // 'Suraj' (3 is truthy, so returns last if all previous are truthy)
 console.log(3 && 'Suraj' && null); // null (first falsy encountered in chain)
 console.log(3 && 'Suraj' && 23 && undefined && 5 && null); // undefined (returned as soon as found, stops evaluating)
-
 
 // --- Practical Use Case: executing code ONLY if a property/method exists ---
 
@@ -475,9 +472,8 @@ restaurant.orderPizza &&
   restaurant.orderPizza('chicken', 'pepporni', 'corn', 'cheese');
 // If orderPizza exists (truthy), the function is called; if falsy, nothing happens
 
-
 // ----------- EXTRA EXAMPLES -----------
-console.log('----------- EXTRA EXAMPLES -----------')
+console.log('----------- EXTRA EXAMPLES -----------');
 
 // OR chain for default fallback (first defined value)
 let val = '' || 0 || undefined || null || 'Default';
@@ -489,14 +485,15 @@ console.log(true && 1 && 'hello' && [] && 0 && 'should not print'); // 0
 // Using AND to guard function calls (classic pattern)
 const user = {
   name: 'Suraj',
-  greet: function() { console.log(`Hello, ${this.name}!`); }
+  greet: function () {
+    console.log(`Hello, ${this.name}!`);
+  },
 };
 user.greet && user.greet(); // Hello, Suraj!
 // If greet existed, it gets called
 
 const anonymous = {};
 anonymous.greet && anonymous.greet(); // (nothing happens, doesn't error!)
-
 
 /*
     ==== SUMMARY: SHORT-CIRCUITING ====
@@ -514,10 +511,11 @@ anonymous.greet && anonymous.greet(); // (nothing happens, doesn't error!)
     === Practice combining them to streamline your logic! ===
 */
 
-
 /////////////////////////////////////////////////////////////////
 // ---- NULLISH COALESCING OPERATOR (??) ----
-console.log('---------------NULLISH COALESCING OPERATOR(??)---------------------');
+console.log(
+  '---------------NULLISH COALESCING OPERATOR(??)---------------------',
+);
 
 // Scenario: You want a fallback value ONLY if the property is null or undefined,
 // NOT if the value is 0, '', or false (which are all falsy with ||).
@@ -538,7 +536,7 @@ console.log(newGuestCorrect); // 0 (CORRECT: 0 is a valid, intended value)
  */
 
 // ----- More Examples -----
-console.log('-------- More Examples --------')
+console.log('-------- More Examples --------');
 
 // Example 1: Null or undefined fallbacks
 let input;
@@ -557,7 +555,9 @@ input = false;
 console.log(input ?? 'Fallback'); // false
 
 // Example 3: Chained ??
-let a1 = null, b1 = undefined, c1 = 5;
+let a1 = null,
+  b1 = undefined,
+  c1 = 5;
 console.log(a1 ?? b1 ?? c1 ?? 100); // 5 (first value that is NOT null or undefined)
 
 // Example 4: ?? vs || (OR)
@@ -572,9 +572,9 @@ function sayHello(name) {
   console.log(`Hello, ${userName}!`);
 }
 sayHello('Suraj'); // Hello, Suraj!
-sayHello(null);    // Hello, Guest!
+sayHello(null); // Hello, Guest!
 sayHello(undefined); // Hello, Guest!
-sayHello('');      // Hello, !
+sayHello(''); // Hello, !
 
 /*
 ======== SUMMARY ========
@@ -586,4 +586,113 @@ sayHello('');      // Hello, !
 -- This helps make your fallback logic much safer and more predictable!
 */
 
+/////////////////////////////////////////////////////////////////
+// Logical Assignment Operators
+console.log('----------Logical Assignment Operators-----------');
+
+const restaurantOne = {
+  name: 'Capri',
+  numGuest: 20,
+  numVipGuest: 0,
+};
+
+const restaurantSecond = {
+  name: 'La Pizzeria',
+  owner: 'Suraj Roberto',
+  followers: 0,
+};
+
+// Used short-circuiting (classic way):
+console.log('-------------- using short circuiting ------------ ');
+restaurantOne.numGuest = restaurantOne.numGuest || 10; // If falsy, assign 10 (so 0, '', null, undefined all replaced!)
+restaurantSecond.numGuest = restaurantSecond.numGuest || 10;
+console.log(restaurantSecond.numGuest); // 10 (property did not exist, so assigned)
+console.log(restaurantOne.numGuest); // 20 (already truthy, stays the same)
+
+// --- Logical OR Assignment (||=) ---
+// If current value is falsy, assign right side (just like x = x || y, but shorter!)
+console.log(
+  '------------------- using logical OR assignment --------------------------',
+);
+// Does nothing, numGuest already 20 (truthy), but _would_ assign if 0, '', null, or undefined
+restaurantOne.numGuest ||= 10;
+restaurantSecond.numGuest ||= 10;
+// Now, numVipGuest is 0 (falsy!) so || assigns 1 - CAUTION!
+restaurantOne.numVipGuest ||= 1;
+console.log(restaurantSecond.numGuest); // 10
+console.log(restaurantOne.numGuest); // 20
+console.log(restaurantOne.numVipGuest); // 1  (assigned, even though 0 is a valid value!)
+
+// --- Logical Nullish Assignment (??=) ---
+// Only assigns if current value is null or undefined (treats 0 and '' as valid!)
+console.log(
+  '------------------- using logical Nullish assignment --------------------------',
+);
+restaurantOne.followers ??= 10000; // not present (undefined), so assigns 10000
+restaurantSecond.followers ??= 12000; // already 0 (NOT null/undefined!), so not assigned
+console.log(restaurantOne); // followers: 10000
+console.log(restaurantSecond); // followers: 0
+
+// --- Logical AND Assignment (&&=) ---
+// Only assigns if current value is truthy (x &&= y is x = x && y)
+// Useful to change a value only when it is truthy (for example, redacting owner data if present)
+console.log(
+  '------------------- using logical AND assignment --------------------------',
+);
+restaurantOne.owner &&= '<ANONYMOUS>'; // undefined, so doesn't assign
+restaurantSecond.owner &&= '<ANONYMOUS>'; // had value, so updates to '<ANONYMOUS>'
+console.log(restaurantOne); // owner: still undefined
+console.log(restaurantSecond); // owner: '<ANONYMOUS>'
+
+// ------------------- EXTRA EXAMPLES! -----------------------
+console.log(' ------------------- EXTRA EXAMPLES! -----------------------')
+// Example 1: Why use ??= rather than ||= for some values?
+let settings = { darkMode: false, volume: 0 };
+settings.darkMode ||= true; // darkMode is false (falsy), so assigns TRUE! (not what you want!)
+console.log(settings.darkMode); // true (probably NOT intended!)
+
+settings = { darkMode: false, volume: 0 };
+// Now, use nullish assignment (correct: only assigns if null/undefined)
+settings.darkMode ??= true;
+settings.volume ??= 100;
+console.log(settings.darkMode); // false (remains, as it is not null/undefined)
+console.log(settings.volume); // 0 (not overridden by 100, because it's not null/undefined)
+
+// Example 2: AND assignment to redact info
+const userProfile = { name: 'Sam', isAdmin: true };
+userProfile.isAdmin &&= 'ACCESS-RESTRICTED';
+console.log(userProfile.isAdmin); // "ACCESS-RESTRICTED" (only set because previous value was truthy)
+
+// Example 3: Works with non-existing properties too
+const obj3 = {};
+obj3.views ??= 1; // undefined, so assigns 1
+obj3.views ??= 5; // already exists, so does nothing
+console.log(obj3.views); // 1
+
+// Example 4: Combined
+let x1 = 0;
+x1 ||= 42; // x = x || 42, so 0 is falsy -> x becomes 42
+console.log(x1); // 42
+
+let y2 = 0;
+y2 ??= 42; // y is 0, not null/undefined, so stays 0
+console.log(y2); // 0
+
+let z3 = false;
+z3 &&= true; // z is false, so stays false
+console.log(z3); // false
+
+/*
+======== SUMMARY: Logical Assignment Operators ========
+
+- ||=   (OR Assign):          a ||= b   sets a to b if a is falsy (false, 0, '', null, undefined, NaN)
+- ??=   (Nullish Assign):     a ??= b   sets a to b if a is null or undefined ONLY (not 0/'')
+- &&=   (AND Assign):         a &&= b   sets a to b if a is truthy
+
+Benefits:
+- Short, declarative code for assigning fallback (default) values or _guarded_ assignment
+- Prefer ??= when you want to allow 0 or '' or false as valid
+
+✨ Try these in different patterns to enforce robust defaults or to update values only in the right cases!
+*/
 /////////////////////////////////////////////////////////////////
