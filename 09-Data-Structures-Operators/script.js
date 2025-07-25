@@ -37,6 +37,12 @@ const restaurant = {
       `Order Received! ${this.starterMenu[starterIndex]} and ${this.mainMenu[mainIndex]} will be delivered to ${address} at ${time}`,
     );
   },
+
+  orderPasta: function (ing1, ing2, ing3) {
+    console.log(
+      `Here is your delicious pasta with ${ing1},${ing2} and ${ing3}`,
+    );
+  },
 };
 
 //////////////////////////////////////////
@@ -217,5 +223,113 @@ console.log('Monday:', openMon, closeMon); // Monday: 9 21 (defaults used becaus
 // Combine destructuring with rest (...) operator to separate certain properties from the rest.
 // When calling functions that destructure parameters, any missing keys can use default values.
 // ✨ Object destructuring makes accessing and managing data from objects much easier and your code cleaner! Play around with these examples to gain comfort.
+
+/////////////////////////////////////////////////////////////////
+// ---------- SPREAD OPERATOR (...) ----------
+
+// Without spread: manually copying elements = tedious, error-prone, and not scalable
+const arr4 = [1, 2, 3];
+const badNewArray = [4, 5, arr4[0], arr4[1], arr4[2]];
+console.log(badNewArray); // [4, 5, 1, 2, 3]
+
+// With spread: automatically expands arr4 elements in-place
+const newArr = [4, 5, ...arr4];
+console.log(newArr); // [4, 5, 1, 2, 3]
+
+// Spread elements individually to a function or output (not as an array, but as separate values)
+console.log(...newArr); // 4 5 1 2 3
+
+
+// ---- COMMON USE CASES FOR ARRAYS ----
+
+// 1. Creating a new array by expanding another in place
+const newMenu = [...restaurant.mainMenu, 'Gnocci'];
+console.log(newMenu);           // ['Pizza', 'Pasta', 'Risotto', 'Gnocci']
+console.log(restaurant.mainMenu); // Original array is NOT mutated
+
+// 2. Copying arrays (shallow copy, for new independent reference)
+const mainMenuCopyArr = [...restaurant.mainMenu];
+console.log(mainMenuCopyArr);
+
+// 3. Joining (concatenating) arrays
+const combineMenu = [...restaurant.mainMenu, ...restaurant.starterMenu];
+console.log(combineMenu);
+
+
+// 4. Using spread with strings
+const newStr = 'Suraj';
+// Strings are iterable, so spread turns each character into a separate element
+const letters = [...newStr, ' ', 'I.'];
+console.log(letters);       // ['S','u','r','a','j',' ','I.']
+console.log(...newStr);     // S u r a j (spreads characters)
+
+
+// ---- SPREAD OPERATOR IN FUNCTION CALLS ----
+
+// Old way: pass each ingredient individually
+// restaurant.orderPasta(ingredients[0], ingredients[1], ingredients[2]);
+
+// Modern ES6 way: Use spread to "explode" array into separate arguments
+const ingredients = [
+  prompt(`Let's make pasta! Ingredient 1? `),
+  prompt(`Let's make pasta! Ingredient 2? `),
+  prompt(`Let's make pasta! Ingredient 3? `),
+];
+
+console.log(ingredients);
+
+restaurant.orderPasta(...ingredients); // Cleaner and scalable!
+
+// ---- SPREAD OPERATOR WITH OBJECTS (ES2018+) ----
+
+// Making a full (shallow) copy and adding/modifying properties
+const newRestaurant = {
+  ...restaurant,      // copies all properties
+  founder: 'Suraj Ingole',  // adds new property
+  foundingYear: 1998, // note: corrected spelling from 'foudingYear'
+};
+console.log(newRestaurant);
+
+// Shallow cloning: same top-level structure, but not deep/nested clone
+const restaurantCopy = { ...restaurant };
+console.log(restaurantCopy);
+
+// Changes to the copy do NOT affect the original
+restaurantCopy.name = 'Ristorante Roma';
+console.log(restaurant.name);       // 'Classico Italiano'
+console.log(restaurantCopy.name);   // 'Ristorante Roma'
+
+// But changing a nested object property will affect both (because of shallow copy)
+restaurantCopy.openingHours.fri.open = 10;
+console.log(restaurant.openingHours.fri.open); // 10 (changed in both!)
+
+// ---- EXTRA EXAMPLES ----
+// 1. Spreading to create a shallow copy of a nested array
+const doubleArr = [[1,2], [3,4]];
+const shallowCopyDouble = [...doubleArr];
+shallowCopyDouble[0][0] = 9;
+console.log(doubleArr); // [[9,2], [3,4]] — shallow copy, so nested arrays are shared!
+
+// 2. Spread for merging objects
+const obj1 = { x: 1, y: 2 };
+const obj2 = { z: 3, x: 7 };
+const merged = { ...obj1, ...obj2 };
+console.log(merged); // { x:7, y:2, z:3 } — last value for 'x' overwrites previous
+
+// 3. Spread with Math functions:
+const numArr = [12, 4, 23, 99];
+console.log(Math.max(...numArr)); // 99
+
+/*
+  ==== SUMMARY: SPREAD OPERATOR ====
+
+  - Spreads (expands) elements of iterables (arrays, strings) or enumerable object properties.
+  - Useful for: combining, copying, passing as arguments, adding new properties.
+  - Does not mutate original objects/arrays when copying.
+  - Shallow copy: nested (inner) structures are still shared by reference!
+  - Also works in object literals (since ES2018).
+
+  ✨ Use spread for concise, clear, and modern JavaScript!
+*/
 
 /////////////////////////////////////////////////////////////////
