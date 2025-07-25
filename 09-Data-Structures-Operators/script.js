@@ -516,3 +516,74 @@ anonymous.greet && anonymous.greet(); // (nothing happens, doesn't error!)
 
 
 /////////////////////////////////////////////////////////////////
+// ---- NULLISH COALESCING OPERATOR (??) ----
+console.log('---------------NULLISH COALESCING OPERATOR(??)---------------------');
+
+// Scenario: You want a fallback value ONLY if the property is null or undefined,
+// NOT if the value is 0, '', or false (which are all falsy with ||).
+
+restaurant.numVipGuest = 0;
+
+// Using || (OR) treats 0 as falsy, so you'd get 10 (not what you want):
+const wrongGuest = restaurant.numVipGuest || 10;
+console.log(wrongGuest); // 10 (INCORRECT if 0 is a valid value!)
+
+// Using ?? (nullish coalescing), only null or undefined trigger the default:
+const newGuestCorrect = restaurant.numVipGuest ?? 10;
+console.log(newGuestCorrect); // 0 (CORRECT: 0 is a valid, intended value)
+
+/**
+ * The nullish coalescing operator (??) returns the right-hand value
+ * only if the left-hand side is null or undefined -- NOT for 0, '', or false.
+ */
+
+// ----- More Examples -----
+console.log('-------- More Examples --------')
+
+// Example 1: Null or undefined fallbacks
+let input;
+console.log(input ?? 'Default'); // 'Default'
+input = null;
+console.log(input ?? 'Default'); // 'Default'
+input = undefined;
+console.log(input ?? 'Default'); // 'Default'
+
+// Example 2: 0 and '' are not replaced
+input = 0;
+console.log(input ?? 100); // 0 (not replaced)
+input = '';
+console.log(input ?? 'Empty'); // '' (not replaced)
+input = false;
+console.log(input ?? 'Fallback'); // false
+
+// Example 3: Chained ??
+let a1 = null, b1 = undefined, c1 = 5;
+console.log(a1 ?? b1 ?? c1 ?? 100); // 5 (first value that is NOT null or undefined)
+
+// Example 4: ?? vs || (OR)
+restaurant.numVipGuest = 0;
+console.log(restaurant.numVipGuest || 10); // 10 (because 0 is falsy)
+console.log(restaurant.numVipGuest ?? 10); // 0  (because only null/undefined trigger ??)
+
+// Example 5: Use with function parameter fallback
+function sayHello(name) {
+  // If name is missing or null/undefined, use 'Guest'
+  const userName = name ?? 'Guest';
+  console.log(`Hello, ${userName}!`);
+}
+sayHello('Suraj'); // Hello, Suraj!
+sayHello(null);    // Hello, Guest!
+sayHello(undefined); // Hello, Guest!
+sayHello('');      // Hello, !
+
+/*
+======== SUMMARY ========
+- || (OR) returns the right value for falsy left values (false, 0, '', null, undefined, NaN)
+  - Useful for defaults, but can override valid 0, '' or false accidentally!
+- ?? (nullish coalescing) returns the right value only when the left is null or undefined
+  - Use ?? when you want to allow 0, '' or false as valid and only want to fallback on 'missing' (null/undefined).
+
+-- This helps make your fallback logic much safer and more predictable!
+*/
+
+/////////////////////////////////////////////////////////////////
