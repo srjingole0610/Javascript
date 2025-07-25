@@ -108,7 +108,7 @@ h1 {
   overflow-x: auto;
   /* Use max-height for a smooth collapse/expand transition */
   overflow-y: hidden;
-  max-height: auto; /* A value larger than the content will ever be */
+  max-height: 1800px; /* A value larger than the content will ever be */
   transition: all 0.4s ease-out; /* Animate all properties smoothly */
   box-sizing: border-box;
 }
