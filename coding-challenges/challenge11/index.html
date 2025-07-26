@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="../style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <title>Football Betting App</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Football Betting App Challenge</h1>
+
+      <div class="challenge-description">
+        <p><strong>Coding Challenge #1</strong></p>
+        <p>
+          We're building a football betting app (soccer for my American friends
+          ⚽)! Suppose we get data from a web service about a certain game
+          ('game' variable on next page). In this challenge we're gonna work
+          with that data.
+        </p>
+        <p>Your tasks:</p>
+        <ol>
+          <li>
+            Create one player array for each team (variables 'players1' and
+            'players2')
+          </li>
+          <li>
+            The first player in any player array is the goalkeeper and the
+            others are field players. For Bayern Munich (team 1) create one
+            variable ('gk') with the goalkeeper's name, and one array
+            ('fieldPlayers') with all the remaining 10 field players
+          </li>
+          <li>
+            Create an array 'allPlayers' containing all players of both teams
+            (22 players)
+          </li>
+          <li>
+            During the game, Bayern Munich (team 1) used 3 substitute players.
+            So create a new array ('players1Final') containing all the original
+            team1 players plus 'Thiago', 'Coutinho' and 'Perisic'
+          </li>
+          <li>
+            Based on the game.odds object, create one variable for each odd
+            (called 'team1', 'draw' and 'team2')
+          </li>
+          <li>
+            Write a function ('printGoals') that receives an arbitrary number of
+            player names (not an array) and prints each of them to the console,
+            along with the number of goals that were scored in total (number of
+            player names passed in)
+          </li>
+          <li>
+            The team with the lower odd is more likely to win. Print to the
+            console which team is more likely to win, without using an if/else
+            statement or the ternary operator.
+          </li>
+        </ol>
+      </div>
+
+      <div class="test-data">
+        <h3>Test Data (for task 6):</h3>
+        <p>
+          Use players: 'Davies', 'Muller', 'Lewandowski' and 'Kimmich'.<br />
+          Then, call the function again with players from game.scored.
+        </p>
+      </div>
+
+      <div class="problem-solving">
+        <h3>Problem-Solving Approach:</h3>
+        <ul class="task-list">
+          <li>Understand the problem thoroughly</li>
+          <li>Break it down into sub-problems</li>
+          <li>Write clean and efficient code</li>
+          <li>Test with the provided data</li>
+        </ul>
+      </div>
+      <button id="show-solution-btn" class="btn-modern">
+        Click For Solution
+      </button>
+
+      <!-- Hidden panel that will hold the code -->
+      <pre id="solution-panel" class="code-block hidden">
+<code id="solution-code"></code>
+</pre>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
+
+
