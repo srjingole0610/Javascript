@@ -1,5 +1,19 @@
 'use strict';
 
+const restroOpeningHours = {
+  thu: {
+    open: 12,
+    close: 22,
+  },
+  fri: {
+    open: 11,
+    close: 23,
+  },
+  sat: {
+    open: 0, // Open 24 hours
+    close: 24,
+  },
+};
 const restaurant = {
   name: 'Classico Italiano',
   location: 'Via Angelo Tavanti 23, Firenze, Italy',
@@ -7,26 +21,16 @@ const restaurant = {
   starterMenu: ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad'],
   mainMenu: ['Pizza', 'Pasta', 'Risotto'],
 
-  orderFood: function (starterIndex, mainIndex) {
+  //ENCHANCED OBJECT LITERAL
+  orderFood(starterIndex, mainIndex) {
     // This method returns an array consisting of a starter and a main dish
     return [this.starterMenu[starterIndex], this.mainMenu[mainIndex]];
   },
-  openingHours: {
-    thu: {
-      open: 12,
-      close: 22,
-    },
-    fri: {
-      open: 11,
-      close: 23,
-    },
-    sat: {
-      open: 0, // Open 24 hours
-      close: 24,
-    },
-  },
+  //ENCHANCED OBJECT LITERAL
+  restroOpeningHours,
 
-  orderDelivery: function ({
+  //ENCHANCED OBJECT LITERAL
+  orderDelivery({
     starterIndex = 1, // default value if not provided in argument object
     mainIndex = 0,
     time = '20:00',
@@ -140,7 +144,7 @@ console.log(latitude, longitude); // 25.2345 45.5678
 ///////////////////////////////////////////////////////////////////////////////
 //--- Basic Object Destructuring ---
 // Extract properties 'name', 'openingHours', and 'categories' from restaurant object
-const { name, openingHours, categories } = restaurant;
+const { name, restroOpeningHours: openingHours, categories } = restaurant;
 console.log(name, openingHours, categories);
 
 //--- Rename Variables While Destructuring ---
@@ -304,8 +308,8 @@ console.log(restaurant.name); // 'Classico Italiano'
 console.log(restaurantCopy.name); // 'Ristorante Roma'
 
 // But changing a nested object property will affect both (because of shallow copy)
-restaurantCopy.openingHours.fri.open = 10;
-console.log(restaurant.openingHours.fri.open); // 10 (changed in both!)
+restaurantCopy.restroOpeningHours.fri.open = 10;
+console.log(restaurant.restroOpeningHours.fri.open); // 10 (changed in both!)
 
 // ---- EXTRA EXAMPLES ----
 // 1. Spreading to create a shallow copy of a nested array
@@ -362,7 +366,7 @@ console.log(pizza, rissoto, otherFoods);
 
 // ----- REST with Object Destructuring ------
 // Collect all properties EXCEPT 'sat' into a separate object 'weekdays'
-const { sat, ...weekdays } = restaurant.openingHours;
+const { sat, ...weekdays } = restaurant.restroOpeningHours;
 console.log(sat, weekdays);
 // sat = { open: 0, close: 24 }
 // weekdays = { thu: {open:12,close:22}, fri: {open:11,close:23} }
@@ -761,4 +765,78 @@ for (const num of numbers) {
 6. Use Cases: Ideal for iterating over values (e.g., logging menu items) or with entries() for index-based tasks (e.g., numbered menu display).
 7. Limitations: Only works with iterables, not plain objects. Supports break and continue for control flow.
 */
+/////////////////////////////////////////////////////////////////
+// ENHANCED OBJECT LITERALS
+console.log('----------ENHANCED OBJECT LITERALS-----------');
+// Define an array of weekdays to use as dynamic property names
+// newWeekdays is an array: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+const newWeekdays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+
+// Creating an object using enhanced object literals with computed property names
+// Enhanced object literals allow concise syntax and dynamic property names using square brackets []
+// The [expression] syntax (computed property names) evaluates the expression to determine the property name
+const newOpeningHours = {
+  // [newWeekdays[3]] evaluates to 'thu' (the 4th element at index 3), so the property name is 'thu'
+  [newWeekdays[3]]: {
+    open: 12,  // Restaurant opens at 12 PM
+    close: 22, // Restaurant closes at 10 PM
+  },
+  // [newWeekdays[4]] evaluates to 'fri', so the property name is 'fri'
+  [newWeekdays[4]]: {
+    open: 11,  // Opens at 11 AM
+    close: 23, // Closes at 11 PM
+  },
+  // [newWeekdays[5]] evaluates to 'sat', so the property name is 'sat'
+  [newWeekdays[5]]: {
+    open: 0,   // Open 24 hours (0 represents midnight)
+    close: 24, // Closes at midnight (24-hour format)
+  },
+};
+
+// Logs the resulting object
+// Output: { thu: { open: 12, close: 22 }, fri: { open: 11, close: 23 }, sat: { open: 0, close: 24 } }
+console.log(newOpeningHours);
+
+console.log('----------MORE EXAMPLES-----------');
+// Additional example demonstrating shorthand properties and method definitions
+// Define variables to use in the object
+const newRestaurantName = 'Bella Italia';
+const myLocation = 'Rome';
+const rating = 4.5;
+
+// Using enhanced object literals for concise syntax
+const myNewRestaurant = {
+  // Shorthand property names: when property name matches variable name, omit the value
+  restaurantName, // Equivalent to restaurantName: restaurantName
+  myLocation,       // Equivalent to location: location
+  rating,        // Equivalent to rating: rating
+  
+  // Computed property name using a template literal
+  ['status_' + (rating >= 4 ? 'excellent' : 'good')]: true,
+  
+  // Shorthand method definition: omit 'function' keyword and colon
+  getDetails() {
+    return `${this.restaurantName} in ${this.myLocation} has a rating of ${this.rating}`;
+  },
+  
+  // Method with computed name (less common but possible)
+  ['serve_' + 'food']() {
+    return 'Serving delicious Italian cuisine!';
+  }
+};
+
+// Logs the restaurant object
+// Output: {
+//   restaurantName: 'Bella Italia',
+//   location: 'Rome',
+//   rating: 4.5,
+//   status_excellent: true,
+//   getDetails: [Function: getDetails],
+//   serve_food: [Function: serve_food]
+// }
+console.log(myNewRestaurant);
+
+// Test the methods
+console.log(myNewRestaurant.getDetails()); // Output: Bella Italia in Rome has a rating of 4.5
+console.log(myNewRestaurant.serve_food()); // Output: Serving delicious Italian cuisine!
 /////////////////////////////////////////////////////////////////
