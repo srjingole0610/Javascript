@@ -34,7 +34,7 @@ const restaurant = {
     starterIndex = 1, // default value if not provided in argument object
     mainIndex = 0,
     time = '20:00',
-    address,
+    address = 'Saint Petersburg, Russia',
   }) {
     console.log(starterIndex, mainIndex, time, address);
     console.log(
@@ -840,3 +840,103 @@ console.log(myNewRestaurant);
 console.log(myNewRestaurant.getDetails()); // Output: Bella Italia in Rome has a rating of 4.5
 console.log(myNewRestaurant.serve_food()); // Output: Serving delicious Italian cuisine!
 /////////////////////////////////////////////////////////////////
+// OPTIONAL CHAINING
+console.log('----------OPTIONAL CHAINING-----------');
+// Optional chaining (?.) allows safe access to nested properties/methods/arrays
+// If a property in the chain is undefined or null, it short-circuits and returns undefined
+// Eliminates the need for verbose checks like if (obj.prop && obj.prop.subProp)
+
+// OLD METHOD
+console.log('----------OLD METHOD-----------');
+// Traditional way to check if a nested property exists to avoid errors
+// Assumes restaurant.restroOpeningHours is an object like:
+// { thu: { open: 12, close: 22 }, fri: { open: 11, close: 23 }, sat: { open: 0, close: 24 } }
+// Checks if 'mon' exists before accessing its 'open' property
+if (restaurant.restroOpeningHours.mon) {
+  console.log(restaurant.restroOpeningHours.mon.open); // No output, as 'mon' is undefined
+}
+// Checks if 'fri' exists before accessing its 'open' property
+if (restaurant.restroOpeningHours.fri) {
+  console.log(restaurant.restroOpeningHours.fri.open); // Outputs: 11
+}
+
+// ES2020 OPTIONAL CHAINING
+console.log('----------ES2020 OPTIONAL CHAINING-----------');
+// Using optional chaining to safely access nested properties
+// If restroOpeningHours or mon is undefined/null, returns undefined instead of throwing an error
+console.log(restaurant.restroOpeningHours.mon?.open); // Outputs: undefined (mon doesn't exist)
+// Accesses fri.open safely; fri exists, so returns the value
+console.log(restaurant.restroOpeningHours.fri?.open); // Outputs: 11
+// Handles potential typo or different property name (openingHours instead of restroOpeningHours)
+// Returns undefined if openingHours is undefined
+console.log(restaurant.openingHours?.fri?.open); // Outputs: undefined (openingHours not defined)
+
+// Example of using optional chaining with a loop
+console.log('----------Example of using optional chaining with a loop-----------');
+// newdays is an array: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+const newdays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+// Iterates over each day to check opening hours
+for (const day of newdays) {
+  // Uses optional chaining to safely access [day].open
+  // If restroOpeningHours[day] is undefined (e.g., for 'mon'), open is undefined
+  // Nullish coalescing operator (??) provides 'null' as a fallback if open is undefined
+  const open = restaurant.restroOpeningHours[day]?.open ?? null;
+  // Ternary operator to format output based on whether open is null
+  console.log(
+    `On ${day}, we ${open !== null ? `open at ${open}` : 'are closed all day'}`
+  );
+  // Outputs:
+  // On mon, we are closed all day
+  // On tue, we are closed all day
+  // On wed, we are closed all day
+  // On thu, we open at 12
+  // On fri, we open at 11
+  // On sat, we open at 0
+  // On sun, we are closed all day
+}
+
+// Example of using optional chaining with a method
+console.log('----------Example of using optional chaining with a method-----------');
+// Optional chaining with methods: checks if the method exists before calling it
+// If orderFood exists, calls it with arguments (0, 1); otherwise, returns undefined
+// Nullish coalescing (??) provides a fallback message
+console.log(restaurant.orderFood?.(0, 1) ?? 'Order is not available'); // Outputs: 'Order is not available' (assuming orderFood undefined)
+// Tests a non-existent method
+console.log(restaurant.orderRisoto?.(0, 1) ?? 'Method does not exist'); // Outputs: 'Method does not exist'
+
+// Example of using optional chaining with Array
+console.log('----------Example of using optional chaining with Array-----------');
+// Array of user objects
+const users = [
+  { name: 'Suraj', email: 'bV5yJ@example.com' },
+  { name: 'Asha', email: 'k6P2o@example.com' },
+  { name: 'Sneha', email: 'bV5yJ@example.com' },
+];
+// Safely access the email of the first user
+// If users[0] is undefined, returns undefined; ?? provides fallback
+console.log(users[0]?.email ?? 'User not found'); // Outputs: 'bV5yJ@example.com'
+
+// Additional example of optional chaining with nested objects and dynamic keys
+console.log('----------Additional example of optional chaining with nested objects and dynamic keys-----------');
+const config = {
+  settings: {
+    theme: 'dark',
+    notifications: {
+      email: true,
+      sms: false,
+    },
+  },
+};
+
+// Dynamic key to check notification settings
+const notificationType = 'email';
+// Safely access nested property with dynamic key
+console.log(config.settings?.notifications?.[notificationType] ?? 'Setting not found'); // Outputs: true
+
+// Try accessing a non-existent notification type
+console.log(config.settings?.notifications?.push ?? 'Push notifications not configured'); // Outputs: 'Push notifications not configured'
+
+// Safely access deeply nested property that doesn’t exist
+console.log(config.settings?.appearance?.fontSize ?? 'Font size not set'); // Outputs: 'Font size not set'
+
+//////////////////////////////////////////////////////////////////////
