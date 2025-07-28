@@ -1,5 +1,19 @@
 'use strict';
 
+const restroOpeningHours = {
+  thu: {
+    open: 12,
+    close: 22,
+  },
+  fri: {
+    open: 11,
+    close: 23,
+  },
+  sat: {
+    open: 0, // Open 24 hours
+    close: 24,
+  },
+};
 const restaurant = {
   name: 'Classico Italiano',
   location: 'Via Angelo Tavanti 23, Firenze, Italy',
@@ -7,30 +21,20 @@ const restaurant = {
   starterMenu: ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad'],
   mainMenu: ['Pizza', 'Pasta', 'Risotto'],
 
-  orderFood: function (starterIndex, mainIndex) {
+  //ENCHANCED OBJECT LITERAL
+  orderFood(starterIndex, mainIndex) {
     // This method returns an array consisting of a starter and a main dish
     return [this.starterMenu[starterIndex], this.mainMenu[mainIndex]];
   },
-  openingHours: {
-    thu: {
-      open: 12,
-      close: 22,
-    },
-    fri: {
-      open: 11,
-      close: 23,
-    },
-    sat: {
-      open: 0, // Open 24 hours
-      close: 24,
-    },
-  },
+  //ENCHANCED OBJECT LITERAL
+  restroOpeningHours,
 
-  orderDelivery: function ({
+  //ENCHANCED OBJECT LITERAL
+  orderDelivery({
     starterIndex = 1, // default value if not provided in argument object
     mainIndex = 0,
     time = '20:00',
-    address,
+    address = 'Saint Petersburg, Russia',
   }) {
     console.log(starterIndex, mainIndex, time, address);
     console.log(
@@ -140,7 +144,7 @@ console.log(latitude, longitude); // 25.2345 45.5678
 ///////////////////////////////////////////////////////////////////////////////
 //--- Basic Object Destructuring ---
 // Extract properties 'name', 'openingHours', and 'categories' from restaurant object
-const { name, openingHours, categories } = restaurant;
+const { name, restroOpeningHours: openingHours, categories } = restaurant;
 console.log(name, openingHours, categories);
 
 //--- Rename Variables While Destructuring ---
@@ -304,8 +308,8 @@ console.log(restaurant.name); // 'Classico Italiano'
 console.log(restaurantCopy.name); // 'Ristorante Roma'
 
 // But changing a nested object property will affect both (because of shallow copy)
-restaurantCopy.openingHours.fri.open = 10;
-console.log(restaurant.openingHours.fri.open); // 10 (changed in both!)
+restaurantCopy.restroOpeningHours.fri.open = 10;
+console.log(restaurant.restroOpeningHours.fri.open); // 10 (changed in both!)
 
 // ---- EXTRA EXAMPLES ----
 // 1. Spreading to create a shallow copy of a nested array
@@ -362,7 +366,7 @@ console.log(pizza, rissoto, otherFoods);
 
 // ----- REST with Object Destructuring ------
 // Collect all properties EXCEPT 'sat' into a separate object 'weekdays'
-const { sat, ...weekdays } = restaurant.openingHours;
+const { sat, ...weekdays } = restaurant.restroOpeningHours;
 console.log(sat, weekdays);
 // sat = { open: 0, close: 24 }
 // weekdays = { thu: {open:12,close:22}, fri: {open:11,close:23} }
@@ -645,7 +649,7 @@ console.log(restaurantOne); // owner: still undefined
 console.log(restaurantSecond); // owner: '<ANONYMOUS>'
 
 // ------------------- EXTRA EXAMPLES! -----------------------
-console.log(' ------------------- EXTRA EXAMPLES! -----------------------')
+console.log(' ------------------- EXTRA EXAMPLES! -----------------------');
 // Example 1: Why use ??= rather than ||= for some values?
 let settings = { darkMode: false, volume: 0 };
 settings.darkMode ||= true; // darkMode is false (falsy), so assigns TRUE! (not what you want!)
@@ -696,3 +700,243 @@ Benefits:
 ✨ Try these in different patterns to enforce robust defaults or to update values only in the right cases!
 */
 /////////////////////////////////////////////////////////////////
+// FOR-OF Loop
+console.log('----------FOR-OF Loop-----------');
+// newMenuArray is created by combining restaurant.starterMenu and restaurant.mainMenu using the spread operator
+// Based on the provided output, newMenuArray contains:
+// ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad', 'Pizza', 'Pasta', 'Risotto']
+const newMenuArray = [...restaurant.starterMenu, ...restaurant.mainMenu];
+console.log(newMenuArray); // Outputs: ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad', 'Pizza', 'Pasta', 'Risotto']
+
+// Basic for...of loop to iterate over each element in newMenuArray
+// The for...of loop iterates over the iterable (newMenuArray), assigning each element to 'item'
+// No index is needed, making it ideal for simple iteration over values
+for (const item of newMenuArray) {
+  console.log(item); // Outputs: 'Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad', 'Pizza', 'Pasta', 'Risotto' (one per line)
+}
+
+// OLD SCHOOL METHOD
+console.log('----------OLD SCHOOL METHOD-----------');
+// newMenuArray.entries() returns an iterator of [index, element] pairs
+// For newMenuArray, entries() yields: [0, 'Focaccia'], [1, 'Bruschetta'], ..., [6, 'Risotto']
+// 'item' is an array [index, element], so item[0] is the index, item[1] is the element
+for (const item of newMenuArray.entries()) {
+  // Adding 1 to item[0] to display 1-based indices (e.g., 1 instead of 0)
+  console.log(`${item[0] + 1}: ${item[1]}`);
+  // Outputs: '1: Focaccia', '2: Bruschetta', '3: Garlic Bread', '4: Caprese Salad',
+  //          '5: Pizza', '6: Pasta', '7: Risotto'
+}
+
+// USING DESTRUCTURING
+console.log('----------USING DESTRUCTURING-----------');
+// Using array destructuring to unpack [index, element] pairs from entries()
+// This assigns the index to 'itemIndex' and the element to 'item', improving readability
+for (const [itemIndex, item] of newMenuArray.entries()) {
+  // Adding 1 to itemIndex for 1-based display
+  console.log(`${itemIndex + 1}: ${item}`);
+  // Outputs: '1: Focaccia', '2: Bruschetta', '3: Garlic Bread', '4: Caprese Salad',
+  //          '5: Pizza', '6: Pasta', '7: Risotto'
+}
+
+// Spreading entries() into an array to show its structure
+// newMenuArray.entries() is an iterator; spreading it creates an array of [index, element] pairs
+console.log([...newMenuArray.entries()]);
+// Outputs: [[0, 'Focaccia'], [1, 'Bruschetta'], [2, 'Garlic Bread'], [3, 'Caprese Salad'],
+//          [4, 'Pizza'], [5, 'Pasta'], [6, 'Risotto']]
+
+// Iterating over a string, where each iteration yields a character
+const str = 'Hello';
+for (const char of str) {
+  console.log(char); // Outputs: 'H', 'e', 'l', 'l', 'o' (one per line)
+}
+
+// Using break to exit the loop early
+const numbers = [10, 20, 30, 40, 50];
+for (const num of numbers) {
+  if (num > 30) break; // Exit the loop when a number greater than 30 is found
+  console.log(num); // Outputs: 10, 20, 30
+}
+/*
+1. Purpose: The for...of loop iterates over iterable objects (e.g., arrays, strings, sets, maps) to access their elements directly. In the code, it loops over newMenuArray to process menu items.
+2. Syntax: for (const variable of iterable) { ... }. Here, variable (e.g., item) takes each element’s value in newMenuArray, like 'Focaccia', 'Bruschetta', etc.
+3. Direct Element Access: It provides elements without needing manual index management. Example: for (const item of newMenuArray) logs each menu item directly.
+4. Using entries(): The entries() method returns an iterator of [index, element] pairs (e.g., [0, 'Focaccia']). The code uses it to access both index and element, either as item[0] and item[1] or via destructuring ([itemIndex, item]).
+5. Destructuring: Destructuring in for (const [itemIndex, item] of newMenuArray.entries()) cleanly assigns index and element, improving readability. Example output: 1: Focaccia, 2: Bruschetta.
+6. Use Cases: Ideal for iterating over values (e.g., logging menu items) or with entries() for index-based tasks (e.g., numbered menu display).
+7. Limitations: Only works with iterables, not plain objects. Supports break and continue for control flow.
+*/
+/////////////////////////////////////////////////////////////////
+// ENHANCED OBJECT LITERALS
+console.log('----------ENHANCED OBJECT LITERALS-----------');
+// Define an array of weekdays to use as dynamic property names
+// newWeekdays is an array: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+const newWeekdays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+
+// Creating an object using enhanced object literals with computed property names
+// Enhanced object literals allow concise syntax and dynamic property names using square brackets []
+// The [expression] syntax (computed property names) evaluates the expression to determine the property name
+const newOpeningHours = {
+  // [newWeekdays[3]] evaluates to 'thu' (the 4th element at index 3), so the property name is 'thu'
+  [newWeekdays[3]]: {
+    open: 12,  // Restaurant opens at 12 PM
+    close: 22, // Restaurant closes at 10 PM
+  },
+  // [newWeekdays[4]] evaluates to 'fri', so the property name is 'fri'
+  [newWeekdays[4]]: {
+    open: 11,  // Opens at 11 AM
+    close: 23, // Closes at 11 PM
+  },
+  // [newWeekdays[5]] evaluates to 'sat', so the property name is 'sat'
+  [newWeekdays[5]]: {
+    open: 0,   // Open 24 hours (0 represents midnight)
+    close: 24, // Closes at midnight (24-hour format)
+  },
+};
+
+// Logs the resulting object
+// Output: { thu: { open: 12, close: 22 }, fri: { open: 11, close: 23 }, sat: { open: 0, close: 24 } }
+console.log(newOpeningHours);
+
+console.log('----------MORE EXAMPLES-----------');
+// Additional example demonstrating shorthand properties and method definitions
+// Define variables to use in the object
+const newRestaurantName = 'Bella Italia';
+const myLocation = 'Rome';
+const rating = 4.5;
+
+// Using enhanced object literals for concise syntax
+const myNewRestaurant = {
+  // Shorthand property names: when property name matches variable name, omit the value
+  newRestaurantName, // Equivalent to newRestaurantName: newRestaurantName
+  myLocation,       // Equivalent to myLocation: myLocation
+  rating,        // Equivalent to rating: rating
+  
+  // Computed property name using a template literal
+  ['status_' + (rating >= 4 ? 'excellent' : 'good')]: true,
+  
+  // Shorthand method definition: omit 'function' keyword and colon
+  getDetails() {
+    return `${this.newRestaurantName} in ${this.myLocation} has a rating of ${this.rating}`;
+  },
+  
+  // Method with computed name (less common but possible)
+  ['serve_' + 'food']() {
+    return 'Serving delicious Italian cuisine!';
+  }
+};
+
+// Logs the restaurant object
+// Output: {
+//   restaurantName: 'Bella Italia',
+//   location: 'Rome',
+//   rating: 4.5,
+//   status_excellent: true,
+//   getDetails: [Function: getDetails],
+//   serve_food: [Function: serve_food]
+// }
+console.log(myNewRestaurant);
+
+// Test the methods
+console.log(myNewRestaurant.getDetails()); // Output: Bella Italia in Rome has a rating of 4.5
+console.log(myNewRestaurant.serve_food()); // Output: Serving delicious Italian cuisine!
+/////////////////////////////////////////////////////////////////
+// OPTIONAL CHAINING
+console.log('----------OPTIONAL CHAINING-----------');
+// Optional chaining (?.) allows safe access to nested properties/methods/arrays
+// If a property in the chain is undefined or null, it short-circuits and returns undefined
+// Eliminates the need for verbose checks like if (obj.prop && obj.prop.subProp)
+
+// OLD METHOD
+console.log('----------OLD METHOD-----------');
+// Traditional way to check if a nested property exists to avoid errors
+// Assumes restaurant.restroOpeningHours is an object like:
+// { thu: { open: 12, close: 22 }, fri: { open: 11, close: 23 }, sat: { open: 0, close: 24 } }
+// Checks if 'mon' exists before accessing its 'open' property
+if (restaurant.restroOpeningHours.mon) {
+  console.log(restaurant.restroOpeningHours.mon.open); // No output, as 'mon' is undefined
+}
+// Checks if 'fri' exists before accessing its 'open' property
+if (restaurant.restroOpeningHours.fri) {
+  console.log(restaurant.restroOpeningHours.fri.open); // Outputs: 11
+}
+
+// ES2020 OPTIONAL CHAINING
+console.log('----------ES2020 OPTIONAL CHAINING-----------');
+// Using optional chaining to safely access nested properties
+// If restroOpeningHours or mon is undefined/null, returns undefined instead of throwing an error
+console.log(restaurant.restroOpeningHours.mon?.open); // Outputs: undefined (mon doesn't exist)
+// Accesses fri.open safely; fri exists, so returns the value
+console.log(restaurant.restroOpeningHours.fri?.open); // Outputs: 11
+// Handles potential typo or different property name (openingHours instead of restroOpeningHours)
+// Returns undefined if openingHours is undefined
+console.log(restaurant.openingHours?.fri?.open); // Outputs: undefined (openingHours not defined)
+
+// Example of using optional chaining with a loop
+console.log('----------Example of using optional chaining with a loop-----------');
+// newdays is an array: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+const newdays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+// Iterates over each day to check opening hours
+for (const day of newdays) {
+  // Uses optional chaining to safely access [day].open
+  // If restroOpeningHours[day] is undefined (e.g., for 'mon'), open is undefined
+  // Nullish coalescing operator (??) provides 'null' as a fallback if open is undefined
+  const open = restaurant.restroOpeningHours[day]?.open ?? null;
+  // Ternary operator to format output based on whether open is null
+  console.log(
+    `On ${day}, we ${open !== null ? `open at ${open}` : 'are closed all day'}`
+  );
+  // Outputs:
+  // On mon, we are closed all day
+  // On tue, we are closed all day
+  // On wed, we are closed all day
+  // On thu, we open at 12
+  // On fri, we open at 11
+  // On sat, we open at 0
+  // On sun, we are closed all day
+}
+
+// Example of using optional chaining with a method
+console.log('----------Example of using optional chaining with a method-----------');
+// Optional chaining with methods: checks if the method exists before calling it
+// If orderFood exists, calls it with arguments (0, 1); otherwise, returns undefined
+// Nullish coalescing (??) provides a fallback message
+console.log(restaurant.orderFood?.(0, 1) ?? 'Order is not available'); // Outputs: '['Focaccia', 'Pasta']'
+// Tests a non-existent method
+console.log(restaurant.orderRisoto?.(0, 1) ?? 'Method does not exist'); // Outputs: 'Method does not exist'
+
+// Example of using optional chaining with Array
+console.log('----------Example of using optional chaining with Array-----------');
+// Array of user objects
+const users = [
+  { name: 'Suraj', email: 'bV5yJ@example.com' },
+  { name: 'Asha', email: 'k6P2o@example.com' },
+  { name: 'Sneha', email: 'bV5yJ@example.com' },
+];
+// Safely access the email of the first user
+// If users[0] is undefined, returns undefined; ?? provides fallback
+console.log(users[0]?.email ?? 'User not found'); // Outputs: 'bV5yJ@example.com'
+
+// Additional example of optional chaining with nested objects and dynamic keys
+console.log('----------Additional example of optional chaining with nested objects and dynamic keys-----------');
+const config = {
+  settings: {
+    theme: 'dark',
+    notifications: {
+      email: true,
+      sms: false,
+    },
+  },
+};
+
+// Dynamic key to check notification settings
+const notificationType = 'email';
+// Safely access nested property with dynamic key
+console.log(config.settings?.notifications?.[notificationType] ?? 'Setting not found'); // Outputs: true
+
+// Try accessing a non-existent notification type
+console.log(config.settings?.notifications?.push ?? 'Push notifications not configured'); // Outputs: 'Push notifications not configured'
+
+// Safely access deeply nested property that doesn’t exist
+console.log(config.settings?.appearance?.fontSize ?? 'Font size not set'); // Outputs: 'Font size not set'
+
+//////////////////////////////////////////////////////////////////////
