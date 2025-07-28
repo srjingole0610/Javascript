@@ -807,8 +807,8 @@ const rating = 4.5;
 // Using enhanced object literals for concise syntax
 const myNewRestaurant = {
   // Shorthand property names: when property name matches variable name, omit the value
-  restaurantName, // Equivalent to restaurantName: restaurantName
-  myLocation,       // Equivalent to location: location
+  newRestaurantName, // Equivalent to newRestaurantName: newRestaurantName
+  myLocation,       // Equivalent to myLocation: myLocation
   rating,        // Equivalent to rating: rating
   
   // Computed property name using a template literal
@@ -816,7 +816,7 @@ const myNewRestaurant = {
   
   // Shorthand method definition: omit 'function' keyword and colon
   getDetails() {
-    return `${this.restaurantName} in ${this.myLocation} has a rating of ${this.rating}`;
+    return `${this.newRestaurantName} in ${this.myLocation} has a rating of ${this.rating}`;
   },
   
   // Method with computed name (less common but possible)
@@ -900,7 +900,7 @@ console.log('----------Example of using optional chaining with a method---------
 // Optional chaining with methods: checks if the method exists before calling it
 // If orderFood exists, calls it with arguments (0, 1); otherwise, returns undefined
 // Nullish coalescing (??) provides a fallback message
-console.log(restaurant.orderFood?.(0, 1) ?? 'Order is not available'); // Outputs: 'Order is not available' (assuming orderFood undefined)
+console.log(restaurant.orderFood?.(0, 1) ?? 'Order is not available'); // Outputs: '['Focaccia', 'Pasta']'
 // Tests a non-existent method
 console.log(restaurant.orderRisoto?.(0, 1) ?? 'Method does not exist'); // Outputs: 'Method does not exist'
 
