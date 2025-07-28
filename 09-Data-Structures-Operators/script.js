@@ -645,7 +645,7 @@ console.log(restaurantOne); // owner: still undefined
 console.log(restaurantSecond); // owner: '<ANONYMOUS>'
 
 // ------------------- EXTRA EXAMPLES! -----------------------
-console.log(' ------------------- EXTRA EXAMPLES! -----------------------')
+console.log(' ------------------- EXTRA EXAMPLES! -----------------------');
 // Example 1: Why use ??= rather than ||= for some values?
 let settings = { darkMode: false, volume: 0 };
 settings.darkMode ||= true; // darkMode is false (falsy), so assigns TRUE! (not what you want!)
@@ -694,5 +694,71 @@ Benefits:
 - Prefer ??= when you want to allow 0 or '' or false as valid
 
 ✨ Try these in different patterns to enforce robust defaults or to update values only in the right cases!
+*/
+/////////////////////////////////////////////////////////////////
+// FOR-OF Loop
+console.log('----------FOR-OF Loop-----------');
+// newMenuArray is created by combining restaurant.starterMenu and restaurant.mainMenu using the spread operator
+// Based on the provided output, newMenuArray contains:
+// ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad', 'Pizza', 'Pasta', 'Risotto']
+const newMenuArray = [...restaurant.starterMenu, ...restaurant.mainMenu];
+console.log(newMenuArray); // Outputs: ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad', 'Pizza', 'Pasta', 'Risotto']
+
+// Basic for...of loop to iterate over each element in newMenuArray
+// The for...of loop iterates over the iterable (newMenuArray), assigning each element to 'item'
+// No index is needed, making it ideal for simple iteration over values
+for (const item of newMenuArray) {
+  console.log(item); // Outputs: 'Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad', 'Pizza', 'Pasta', 'Risotto' (one per line)
+}
+
+// OLD SCHOOL METHOD
+console.log('----------OLD SCHOOL METHOD-----------');
+// newMenuArray.entries() returns an iterator of [index, element] pairs
+// For newMenuArray, entries() yields: [0, 'Focaccia'], [1, 'Bruschetta'], ..., [6, 'Risotto']
+// 'item' is an array [index, element], so item[0] is the index, item[1] is the element
+for (const item of newMenuArray.entries()) {
+  // Adding 1 to item[0] to display 1-based indices (e.g., 1 instead of 0)
+  console.log(`${item[0] + 1}: ${item[1]}`);
+  // Outputs: '1: Focaccia', '2: Bruschetta', '3: Garlic Bread', '4: Caprese Salad',
+  //          '5: Pizza', '6: Pasta', '7: Risotto'
+}
+
+// USING DESTRUCTURING
+console.log('----------USING DESTRUCTURING-----------');
+// Using array destructuring to unpack [index, element] pairs from entries()
+// This assigns the index to 'itemIndex' and the element to 'item', improving readability
+for (const [itemIndex, item] of newMenuArray.entries()) {
+  // Adding 1 to itemIndex for 1-based display
+  console.log(`${itemIndex + 1}: ${item}`);
+  // Outputs: '1: Focaccia', '2: Bruschetta', '3: Garlic Bread', '4: Caprese Salad',
+  //          '5: Pizza', '6: Pasta', '7: Risotto'
+}
+
+// Spreading entries() into an array to show its structure
+// newMenuArray.entries() is an iterator; spreading it creates an array of [index, element] pairs
+console.log([...newMenuArray.entries()]);
+// Outputs: [[0, 'Focaccia'], [1, 'Bruschetta'], [2, 'Garlic Bread'], [3, 'Caprese Salad'],
+//          [4, 'Pizza'], [5, 'Pasta'], [6, 'Risotto']]
+
+// Iterating over a string, where each iteration yields a character
+const str = 'Hello';
+for (const char of str) {
+  console.log(char); // Outputs: 'H', 'e', 'l', 'l', 'o' (one per line)
+}
+
+// Using break to exit the loop early
+const numbers = [10, 20, 30, 40, 50];
+for (const num of numbers) {
+  if (num > 30) break; // Exit the loop when a number greater than 30 is found
+  console.log(num); // Outputs: 10, 20, 30
+}
+/*
+1. Purpose: The for...of loop iterates over iterable objects (e.g., arrays, strings, sets, maps) to access their elements directly. In the code, it loops over newMenuArray to process menu items.
+2. Syntax: for (const variable of iterable) { ... }. Here, variable (e.g., item) takes each element’s value in newMenuArray, like 'Focaccia', 'Bruschetta', etc.
+3. Direct Element Access: It provides elements without needing manual index management. Example: for (const item of newMenuArray) logs each menu item directly.
+4. Using entries(): The entries() method returns an iterator of [index, element] pairs (e.g., [0, 'Focaccia']). The code uses it to access both index and element, either as item[0] and item[1] or via destructuring ([itemIndex, item]).
+5. Destructuring: Destructuring in for (const [itemIndex, item] of newMenuArray.entries()) cleanly assigns index and element, improving readability. Example output: 1: Focaccia, 2: Bruschetta.
+6. Use Cases: Ideal for iterating over values (e.g., logging menu items) or with entries() for index-based tasks (e.g., numbered menu display).
+7. Limitations: Only works with iterables, not plain objects. Supports break and continue for control flow.
 */
 /////////////////////////////////////////////////////////////////
