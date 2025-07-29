@@ -277,16 +277,16 @@ console.log(...newStr); // S u r a j (spreads characters)
 // Old way: pass each ingredient individually
 // restaurant.orderPasta(ingredients[0], ingredients[1], ingredients[2]);
 
-// Modern ES6 way: Use spread to "explode" array into separate arguments
-const ingredients = [
-  prompt(`Let's make pasta! Ingredient 1? `),
-  prompt(`Let's make pasta! Ingredient 2? `),
-  prompt(`Let's make pasta! Ingredient 3? `),
-];
+// // Modern ES6 way: Use spread to "explode" array into separate arguments
+// const ingredients = [
+//   prompt(`Let's make pasta! Ingredient 1? `),
+//   prompt(`Let's make pasta! Ingredient 2? `),
+//   prompt(`Let's make pasta! Ingredient 3? `),
+// ];
 
-console.log(ingredients);
+// console.log(ingredients);
 
-restaurant.orderPasta(...ingredients); // Cleaner and scalable!
+// restaurant.orderPasta(...ingredients); // Cleaner and scalable!
 
 // ---- SPREAD OPERATOR WITH OBJECTS (ES2018+) ----
 
@@ -1388,7 +1388,9 @@ const question = new Map([
 console.log(question); // Outputs: Map(7) { 'question' => 'What is the best programming language in the world?', 1 => 'C', 2 => 'Java', 3 => 'JavaScript', 'correct' => 3, true => 'Correct :D', false => 'Try again! :(' }
 
 // Convert Object to Map
-console.log('-------------------------MAP: Object to Map------------------------');
+console.log(
+  '-------------------------MAP: Object to Map------------------------',
+);
 // Object.entries() converts an object to an array of [key, value] pairs
 // Assuming openingHours is { thu: { open: 12, close: 22 }, fri: { open: 11, close: 23 }, sat: { open: 0, close: 24 } }
 // new Map(Object.entries()) creates a Map from the object's key-value pairs
@@ -1414,7 +1416,8 @@ for (const [key, value] of question) {
 
 // Interactive quiz: Prompt user for an answer and check if it's correct
 // prompt() returns a string, so Number() converts it to a number
-const correctAnswer = Number(prompt('Your answer')); // Example input: '3'
+// const correctAnswer = Number(prompt('Your answer')); // Example input: '3'
+const correctAnswer = 3; // Example input: '3'
 console.log(correctAnswer); // Outputs: 3
 // question.get('correct') retrieves 3; compare with user input to get true/false
 // question.get(true/false) retrieves 'Correct :D' or 'Try again! :('
@@ -1433,3 +1436,390 @@ console.log([...question.keys()]); // Outputs: ['question', 1, 2, 3, 'correct', 
 console.log([...question.values()]); // Outputs: ['What is...', 'C', 'Java', 'JavaScript', 3, 'Correct :D', 'Try again! :(']
 
 ///////////////////////////////////////////////////////////////////////////////////
+// WORKING WITH STRINGS
+console.log(
+  '-------------------------WORKING WITH STRINGS - PART 1------------------------',
+);
+// Strings in JavaScript are primitive, immutable sequences of characters
+// They can be accessed like arrays and have built-in methods for manipulation
+const airline = 'TAP Air Portugal'; // Example string with 16 characters
+const plane = 'A320'; // Example string with 4 characters
+
+console.log(
+  '-------------------------Reading String Values ------------------------',
+);
+// Strings can be indexed like arrays to access individual characters
+// Indices are zero-based; accessing an invalid index returns undefined
+console.log(plane[0]); // Outputs: 'A' (first character at index 0)
+console.log(plane[1]); // Outputs: '3' (second character at index 1)
+console.log(plane[2]); // Outputs: '2' (third character at index 2)
+console.log('b737'[0]); // Outputs: 'b' (first character of string literal)
+
+console.log(
+  '-----------------------------Length of String-----------------------------',
+);
+// The length property returns the number of characters in a string
+// Includes spaces and special characters
+console.log(airline.length); // Outputs: 16 (counts all characters in 'TAP Air Portugal')
+console.log('B737'.length); // Outputs: 4 (counts characters in 'B737')
+
+console.log(
+  '-----------------------------String Methods-----------------------------',
+);
+console.log(
+  '-----------------------------indexOf()-----------------------------',
+);
+// indexOf(searchValue) returns the index of the first occurrence of searchValue
+// Returns -1 if not found; case-sensitive
+console.log(airline.indexOf('r')); // Outputs: 6 (first 'r' in 'Portugal')
+console.log(airline.indexOf('portugal')); // Outputs: -1 (not found, lowercase 'p')
+console.log(airline.indexOf('Portugal')); // Outputs: 8 (found, matches case exactly)
+
+console.log(
+  '-----------------------------lastIndexOf()-----------------------------',
+);
+// lastIndexOf(searchValue) returns the index of the last occurrence of searchValue
+// Returns -1 if not found; case-sensitive
+console.log(airline.lastIndexOf('r')); // Outputs: 10 (last 'r' in 'Portugal')
+
+console.log(
+  '-----------------------------slice()-----------------------------',
+);
+// slice(start, end) extracts a portion of the string from start index to end-1
+// If end is omitted, extracts to the end; negative indices count from the end
+console.log(airline.slice(4)); // Outputs: 'Air Portugal' (from index 4 to end)
+console.log(airline.slice(4, 7)); // Outputs: 'Air' (from index 4 to 6, excluding 7)
+console.log(airline.slice(0, airline.indexOf(' '))); // Outputs: 'TAP' (from start to first space at index 3)
+console.log(airline.slice(airline.lastIndexOf(' ') + 1)); // Outputs: 'Portugal' (from after last space at index 7 to end)
+console.log(airline.slice(-2)); // Outputs: 'al' (from second-to-last character to end)
+console.log(airline.slice(1, -1)); // Outputs: 'AP Air Portuga' (from index 1 to second-to-last character)
+
+console.log(
+  '-------------------------REAL WORLD EXAMPLES of Slice() Method------------------------',
+);
+// Function to check if a seat is a middle seat based on its letter (B or E)
+const checkMiddleSeat = function (seat) {
+  // Middle seats in airplane seating are typically 'B' or 'E' (e.g., in a 3-3 configuration)
+  // slice(-1) extracts the last character of the seat string
+  const middleSeat = seat.slice(-1);
+  if (middleSeat === 'B' || middleSeat === 'E') {
+    console.log('You got the middle seat! 😁');
+  } else {
+    console.log('You got lucky! 🙌');
+  }
+};
+
+// Test the function with example seat numbers
+checkMiddleSeat('11B'); // Outputs: 'You got the middle seat! 😁' (ends with 'B')
+checkMiddleSeat('23C'); // Outputs: 'You got lucky! 🙌' (ends with 'C')
+checkMiddleSeat('3E'); // Outputs: 'You got the middle seat! 😁' (ends with 'E')
+
+// WORKING WITH STRINGS - PART 2
+console.log(
+  '-------------------------WORKING WITH STRINGS - PART 2------------------------',
+);
+// Strings are immutable; methods return new strings without modifying the original
+// This section covers case conversion, trimming, replacing, and checking substrings
+console.log(
+  '-----------------------------toUpperCase()-----------------------------',
+);
+// toUpperCase() converts all characters to uppercase, returning a new string
+console.log(airline.toUpperCase()); // Outputs: 'TAP AIR PORTUGAL'
+
+console.log(
+  '-----------------------------toLowerCase()-----------------------------',
+);
+// toLowerCase() converts all characters to lowercase, returning a new string
+console.log(airline.toLowerCase()); // Outputs: 'tap air portugal'
+
+// Fix Capitalization
+console.log(
+  '-----------------------------Fix Capitalization-----------------------------',
+);
+// Function to capitalize the first letter of a name and lowercase the rest
+const passenger = 'jOnAS'; // Example name with mixed case
+const passengerLower = passenger.toLowerCase(); // Convert to lowercase: 'jonas'
+const passengerCorrect =
+  passengerLower[0].toUpperCase() + passengerLower.slice(1); // Capitalize first letter: 'Jonas'
+console.log(passengerCorrect); // Outputs: 'Jonas'
+
+// Check Email
+console.log(
+  '-----------------------------Check Email-----------------------------',
+);
+console.log('---------------------------trim()-----------------------------');
+// trim() removes leading and trailing whitespace (spaces, tabs, newlines) from a string
+const passengerEmail = 'hello@jonas.io'; // Reference email
+const passengerLoginEmail = '   Hello@Jonas.Io \n'; // Email with extra whitespace and newline
+const lowerPassengerEmail = passengerEmail.toLowerCase(); // Normalize to lowercase: 'hello@jonas.io'
+const lowerPassengerLoginEmail = passengerLoginEmail.toLowerCase(); // Normalize to lowercase: '   hello@jonas.io \n'
+const trimmedPassengerLoginEmail = lowerPassengerLoginEmail.trim(); // Remove whitespace: 'hello@jonas.io'
+console.log(trimmedPassengerLoginEmail); // Outputs: 'hello@jonas.io'
+
+console.log(
+  '---------------------------methods chaining-----------------------------',
+);
+// Method chaining combines multiple string methods in a single expression
+// toLowerCase().trim() normalizes email in one step
+const normalisedEmail = passengerLoginEmail.toLowerCase().trim();
+console.log(normalisedEmail); // Outputs: 'hello@jonas.io'
+
+console.log(
+  '---------------------------comparison-----------------------------',
+);
+// Compare normalized emails to check if they match
+console.log(lowerPassengerEmail === trimmedPassengerLoginEmail); // Outputs: true (both are 'hello@jonas.io')
+console.log(lowerPassengerEmail === normalisedEmail); // Outputs: true (both are 'hello@jonas.io')
+
+console.log(
+  '---------------------------replace()-----------------------------',
+);
+// replace(searchValue, newValue) replaces the first occurrence of searchValue with newValue
+const priceGB = '28,80£'; // Price in British format
+const priceUS = priceGB.replace('£', '$').replace(',', '.'); // Convert to US format
+console.log(priceUS); // Outputs: '28.80$' (replaces '£' with '$' and ',' with '.')
+
+const announcement =
+  'All passengers come to boarding door 23. Boarding door 23!';
+// replace() only replaces the first occurrence
+console.log(announcement.replace('door', 'gate')); // Outputs: 'All passengers come to boarding gate 23. Boarding door 23!'
+
+console.log(
+  '---------------------------replaceAll()-----------------------------',
+);
+// replaceAll(searchValue, newValue) replaces all occurrences of searchValue (ES2021+)
+console.log(announcement.replaceAll('door', 'gate')); // Outputs: 'All passengers come to boarding gate 23. Boarding gate 23!'
+
+console.log(
+  '------------------------------Replacing using Regex------------------------------',
+);
+// Regular expression with /g flag achieves the same as replaceAll() for older environments
+console.log(announcement.replace(/door/g, 'gate')); // Outputs: 'All passengers come to boarding gate 23. Boarding gate 23!'
+
+console.log(
+  '---------------------------includes()-----------------------------',
+);
+// includes(searchString) returns true if searchString is found, false otherwise (case-sensitive)
+const newPlane = 'A320neo';
+console.log(newPlane.includes('A320')); // Outputs: true ('A320' is in 'A320neo')
+console.log(newPlane.includes('neo')); // Outputs: true ('neo' is in 'A320neo')
+console.log(newPlane.includes('Boeing')); // Outputs: false ('Boeing' not found)
+console.log(newPlane.includes('A321')); // Outputs: false ('A321' not found)
+
+console.log(
+  '---------------------------startsWith()-----------------------------',
+);
+// startsWith(searchString) returns true if the string starts with searchString (case-sensitive)
+console.log(newPlane.startsWith('A3')); // Outputs: true ('A320neo' starts with 'A3')
+console.log(newPlane.startsWith('B7')); // Outputs: false ('A320neo' doesn’t start with 'B7')
+
+console.log(
+  '---------------------------endsWith()-----------------------------',
+);
+// endsWith(searchString) returns true if the string ends with searchString (case-sensitive)
+console.log(newPlane.endsWith('neo')); // Outputs: true ('A320neo' ends with 'neo')
+console.log(newPlane.endsWith('320')); // Outputs: false ('A320neo' doesn’t end with '320')
+
+console.log(
+  '---------------------------REAL TIME EXAMPLE-----------------------------',
+);
+// Check if plane model is a specific type using startsWith()
+if (newPlane.startsWith('A320')) console.log('Plane is an Airbus 320neo'); // Outputs: 'Plane is an Airbus 320neo'
+
+// PRACTICE EXERCISE
+console.log(
+  '------------------------------PRACTICE EXERCISE------------------------------',
+);
+// Function to check baggage items for prohibited items (knife, gun)
+const checkBaggage = function (items) {
+  // Convert to lowercase for case-insensitive checking
+  const baggage = items.toLowerCase();
+  // Check for prohibited items using includes()
+  if (baggage.includes('knife') || baggage.includes('gun')) {
+    console.log('You are NOT allowed on board');
+  } else {
+    console.log('Welcome aboard');
+  }
+};
+
+// Test baggage checking function
+checkBaggage('I have a Laptop, some Food And a pocket Knife'); // Outputs: 'You are NOT allowed on board' (contains 'knife')
+checkBaggage('socks and camera'); // Outputs: 'Welcome aboard' (no prohibited items)
+checkBaggage('Got some snacks and a guitar'); // Outputs: 'Welcome aboard' (no prohibited items)
+checkBaggage('Clothes and a gun for protection'); // Outputs: 'You are NOT allowed on board' (contains 'gun')
+
+console.log(
+  '------------------------------REAL WORLD EXAMPLE------------------------------',
+);
+// Real-time example: Validating and formatting user input in a form
+const validateAndFormatUser = function (username, email) {
+  // Format username: trim, capitalize first letter, lowercase rest
+  const cleanedUsername = username.trim();
+  const formattedUsername = cleanedUsername
+    ? cleanedUsername[0].toUpperCase() + cleanedUsername.slice(1).toLowerCase()
+    : '';
+
+  // Format and validate email: trim, lowercase, check for '@'
+  const formattedEmail = email.toLowerCase().trim();
+  const isValidEmail =
+    formattedEmail.includes('@') && formattedEmail.includes('.');
+
+  // Return formatted data and validation result
+  return {
+    username: formattedUsername,
+    email: formattedEmail,
+    isValid: isValidEmail && formattedUsername.length >= 3,
+  };
+};
+
+// Test the function with sample inputs
+console.log(validateAndFormatUser('  jOhN  ', '  John.Doe@Example.Com  '));
+// Outputs: { username: 'John', email: 'john.doe@example.com', isValid: true }
+console.log(validateAndFormatUser('aB', 'test.com'));
+// Outputs: { username: 'Ab', email: 'test.com', isValid: false }
+console.log(validateAndFormatUser('  mary JANE  ', 'MARY@company.io'));
+// Outputs: { username: 'Mary jane', email: 'mary@company.io', isValid: true }
+
+// Example with invalid input
+console.log(validateAndFormatUser('', '  @invalid  '));
+// Outputs: { username: '', email: '@invalid', isValid: false }
+
+// WORKING WITH STRINGS - PART 3
+console.log('---------------------------String Methods - Part 3 -----------------------------');
+// This section covers string methods for splitting, joining, padding, and repeating strings
+// Strings are immutable; all methods return new strings without modifying the original
+
+console.log('----------------------------split()-----------------------------');
+// split(separator) splits a string into an array of substrings based on the separator
+// If separator is '', splits into individual characters
+console.log('a+very+nice+string'.split('+')); // Outputs: ['a', 'very', 'nice', 'string'] (splits at '+')
+console.log('Jonas Schmedtmann'.split(' ')); // Outputs: ['Jonas', 'Schmedtmann'] (splits at space)
+console.log('Jonas Schmedtmann'.split('')); // Outputs: ['J', 'o', 'n', 'a', 's', ' ', 'S', 'c', 'h', 'm', 'e', 'd', 't', 'm', 'a', 'n', 'n'] (splits into characters)
+// Destructuring the split result to assign first and last names
+const [myFirstName, myLastName] = 'Suraj Ingole'.split(' ');
+console.log(myFirstName); // Outputs: 'Suraj' (first element)
+console.log(myLastName); // Outputs: 'Ingole' (second element)
+
+console.log('----------------------------join()-----------------------------');
+// join(separator) combines array elements into a string, using separator between elements
+const fullName = ['Mr.', myFirstName, myLastName.toUpperCase()].join(' ');
+// toUpperCase() converts 'Ingole' to 'INGOLE'; join(' ') combines with spaces
+console.log(fullName); // Outputs: 'Mr. Suraj INGOLE'
+
+console.log('---------------------------REAL TIME EXAMPLE-----------------------------');
+// Real-time example: Capitalizing each word in a name
+const capitalizeName = function (name) {
+  // Convert to lowercase and split into words
+  const names = name.toLowerCase().split(' ');
+  const namesUpper = [];
+  // Capitalize first letter of each word using toUpperCase() and slice()
+  for (const n of names) {
+    namesUpper.push(n[0].toUpperCase() + n.slice(1));
+  }
+  // Join words with a space
+  return namesUpper.join(' ');
+};
+
+// Test the function with sample names
+console.log(capitalizeName('jessica ann smith davis')); // Outputs: 'Jessica Ann Smith Davis'
+console.log(capitalizeName('suraj ingole')); // Outputs: 'Suraj Ingole'
+
+console.log('---------------------------Padding Strings-----------------------------');
+console.log('----------------------------padStart()-----------------------------');
+// padStart(targetLength, padString) pads the start of a string with padString until it reaches targetLength
+const message = 'Go to gate 23!';
+console.log(message.padStart(20, '+')); // Outputs: '++++++Go to gate 23!' (adds 6 '+' to reach length 20)
+console.log(message.padStart(30, '+')); // Outputs: '++++++++++++++Go to gate 23!' (adds 14 '+' to reach length 30)
+
+console.log('----------------------------padEnd()-----------------------------');
+// padEnd(targetLength, padString) pads the end of a string with padString until it reaches targetLength
+console.log(message.padEnd(20, '+')); // Outputs: 'Go to gate 23!++++++' (adds 6 '+' to reach length 20)
+console.log(message.padEnd(30, '+')); // Outputs: 'Go to gate 23!++++++++++++++' (adds 14 '+' to reach length 30)
+
+console.log('---------------------------Padding Strings - Chaining-----------------------------');
+// Chain padStart() and padEnd() to pad both ends
+console.log(message.padStart(20, '+').padEnd(30, '+')); // Outputs: '++++++Go to gate 23!++++++++++++++' (20 at start, 10 at end)
+
+console.log('---------------------------REAL TIME EXAMPLE-----------------------------');
+// Real-time example: Masking credit card numbers, showing only the last 4 digits
+const maskingCreditCard = function (number) {
+  // Convert number to string to handle numeric inputs
+  const cardNumber = number + '';
+  // Extract last 4 digits using slice()
+  const lastDigits = cardNumber.slice(-4);
+  // Pad start with '*' to match original length
+  return lastDigits.padStart(cardNumber.length, '*');
+};
+
+// Test the function with sample credit card numbers
+console.log(maskingCreditCard(1234567890123456)); // Outputs: '************3456' (16 digits, 12 '*' + last 4)
+console.log(maskingCreditCard(123456789012345)); // Outputs: '************2345' (15 digits, 11 '*' + last 4)
+console.log(maskingCreditCard('3435346216464263')); // Outputs: '************4263' (16 digits, 12 '*' + last 4)
+
+console.log('---------------------------repeat()-----------------------------');
+// repeat(count) repeats the string count times
+console.log('a'.repeat(5)); // Outputs: 'aaaaa' (repeats 'a' 5 times)
+const badWeather = 'Bad weather... All doors closed!';
+console.log(badWeather.repeat(3)); // Outputs: 'Bad weather... All doors closed!Bad weather... All doors closed!Bad weather... All doors closed!'
+
+// Function to display planes in a queue using repeat()
+const planesInLine = function (n) {
+  console.log(`There are ${n} planes in line ${'🛩'.repeat(n)}`);
+};
+planesInLine(5); // Outputs: 'There are 5 planes in line 🛩🛩🛩🛩🛩'
+planesInLine(3); // Outputs: 'There are 3 planes in line 🛩🛩🛩'
+planesInLine(12); // Outputs: 'There are 12 planes in line 🛩🛩🛩🛩🛩🛩🛩🛩🛩🛩🛩🛩'
+
+console.log('---------------------------REAL TIME EXAMPLE-----------------------------');
+// Real-time example: Formatting and validating product codes in an e-commerce system
+const formatProductCode = function (code) {
+  // Normalize: trim whitespace, convert to uppercase, split on hyphens or spaces
+  const parts = code.trim().toUpperCase().split(/[- ]/);
+  // Ensure code has 3 parts (category, id, size)
+  if (parts.length !== 3) return 'Invalid product code';
+  // Pad ID to 4 digits and size to 2 characters
+  const [category, id, size] = parts;
+  const formattedId = id.padStart(4, '0');
+  const formattedSize = size.padStart(2, '0');
+  // Join with hyphens
+  return [category, formattedId, formattedSize].join('-');
+};
+
+// Validate product code format (e.g., 'SHIRT-1234-MD')
+const isValidProductCode = function (code) {
+  const normalized = code.trim().toUpperCase();
+  // Check format using regex: 3-4 letters, hyphen, 4 digits, hyphen, 2 letters
+   return /^[A-Z]{3,4}-\d{4}-[A-Z0-9]{2}$/.test(normalized);
+};
+
+// Test the functions
+console.log(formatProductCode('shirt-123-md')); // Outputs: 'SHIRT-0123-MD'
+console.log(formatProductCode('  pants 4567 s')); // Outputs: 'PANTS-4567-0S'
+console.log(formatProductCode('hat-12-')); // Outputs: 'Invalid product code'
+console.log(isValidProductCode('SHIRT-1234-MD')); // Outputs: true
+console.log(isValidProductCode('shirt-123-md')); // Outputs: false
+console.log(isValidProductCode('PANTS-4567-0S')); // Outputs: true
+///////////////////////////////////////
+// String Methods Practice
+console.log('---------------------------String Methods - Practice-----------------------------');
+
+const flights =
+  '_Delayed_Departure;fao93766109;txl2133758440;11:25+_Arrival;bru0943384722;fao93766109;11:45+_Delayed_Arrival;hel7439299980;fao93766109;12:05+_Departure;fao93766109;lis2323639855;12:30';
+
+// 🔴 Delayed Departure from FAO to TXL (11h25)
+//              Arrival from BRU to FAO (11h45)
+//   🔴 Delayed Arrival from HEL to FAO (12h05)
+//            Departure from FAO to LIS (12h30)
+
+const getCode = str => str.slice(0, 3).toUpperCase();
+
+for (const flight of flights.split('+')) {
+  const [type, from, to, time] = flight.split(';');
+  const output = `${type.startsWith('_Delayed') ? '🔴' : ''}${type.replaceAll(
+    '_',
+    ' '
+  )} ${getCode(from)} ${getCode(to)} (${time.replace(':', 'h')})`.padStart(36);
+  console.log(output);
+}
+
+///////////////////////////////////////
