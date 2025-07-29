@@ -1390,7 +1390,7 @@ console.log(question); // Outputs: Map(7) { 'question' => 'What is the best prog
 // Convert Object to Map
 console.log('-------------------------MAP: Object to Map------------------------');
 // Object.entries() converts an object to an array of [key, value] pairs
-// Assuming openingHours is { mon: '9-12', tue: '9-12', wed: '9-12', thu: '9-12', fri: '9-12', sat: '9-12', sun: '9-12' }
+// Assuming openingHours is { thu: { open: 12, close: 22 }, fri: { open: 11, close: 23 }, sat: { open: 0, close: 24 } }
 // new Map(Object.entries()) creates a Map from the object's key-value pairs
 const hoursMap = new Map(Object.entries(openingHours));
 console.log(hoursMap); // Outputs: Map(7) { 'mon' => '9-12', 'tue' => '9-12', 'wed' => '9-12', 'thu' => '9-12', 'fri' => '9-12', 'sat' => '9-12', 'sun' => '9-12' }
