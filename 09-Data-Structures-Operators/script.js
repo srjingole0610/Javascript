@@ -277,16 +277,16 @@ console.log(...newStr); // S u r a j (spreads characters)
 // Old way: pass each ingredient individually
 // restaurant.orderPasta(ingredients[0], ingredients[1], ingredients[2]);
 
-// Modern ES6 way: Use spread to "explode" array into separate arguments
-const ingredients = [
-  prompt(`Let's make pasta! Ingredient 1? `),
-  prompt(`Let's make pasta! Ingredient 2? `),
-  prompt(`Let's make pasta! Ingredient 3? `),
-];
+// // Modern ES6 way: Use spread to "explode" array into separate arguments
+// const ingredients = [
+//   prompt(`Let's make pasta! Ingredient 1? `),
+//   prompt(`Let's make pasta! Ingredient 2? `),
+//   prompt(`Let's make pasta! Ingredient 3? `),
+// ];
 
-console.log(ingredients);
+// console.log(ingredients);
 
-restaurant.orderPasta(...ingredients); // Cleaner and scalable!
+// restaurant.orderPasta(...ingredients); // Cleaner and scalable!
 
 // ---- SPREAD OPERATOR WITH OBJECTS (ES2018+) ----
 
@@ -1388,7 +1388,9 @@ const question = new Map([
 console.log(question); // Outputs: Map(7) { 'question' => 'What is the best programming language in the world?', 1 => 'C', 2 => 'Java', 3 => 'JavaScript', 'correct' => 3, true => 'Correct :D', false => 'Try again! :(' }
 
 // Convert Object to Map
-console.log('-------------------------MAP: Object to Map------------------------');
+console.log(
+  '-------------------------MAP: Object to Map------------------------',
+);
 // Object.entries() converts an object to an array of [key, value] pairs
 // Assuming openingHours is { thu: { open: 12, close: 22 }, fri: { open: 11, close: 23 }, sat: { open: 0, close: 24 } }
 // new Map(Object.entries()) creates a Map from the object's key-value pairs
@@ -1414,7 +1416,8 @@ for (const [key, value] of question) {
 
 // Interactive quiz: Prompt user for an answer and check if it's correct
 // prompt() returns a string, so Number() converts it to a number
-const correctAnswer = Number(prompt('Your answer')); // Example input: '3'
+// const correctAnswer = Number(prompt('Your answer')); // Example input: '3'
+const correctAnswer = 3; // Example input: '3'
 console.log(correctAnswer); // Outputs: 3
 // question.get('correct') retrieves 3; compare with user input to get true/false
 // question.get(true/false) retrieves 'Correct :D' or 'Try again! :('
@@ -1433,14 +1436,18 @@ console.log([...question.keys()]); // Outputs: ['question', 1, 2, 3, 'correct', 
 console.log([...question.values()]); // Outputs: ['What is...', 'C', 'Java', 'JavaScript', 3, 'Correct :D', 'Try again! :(']
 
 ///////////////////////////////////////////////////////////////////////////////////
-// WORKING WITH STRINGS - PART 1
-console.log('-------------------------WORKING WITH STRINGS - PART 1------------------------');
+// WORKING WITH STRINGS
+console.log(
+  '-------------------------WORKING WITH STRINGS - PART 1------------------------',
+);
 // Strings in JavaScript are primitive, immutable sequences of characters
 // They can be accessed like arrays and have built-in methods for manipulation
 const airline = 'TAP Air Portugal'; // Example string with 16 characters
 const plane = 'A320'; // Example string with 4 characters
 
-console.log('-------------------------Reading String Values ------------------------');
+console.log(
+  '-------------------------Reading String Values ------------------------',
+);
 // Strings can be indexed like arrays to access individual characters
 // Indices are zero-based; accessing an invalid index returns undefined
 console.log(plane[0]); // Outputs: 'A' (first character at index 0)
@@ -1448,26 +1455,36 @@ console.log(plane[1]); // Outputs: '3' (second character at index 1)
 console.log(plane[2]); // Outputs: '2' (third character at index 2)
 console.log('b737'[0]); // Outputs: 'b' (first character of string literal)
 
-console.log('-----------------------------Length of String-----------------------------');
+console.log(
+  '-----------------------------Length of String-----------------------------',
+);
 // The length property returns the number of characters in a string
 // Includes spaces and special characters
 console.log(airline.length); // Outputs: 16 (counts all characters in 'TAP Air Portugal')
 console.log('B737'.length); // Outputs: 4 (counts characters in 'B737')
 
-console.log('-----------------------------String Methods-----------------------------');
-console.log('-----------------------------indexOf()-----------------------------');
+console.log(
+  '-----------------------------String Methods-----------------------------',
+);
+console.log(
+  '-----------------------------indexOf()-----------------------------',
+);
 // indexOf(searchValue) returns the index of the first occurrence of searchValue
 // Returns -1 if not found; case-sensitive
 console.log(airline.indexOf('r')); // Outputs: 6 (first 'r' in 'Portugal')
 console.log(airline.indexOf('portugal')); // Outputs: -1 (not found, lowercase 'p')
 console.log(airline.indexOf('Portugal')); // Outputs: 8 (found, matches case exactly)
 
-console.log('-----------------------------lastIndexOf()-----------------------------');
+console.log(
+  '-----------------------------lastIndexOf()-----------------------------',
+);
 // lastIndexOf(searchValue) returns the index of the last occurrence of searchValue
 // Returns -1 if not found; case-sensitive
 console.log(airline.lastIndexOf('r')); // Outputs: 10 (last 'r' in 'Portugal')
 
-console.log('-----------------------------slice()-----------------------------');
+console.log(
+  '-----------------------------slice()-----------------------------',
+);
 // slice(start, end) extracts a portion of the string from start index to end-1
 // If end is omitted, extracts to the end; negative indices count from the end
 console.log(airline.slice(4)); // Outputs: 'Air Portugal' (from index 4 to end)
@@ -1477,7 +1494,9 @@ console.log(airline.slice(airline.lastIndexOf(' ') + 1)); // Outputs: 'Portugal'
 console.log(airline.slice(-2)); // Outputs: 'al' (from second-to-last character to end)
 console.log(airline.slice(1, -1)); // Outputs: 'AP Air Portuga' (from index 1 to second-to-last character)
 
-console.log('-------------------------REAL WORLD EXAMPLES of Slice() Method------------------------');
+console.log(
+  '-------------------------REAL WORLD EXAMPLES of Slice() Method------------------------',
+);
 // Function to check if a seat is a middle seat based on its letter (B or E)
 const checkMiddleSeat = function (seat) {
   // Middle seats in airplane seating are typically 'B' or 'E' (e.g., in a 3-3 configuration)
@@ -1495,4 +1514,174 @@ checkMiddleSeat('11B'); // Outputs: 'You got the middle seat! 😁' (ends with '
 checkMiddleSeat('23C'); // Outputs: 'You got lucky! 🙌' (ends with 'C')
 checkMiddleSeat('3E'); // Outputs: 'You got the middle seat! 😁' (ends with 'E')
 
+// WORKING WITH STRINGS - PART 2
+console.log(
+  '-------------------------WORKING WITH STRINGS - PART 2------------------------',
+);
+// Strings are immutable; methods return new strings without modifying the original
+// This section covers case conversion, trimming, replacing, and checking substrings
+console.log(
+  '-----------------------------toUpperCase()-----------------------------',
+);
+// toUpperCase() converts all characters to uppercase, returning a new string
+console.log(airline.toUpperCase()); // Outputs: 'TAP AIR PORTUGAL'
 
+console.log(
+  '-----------------------------toLowerCase()-----------------------------',
+);
+// toLowerCase() converts all characters to lowercase, returning a new string
+console.log(airline.toLowerCase()); // Outputs: 'tap air portugal'
+
+// Fix Capitalization
+console.log(
+  '-----------------------------Fix Capitalization-----------------------------',
+);
+// Function to capitalize the first letter of a name and lowercase the rest
+const passenger = 'jOnAS'; // Example name with mixed case
+const passengerLower = passenger.toLowerCase(); // Convert to lowercase: 'jonas'
+const passengerCorrect =
+  passengerLower[0].toUpperCase() + passengerLower.slice(1); // Capitalize first letter: 'Jonas'
+console.log(passengerCorrect); // Outputs: 'Jonas'
+
+// Check Email
+console.log(
+  '-----------------------------Check Email-----------------------------',
+);
+console.log('---------------------------trim()-----------------------------');
+// trim() removes leading and trailing whitespace (spaces, tabs, newlines) from a string
+const passengerEmail = 'hello@jonas.io'; // Reference email
+const passengerLoginEmail = '   Hello@Jonas.Io \n'; // Email with extra whitespace and newline
+const lowerPassengerEmail = passengerEmail.toLowerCase(); // Normalize to lowercase: 'hello@jonas.io'
+const lowerPassengerLoginEmail = passengerLoginEmail.toLowerCase(); // Normalize to lowercase: '   hello@jonas.io \n'
+const trimmedPassengerLoginEmail = lowerPassengerLoginEmail.trim(); // Remove whitespace: 'hello@jonas.io'
+console.log(trimmedPassengerLoginEmail); // Outputs: 'hello@jonas.io'
+
+console.log(
+  '---------------------------methods chaining-----------------------------',
+);
+// Method chaining combines multiple string methods in a single expression
+// toLowerCase().trim() normalizes email in one step
+const normalisedEmail = passengerLoginEmail.toLowerCase().trim();
+console.log(normalisedEmail); // Outputs: 'hello@jonas.io'
+
+console.log(
+  '---------------------------comparison-----------------------------',
+);
+// Compare normalized emails to check if they match
+console.log(lowerPassengerEmail === trimmedPassengerLoginEmail); // Outputs: true (both are 'hello@jonas.io')
+console.log(lowerPassengerEmail === trimmedPassengerLoginEmail); // Outputs: true (repeated for clarity)
+
+console.log(
+  '---------------------------replace()-----------------------------',
+);
+// replace(searchValue, newValue) replaces the first occurrence of searchValue with newValue
+const priceGB = '28,80£'; // Price in British format
+const priceUS = priceGB.replace('£', '$').replace(',', '.'); // Convert to US format
+console.log(priceUS); // Outputs: '28.80$' (replaces '£' with '$' and ',' with '.')
+
+const announcement =
+  'All passengers come to boarding door 23. Boarding door 23!';
+// replace() only replaces the first occurrence
+console.log(announcement.replace('door', 'gate')); // Outputs: 'All passengers come to boarding gate 23. Boarding door 23!'
+
+console.log(
+  '---------------------------replaceAll()-----------------------------',
+);
+// replaceAll(searchValue, newValue) replaces all occurrences of searchValue (ES2021+)
+console.log(announcement.replaceAll('door', 'gate')); // Outputs: 'All passengers come to boarding gate 23. Boarding gate 23!'
+
+console.log(
+  '------------------------------Replacing using Regex------------------------------',
+);
+// Regular expression with /g flag achieves the same as replaceAll() for older environments
+console.log(announcement.replace(/door/g, 'gate')); // Outputs: 'All passengers come to boarding gate 23. Boarding gate 23!'
+
+console.log(
+  '---------------------------includes()-----------------------------',
+);
+// includes(searchString) returns true if searchString is found, false otherwise (case-sensitive)
+const newPlane = 'A320neo';
+console.log(newPlane.includes('A320')); // Outputs: true ('A320' is in 'A320neo')
+console.log(newPlane.includes('neo')); // Outputs: true ('neo' is in 'A320neo')
+console.log(newPlane.includes('Boeing')); // Outputs: false ('Boeing' not found)
+console.log(newPlane.includes('A321')); // Outputs: false ('A321' not found)
+
+console.log(
+  '---------------------------startsWith()-----------------------------',
+);
+// startsWith(searchString) returns true if the string starts with searchString (case-sensitive)
+console.log(newPlane.startsWith('A3')); // Outputs: true ('A320neo' starts with 'A3')
+console.log(newPlane.startsWith('B7')); // Outputs: false ('A320neo' doesn’t start with 'B7')
+
+console.log(
+  '---------------------------endsWith()-----------------------------',
+);
+// endsWith(searchString) returns true if the string ends with searchString (case-sensitive)
+console.log(newPlane.endsWith('neo')); // Outputs: true ('A320neo' ends with 'neo')
+console.log(newPlane.endsWith('320')); // Outputs: false ('A320neo' doesn’t end with '320')
+
+console.log(
+  '---------------------------REAL TIME EXAMPLE-----------------------------',
+);
+// Check if plane model is a specific type using startsWith()
+if (newPlane.startsWith('A320')) console.log('Plane is a Boeing 320neo'); // Outputs: 'Plane is a Boeing 320neo' (Note: should be Airbus, not Boeing)
+
+// PRACTICE EXERCISE
+console.log(
+  '------------------------------PRACTICE EXERCISE------------------------------',
+);
+// Function to check baggage items for prohibited items (knife, gun)
+const checkBaggage = function (items) {
+  // Convert to lowercase for case-insensitive checking
+  const baggage = items.toLowerCase();
+  // Check for prohibited items using includes()
+  if (baggage.includes('knife') || baggage.includes('gun')) {
+    console.log('You are NOT allowed on board');
+  } else {
+    console.log('Welcome aboard');
+  }
+};
+
+// Test baggage checking function
+checkBaggage('I have a Laptop, some Food And a pocket Knife'); // Outputs: 'You are NOT allowed on board' (contains 'knife')
+checkBaggage('socks and camera'); // Outputs: 'Welcome aboard' (no prohibited items)
+checkBaggage('Got some snacks and a guitar'); // Outputs: 'Welcome aboard' (no prohibited items)
+checkBaggage('Clothes and a gun for protection'); // Outputs: 'You are NOT allowed on board' (contains 'gun')
+
+console.log(
+  '------------------------------REAL WORLD EXAMPLE------------------------------',
+);
+// Real-time example: Validating and formatting user input in a form
+const validateAndFormatUser = function (username, email) {
+  // Format username: trim, capitalize first letter, lowercase rest
+  const cleanedUsername = username.trim();
+  const formattedUsername = cleanedUsername
+    ? cleanedUsername[0].toUpperCase() + cleanedUsername.slice(1).toLowerCase()
+    : '';
+
+  // Format and validate email: trim, lowercase, check for '@'
+  const formattedEmail = email.toLowerCase().trim();
+  const isValidEmail =
+    formattedEmail.includes('@') && formattedEmail.includes('.');
+
+  // Return formatted data and validation result
+  return {
+    username: formattedUsername,
+    email: formattedEmail,
+    isValid: isValidEmail && formattedUsername.length >= 3,
+  };
+};
+
+// Test the function with sample inputs
+console.log(validateAndFormatUser('  jOhN  ', '  John.Doe@Example.Com  '));
+// Outputs: { username: 'John', email: 'john.doe@example.com', isValid: true }
+console.log(validateAndFormatUser('aB', 'test.com'));
+// Outputs: { username: 'Ab', email: 'test.com', isValid: false }
+console.log(validateAndFormatUser('  mary JANE  ', 'MARY@company.io'));
+// Outputs: { username: 'Mary jane', email: 'mary@company.io', isValid: true }
+
+// Example with invalid input
+console.log(validateAndFormatUser('', '  @invalid  '));
+// Outputs: { username: '', email: '@invalid', isValid: false }
+
+///////////////////////////////////////////////////////////////////////////////////
