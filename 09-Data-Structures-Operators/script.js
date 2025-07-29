@@ -1107,4 +1107,114 @@ console.log('----------Array of unique staff-----------');
 // Spreading a Set into an array converts it to an array of unique values
 const newStaff = [...uniqueStaff];
 console.log(newStaff); // Outputs: ['Waiter', 'Chef', 'Manager']
+
+// SET METHODS
+console.log('----------------Set Methods----------------');
+// Sets store unique values, and ES2022 introduced methods for comparing and combining Sets
+// italianFoods contains unique ingredients used in Italian cuisine
+const italianFoods = new Set([
+  'pasta',
+  'gnocchi',
+  'tomatoes',
+  'olive oil',
+  'garlic',
+  'basil',
+]);
+
+// mexicanFoods contains unique ingredients used in Mexican cuisine
+const mexicanFoods = new Set([
+  'tortillas',
+  'beans',
+  'rice',
+  'tomatoes',
+  'avocado',
+  'garlic',
+]);
+
+console.log('---------------------Set intersection-----------------------------');
+// intersection() returns a new Set with elements present in both Sets
+// For italianFoods and mexicanFoods, it includes elements common to both
+const commonFoods = italianFoods.intersection(mexicanFoods);
+console.log(commonFoods); // Outputs: Set(2) { 'tomatoes', 'garlic' }
+// Convert the Set to an array using the spread operator for further use
+const newCommonFoods = [...commonFoods];
+console.log(newCommonFoods); // Outputs: ['tomatoes', 'garlic']
+
+console.log('--------------------------Set union--------------------------');
+// union() returns a new Set with all unique elements from both Sets
+// Combines all elements, removing duplicates
+const italianMexicanFoods = italianFoods.union(mexicanFoods);
+console.log(italianMexicanFoods); // Outputs: Set(10) { 'pasta', 'gnocchi', 'tomatoes', 'olive oil', 'garlic', 'basil', 'tortillas', 'beans', 'rice', 'avocado' }
+// Convert the Set to an array
+const newItalianMexicanFoods = [...italianMexicanFoods];
+console.log(newItalianMexicanFoods); // Outputs: ['pasta', 'gnocchi', 'tomatoes', 'olive oil', 'garlic', 'basil', 'tortillas', 'beans', 'rice', 'avocado']
+
+console.log('--------------------------Set difference--------------------------');
+// difference() returns a new Set with elements in the first Set but not in the second
+// For italianFoods.difference(mexicanFoods), it includes elements unique to italianFoods
+const italianOnlyFoods = italianFoods.difference(mexicanFoods);
+console.log(italianOnlyFoods); // Outputs: Set(4) { 'pasta', 'gnocchi', 'olive oil', 'basil' }
+// For mexicanFoods.difference(italianFoods), it includes elements unique to mexicanFoods
+const mexicanOnlyFoods = mexicanFoods.difference(italianFoods);
+console.log(mexicanOnlyFoods); // Outputs: Set(4) { 'tortillas', 'beans', 'rice', 'avocado' }
+// Convert italianOnlyFoods to an array
+const newItalianOnlyFoods = [...italianOnlyFoods];
+console.log(newItalianOnlyFoods); // Outputs: ['pasta', 'gnocchi', 'olive oil', 'basil']
+
+console.log('--------------------------Set symmetric difference--------------------------');
+// symmetricDifference() returns a new Set with elements in either Set but not in both
+// Includes elements unique to each Set, excluding common ones
+const symmetricFoods = italianFoods.symmetricDifference(mexicanFoods);
+console.log(symmetricFoods); // Outputs: Set(8) { 'pasta', 'gnocchi', 'olive oil', 'basil', 'tortillas', 'beans', 'rice', 'avocado' }
+// Convert to an array
+const newSymmetricFoods = [...symmetricFoods];
+console.log(newSymmetricFoods); // Outputs: ['pasta', 'gnocchi', 'olive oil', 'basil', 'tortillas', 'beans', 'rice', 'avocado']
+
+console.log('--------------------------Set subset--------------------------');
+// isSubsetOf() checks if all elements of the first Set are in the second Set
+// Returns true if mexicanFoods is a subset of italianFoods, false otherwise
+const isSubset = mexicanFoods.isSubsetOf(italianFoods);
+console.log(isSubset); // Outputs: false (mexicanFoods has 'tortillas', 'beans', 'rice', 'avocado' not in italianFoods)
+
+console.log('--------------------------Set superset--------------------------');
+// isSupersetOf() checks if the first Set contains all elements of the second Set
+// Returns true if italianFoods contains all elements of mexicanFoods, false otherwise
+const isSuperset = italianFoods.isSupersetOf(mexicanFoods);
+console.log(isSuperset); // Outputs: false (italianFoods lacks 'tortillas', 'beans', 'rice', 'avocado')
+
+console.log('--------------------------Set isDisjoint--------------------------');
+// isDisjointFrom() checks if two Sets have no elements in common
+// Returns true if there are no shared elements, false otherwise
+const isDisjoint = italianFoods.isDisjointFrom(mexicanFoods);
+console.log(isDisjoint); // Outputs: false (they share 'tomatoes' and 'garlic')
+
+console.log('---------------------------Additional Examples--------------------------');
+// Example: Managing inventory across restaurant locations using Set methods
+const location1Inventory = new Set(['flour', 'tomatoes', 'cheese', 'basil']);
+const location2Inventory = new Set(['tomatoes', 'olive oil', 'basil', 'garlic']);
+const newIngredients = new Set(['pasta', 'tomatoes']);
+
+// Find ingredients available at both locations (intersection)
+const sharedIngredients = location1Inventory.intersection(location2Inventory);
+console.log('Shared Ingredients:', sharedIngredients); // Outputs: Set(2) { 'tomatoes', 'basil' }
+
+// Combine all ingredients across locations and new stock (union)
+const totalInventory = location1Inventory.union(location2Inventory).union(newIngredients);
+console.log('Total Inventory:', totalInventory); // Outputs: Set(6) { 'flour', 'tomatoes', 'cheese', 'basil', 'olive oil', 'garlic', 'pasta' }
+
+// Find ingredients unique to location1 (difference)
+const location1Unique = location1Inventory.difference(location2Inventory);
+console.log('Location 1 Unique:', location1Unique); // Outputs: Set(2) { 'flour', 'cheese' }
+
+// Check if newIngredients is a subset of total inventory
+const isNewStockCovered = newIngredients.isSubsetOf(totalInventory);
+console.log('New stock fully in inventory?', isNewStockCovered); // Outputs: true
+
+// Check if location1 and location2 have no common ingredients
+const areLocationsDisjoint = location1Inventory.isDisjointFrom(new Set(['rice', 'beans']));
+console.log('Location 1 disjoint from rice/beans?', areLocationsDisjoint); // Outputs: true
+
+// Convert unique ingredients to array for reporting
+const uniqueIngredientsList = [...location1Unique];
+console.log('Unique Ingredients List:', uniqueIngredientsList); // Outputs: ['flour', 'cheese']
 //////////////////////////////////////////////////////////////////////
