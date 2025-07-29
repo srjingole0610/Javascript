@@ -277,16 +277,16 @@ console.log(...newStr); // S u r a j (spreads characters)
 // Old way: pass each ingredient individually
 // restaurant.orderPasta(ingredients[0], ingredients[1], ingredients[2]);
 
-// // Modern ES6 way: Use spread to "explode" array into separate arguments
-// const ingredients = [
-//   prompt(`Let's make pasta! Ingredient 1? `),
-//   prompt(`Let's make pasta! Ingredient 2? `),
-//   prompt(`Let's make pasta! Ingredient 3? `),
-// ];
+// Modern ES6 way: Use spread to "explode" array into separate arguments
+const ingredients = [
+  prompt(`Let's make pasta! Ingredient 1? `),
+  prompt(`Let's make pasta! Ingredient 2? `),
+  prompt(`Let's make pasta! Ingredient 3? `),
+];
 
-// console.log(ingredients);
+console.log(ingredients);
 
-// restaurant.orderPasta(...ingredients); // Cleaner and scalable!
+restaurant.orderPasta(...ingredients); // Cleaner and scalable!
 
 // ---- SPREAD OPERATOR WITH OBJECTS (ES2018+) ----
 
@@ -1416,8 +1416,8 @@ for (const [key, value] of question) {
 
 // Interactive quiz: Prompt user for an answer and check if it's correct
 // prompt() returns a string, so Number() converts it to a number
-// const correctAnswer = Number(prompt('Your answer')); // Example input: '3'
-const correctAnswer = 3; // Example input: '3'
+const correctAnswer = Number(prompt('Your answer')); // Example input: '3'
+// const correctAnswer = 3; // Example input: '3'
 console.log(correctAnswer); // Outputs: 3
 // question.get('correct') retrieves 3; compare with user input to get true/false
 // question.get(true/false) retrieves 'Correct :D' or 'Try again! :('
