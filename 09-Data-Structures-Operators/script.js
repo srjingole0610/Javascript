@@ -1282,13 +1282,17 @@ console.log('------------------------MAP has Method------------------------');
 console.log(rest.has('categories')); // Outputs: true ('categories' exists)
 console.log(rest.has('8')); // Outputs: false ('8' does not exist)
 
-console.log('------------------------MAP delete Method------------------------');
+console.log(
+  '------------------------MAP delete Method------------------------',
+);
 // delete(key) removes the key-value pair for the specified key, returning true if successful
 const answer = rest.delete(2); // Removes key 2 ('Lisbon, Portugal')
 console.log(answer); // Outputs: true (deletion successful)
 console.log(rest); // Outputs: Map(6) { 'name' => 'Classico Italiano', 1 => 'Firenze, Italy', 'categories' => [...], 'open' => 11, 'close' => 23, true => 'We are open', false => 'We are closed' }
 
-console.log('------------------------MAP size Property------------------------');
+console.log(
+  '------------------------MAP size Property------------------------',
+);
 // size property returns the number of key-value pairs in the Map
 console.log(rest.size); // Outputs: 6 (after deleting key 2)
 
@@ -1297,7 +1301,9 @@ console.log(rest.size); // Outputs: 6 (after deleting key 2)
 // rest.clear();
 // console.log(rest); // Outputs: Map(0) {} (commented out to preserve Map contents)
 
-console.log('------------------------MAP Additional Example------------------------');
+console.log(
+  '------------------------MAP Additional Example------------------------',
+);
 // Using an array as a key; note that the exact array reference matters
 rest.set([1, 2], 'Test'); // Key: array [1, 2], Value: string 'Test'
 console.log(rest); // Outputs: Map with [1, 2] => 'Test' added
@@ -1314,7 +1320,9 @@ rest.set(document.querySelector('h1'), 'Heading'); // Key: h1 DOM element, Value
 console.log(rest); // Outputs: Map with h1 => 'Heading' added
 console.log(rest.get(document.querySelector('h1'))); // Outputs: 'Heading' (same DOM element reference)
 
-console.log('------------------------MAP Additional Example MENU------------------------');
+console.log(
+  '------------------------MAP Additional Example MENU------------------------',
+);
 // Example: Using a Map to store restaurant menu items with varied key types
 const newMenuMap = new Map();
 
@@ -1362,3 +1370,66 @@ console.log(newMenuMap.has(dessertKey)); // Outputs: true
 const mainCourses = newMenuMap.get(mainCourseKey);
 const totalPrice = mainCourses.reduce((sum, item) => sum + item.price, 0);
 console.log('Total Main Course Price:', totalPrice); // Outputs: 20
+
+// MAP: Iteration
+console.log('-------------------------MAP: Iteration------------------------');
+// Maps are iterable collections of key-value pairs, allowing iteration with for...of
+// Keys can be any data type (strings, numbers, booleans, etc.), and iteration follows insertion order
+// Create a Map with an array of [key, value] pairs to represent a quiz question
+const question = new Map([
+  ['question', 'What is the best programming language in the world?'], // Key: string, Value: string
+  [1, 'C'], // Key: number, Value: string
+  [2, 'Java'], // Key: number, Value: string
+  [3, 'JavaScript'], // Key: number, Value: string
+  ['correct', 3], // Key: string, Value: number
+  [true, 'Correct :D'], // Key: boolean, Value: string
+  [false, 'Try again! :('], // Key: boolean, Value: string
+]);
+console.log(question); // Outputs: Map(7) { 'question' => 'What is the best programming language in the world?', 1 => 'C', 2 => 'Java', 3 => 'JavaScript', 'correct' => 3, true => 'Correct :D', false => 'Try again! :(' }
+
+// Convert Object to Map
+console.log('-------------------------MAP: Object to Map------------------------');
+// Object.entries() converts an object to an array of [key, value] pairs
+// Assuming openingHours is { mon: '9-12', tue: '9-12', wed: '9-12', thu: '9-12', fri: '9-12', sat: '9-12', sun: '9-12' }
+// new Map(Object.entries()) creates a Map from the object's key-value pairs
+const hoursMap = new Map(Object.entries(openingHours));
+console.log(hoursMap); // Outputs: Map(7) { 'mon' => '9-12', 'tue' => '9-12', 'wed' => '9-12', 'thu' => '9-12', 'fri' => '9-12', 'sat' => '9-12', 'sun' => '9-12' }
+
+// Looping over Maps
+console.log('-------------------------MAP: Looping------------------------');
+// get(key) retrieves the value for a specific key
+console.log(question.get('question')); // Outputs: 'What is the best programming language in the world?'
+// for...of iterates over Map entries, yielding [key, value] arrays
+// Destructuring [key, value] makes it easy to access both parts
+for (const [key, value] of question) {
+  // Filter to only log numeric keys (answer options)
+  if (typeof key === 'number') {
+    console.log(`Answer ${key}: ${value}`);
+    // Outputs:
+    // Answer 1: C
+    // Answer 2: Java
+    // Answer 3: JavaScript
+  }
+}
+
+// Interactive quiz: Prompt user for an answer and check if it's correct
+// prompt() returns a string, so Number() converts it to a number
+const correctAnswer = Number(prompt('Your answer')); // Example input: '3'
+console.log(correctAnswer); // Outputs: 3
+// question.get('correct') retrieves 3; compare with user input to get true/false
+// question.get(true/false) retrieves 'Correct :D' or 'Try again! :('
+const finalAnswer = question.get(question.get('correct') === correctAnswer);
+console.log(finalAnswer); // Outputs: 'Correct :D' (if input is 3)
+
+// MAP to Array
+console.log('-------------------------MAP to Array------------------------');
+// Spreading a Map (...question) returns an array of [key, value] pairs (same as entries())
+console.log([...question]); // Outputs: [['question', 'What is...'], [1, 'C'], [2, 'Java'], [3, 'JavaScript'], ['correct', 3], [true, 'Correct :D'], [false, 'Try again! :(']]
+// entries() explicitly returns an iterator of [key, value] pairs, spread into an array
+console.log([...question.entries()]); // Outputs: Same as above
+// keys() returns an iterator of keys, spread into an array
+console.log([...question.keys()]); // Outputs: ['question', 1, 2, 3, 'correct', true, false]
+// values() returns an iterator of values, spread into an array
+console.log([...question.values()]); // Outputs: ['What is...', 'C', 'Java', 'JavaScript', 3, 'Correct :D', 'Try again! :(']
+
+///////////////////////////////////////////////////////////////////////////////////
