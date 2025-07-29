@@ -1131,7 +1131,9 @@ const mexicanFoods = new Set([
   'garlic',
 ]);
 
-console.log('---------------------Set intersection-----------------------------');
+console.log(
+  '---------------------Set intersection-----------------------------',
+);
 // intersection() returns a new Set with elements present in both Sets
 // For italianFoods and mexicanFoods, it includes elements common to both
 const commonFoods = italianFoods.intersection(mexicanFoods);
@@ -1149,7 +1151,9 @@ console.log(italianMexicanFoods); // Outputs: Set(10) { 'pasta', 'gnocchi', 'tom
 const newItalianMexicanFoods = [...italianMexicanFoods];
 console.log(newItalianMexicanFoods); // Outputs: ['pasta', 'gnocchi', 'tomatoes', 'olive oil', 'garlic', 'basil', 'tortillas', 'beans', 'rice', 'avocado']
 
-console.log('--------------------------Set difference--------------------------');
+console.log(
+  '--------------------------Set difference--------------------------',
+);
 // difference() returns a new Set with elements in the first Set but not in the second
 // For italianFoods.difference(mexicanFoods), it includes elements unique to italianFoods
 const italianOnlyFoods = italianFoods.difference(mexicanFoods);
@@ -1161,7 +1165,9 @@ console.log(mexicanOnlyFoods); // Outputs: Set(4) { 'tortillas', 'beans', 'rice'
 const newItalianOnlyFoods = [...italianOnlyFoods];
 console.log(newItalianOnlyFoods); // Outputs: ['pasta', 'gnocchi', 'olive oil', 'basil']
 
-console.log('--------------------------Set symmetric difference--------------------------');
+console.log(
+  '--------------------------Set symmetric difference--------------------------',
+);
 // symmetricDifference() returns a new Set with elements in either Set but not in both
 // Includes elements unique to each Set, excluding common ones
 const symmetricFoods = italianFoods.symmetricDifference(mexicanFoods);
@@ -1182,16 +1188,25 @@ console.log('--------------------------Set superset--------------------------');
 const isSuperset = italianFoods.isSupersetOf(mexicanFoods);
 console.log(isSuperset); // Outputs: false (italianFoods lacks 'tortillas', 'beans', 'rice', 'avocado')
 
-console.log('--------------------------Set isDisjoint--------------------------');
+console.log(
+  '--------------------------Set isDisjoint--------------------------',
+);
 // isDisjointFrom() checks if two Sets have no elements in common
 // Returns true if there are no shared elements, false otherwise
 const isDisjoint = italianFoods.isDisjointFrom(mexicanFoods);
 console.log(isDisjoint); // Outputs: false (they share 'tomatoes' and 'garlic')
 
-console.log('---------------------------Additional Examples--------------------------');
+console.log(
+  '---------------------------Additional Examples--------------------------',
+);
 // Example: Managing inventory across restaurant locations using Set methods
 const location1Inventory = new Set(['flour', 'tomatoes', 'cheese', 'basil']);
-const location2Inventory = new Set(['tomatoes', 'olive oil', 'basil', 'garlic']);
+const location2Inventory = new Set([
+  'tomatoes',
+  'olive oil',
+  'basil',
+  'garlic',
+]);
 const newIngredients = new Set(['pasta', 'tomatoes']);
 
 // Find ingredients available at both locations (intersection)
@@ -1199,7 +1214,9 @@ const sharedIngredients = location1Inventory.intersection(location2Inventory);
 console.log('Shared Ingredients:', sharedIngredients); // Outputs: Set(2) { 'tomatoes', 'basil' }
 
 // Combine all ingredients across locations and new stock (union)
-const totalInventory = location1Inventory.union(location2Inventory).union(newIngredients);
+const totalInventory = location1Inventory
+  .union(location2Inventory)
+  .union(newIngredients);
 console.log('Total Inventory:', totalInventory); // Outputs: Set(6) { 'flour', 'tomatoes', 'cheese', 'basil', 'olive oil', 'garlic', 'pasta' }
 
 // Find ingredients unique to location1 (difference)
@@ -1211,10 +1228,137 @@ const isNewStockCovered = newIngredients.isSubsetOf(totalInventory);
 console.log('New stock fully in inventory?', isNewStockCovered); // Outputs: true
 
 // Check if location1 and location2 have no common ingredients
-const areLocationsDisjoint = location1Inventory.isDisjointFrom(new Set(['rice', 'beans']));
+const areLocationsDisjoint = location1Inventory.isDisjointFrom(
+  new Set(['rice', 'beans']),
+);
 console.log('Location 1 disjoint from rice/beans?', areLocationsDisjoint); // Outputs: true
 
 // Convert unique ingredients to array for reporting
 const uniqueIngredientsList = [...location1Unique];
 console.log('Unique Ingredients List:', uniqueIngredientsList); // Outputs: ['flour', 'cheese']
 //////////////////////////////////////////////////////////////////////
+// MAPS
+console.log('---------------------------Maps--------------------------');
+// Maps are collections of key-value pairs where keys can be any data type (strings, numbers, objects, etc.)
+// Unlike objects, Maps maintain insertion order and allow non-string keys
+// Maps are ideal for key-value storage with dynamic or complex keys
+
+console.log('------------------------MAP CREATION------------------------');
+// Create a new Map instance
+const rest = new Map();
+// set(key, value) adds a key-value pair to the Map and returns the Map for chaining
+rest.set('name', 'Classico Italiano'); // Key: string 'name', Value: string 'Classico Italiano'
+rest.set(1, 'Firenze, Italy'); // Key: number 1, Value: string 'Firenze, Italy'
+// set() returns the Map, so console.log shows the updated Map
+console.log(rest.set(2, 'Lisbon, Portugal')); // Outputs: Map(3) { 'name' => 'Classico Italiano', 1 => 'Firenze, Italy', 2 => 'Lisbon, Portugal' }
+// Log the entire Map to see its contents
+console.log(rest); // Outputs: Map(3) { 'name' => 'Classico Italiano', 1 => 'Firenze, Italy', 2 => 'Lisbon, Portugal' }
+
+console.log('------------------------MAP MANIPULATION------------------------');
+// Chain multiple set() calls to add more key-value pairs
+// Maps support any data type as keys or values, including arrays and booleans
+rest
+  .set('categories', ['Italian', 'Pizzeria', 'Vegetarian', 'Organic']) // Key: string 'categories', Value: array
+  .set('open', 11) // Key: string 'open', Value: number 11
+  .set('close', 23) // Key: string 'close', Value: number 23
+  .set(true, 'We are open') // Key: boolean true, Value: string 'We are open'
+  .set(false, 'We are closed'); // Key: boolean false, Value: string 'We are closed'
+console.log(rest); // Outputs: Map(7) { 'name' => 'Classico Italiano', 1 => 'Firenze, Italy', 2 => 'Lisbon, Portugal', 'categories' => [...], 'open' => 11, 'close' => 23, true => 'We are open', false => 'We are closed' }
+
+console.log('------------------------READ MAP VALUES------------------------');
+// get(key) retrieves the value associated with the specified key
+console.log(rest.get('name')); // Outputs: 'Classico Italiano'
+console.log(rest.get(true)); // Outputs: 'We are open'
+console.log(rest.get(1)); // Outputs: 'Firenze, Italy'
+console.log(rest.get('1')); // Outputs: undefined (keys are type-sensitive; '1' string ≠ 1 number)
+
+// Use get() with a dynamic expression to check if the restaurant is open
+// time > rest.get('open') && time < rest.get('close') evaluates to false (8 < 11)
+const time = 8;
+console.log(rest.get(time > rest.get('open') && time < rest.get('close'))); // Outputs: 'We are closed'
+
+console.log('------------------------MAP has Method------------------------');
+// has(key) checks if a key exists in the Map, returning true or false
+console.log(rest.has('categories')); // Outputs: true ('categories' exists)
+console.log(rest.has('8')); // Outputs: false ('8' does not exist)
+
+console.log('------------------------MAP delete Method------------------------');
+// delete(key) removes the key-value pair for the specified key, returning true if successful
+const answer = rest.delete(2); // Removes key 2 ('Lisbon, Portugal')
+console.log(answer); // Outputs: true (deletion successful)
+console.log(rest); // Outputs: Map(6) { 'name' => 'Classico Italiano', 1 => 'Firenze, Italy', 'categories' => [...], 'open' => 11, 'close' => 23, true => 'We are open', false => 'We are closed' }
+
+console.log('------------------------MAP size Property------------------------');
+// size property returns the number of key-value pairs in the Map
+console.log(rest.size); // Outputs: 6 (after deleting key 2)
+
+// console.log('------------------------MAP CLEAR Method------------------------');
+// clear() removes all key-value pairs from the Map
+// rest.clear();
+// console.log(rest); // Outputs: Map(0) {} (commented out to preserve Map contents)
+
+console.log('------------------------MAP Additional Example------------------------');
+// Using an array as a key; note that the exact array reference matters
+rest.set([1, 2], 'Test'); // Key: array [1, 2], Value: string 'Test'
+console.log(rest); // Outputs: Map with [1, 2] => 'Test' added
+console.log(rest.get([1, 2])); // Outputs: undefined (new array [1, 2] is a different reference)
+
+// Store the array in a variable to reuse the same reference
+const arrTest = [1, 2];
+rest.set(arrTest, 'Test'); // Key: arrTest reference, Value: 'Test'
+console.log(rest); // Outputs: Map with arrTest => 'Test' added
+console.log(rest.get(arrTest)); // Outputs: 'Test' (same reference works)
+
+// Using a DOM element as a key; same reference rule applies
+rest.set(document.querySelector('h1'), 'Heading'); // Key: h1 DOM element, Value: 'Heading'
+console.log(rest); // Outputs: Map with h1 => 'Heading' added
+console.log(rest.get(document.querySelector('h1'))); // Outputs: 'Heading' (same DOM element reference)
+
+console.log('------------------------MAP Additional Example MENU------------------------');
+// Example: Using a Map to store restaurant menu items with varied key types
+const newMenuMap = new Map();
+
+// Define a key as an object for categorization
+const mainCourseKey = { type: 'Main Course' };
+const dessertKey = { type: 'Dessert' };
+
+// Add menu items with different key types
+newMenuMap
+  .set('pizza', { name: 'Margherita', price: 10, category: 'Main' })
+  .set(mainCourseKey, [
+    { name: 'Pasta', price: 8 },
+    { name: 'Risotto', price: 12 },
+  ])
+  .set(dessertKey, [
+    { name: 'Tiramisu', price: 6 },
+    { name: 'Gelato', price: 4 },
+  ])
+  .set('special', 'Daily Chef Special');
+
+// Log the entire Map
+console.log(newMenuMap);
+// Outputs: Map(4) { 'pizza' => { name: 'Margherita', price: 10, category: 'Main' }, { type: 'Main Course' } => [...], { type: 'Dessert' } => [...], 'special' => 'Daily Chef Special' }
+
+// Access specific items
+console.log(newMenuMap.get('pizza')); // Outputs: { name: 'Margherita', price: 10, category: 'Main' }
+console.log(newMenuMap.get(mainCourseKey)); // Outputs: [{ name: 'Pasta', price: 8 }, { name: 'Risotto', price: 12 }]
+
+// Iterate over the Map using for...of and Object.entries
+for (const [key, value] of newMenuMap) {
+  // Handle object keys carefully (stringify for display)
+  const keyDisplay = typeof key === 'object' ? JSON.stringify(key) : key;
+  console.log(`Key: ${keyDisplay}, Value: ${JSON.stringify(value)}`);
+}
+// Outputs:
+// Key: pizza, Value: {"name":"Margherita","price":10,"category":"Main"}
+// Key: {"type":"Main Course"}, Value: [{"name":"Pasta","price":8},{"name":"Risotto","price":12}]
+// Key: {"type":"Dessert"}, Value: [{"name":"Tiramisu","price":6},{"name":"Gelato","price":4}]
+// Key: special, Value: "Daily Chef Special"
+
+// Check if a category exists
+console.log(newMenuMap.has(dessertKey)); // Outputs: true
+
+// Calculate total price of main courses
+const mainCourses = newMenuMap.get(mainCourseKey);
+const totalPrice = mainCourses.reduce((sum, item) => sum + item.price, 0);
+console.log('Total Main Course Price:', totalPrice); // Outputs: 20
