@@ -1569,7 +1569,7 @@ console.log(
 );
 // Compare normalized emails to check if they match
 console.log(lowerPassengerEmail === trimmedPassengerLoginEmail); // Outputs: true (both are 'hello@jonas.io')
-console.log(lowerPassengerEmail === trimmedPassengerLoginEmail); // Outputs: true (repeated for clarity)
+console.log(lowerPassengerEmail === normalisedEmail); // Outputs: true (both are 'hello@jonas.io')
 
 console.log(
   '---------------------------replace()-----------------------------',
@@ -1624,7 +1624,7 @@ console.log(
   '---------------------------REAL TIME EXAMPLE-----------------------------',
 );
 // Check if plane model is a specific type using startsWith()
-if (newPlane.startsWith('A320')) console.log('Plane is a Boeing 320neo'); // Outputs: 'Plane is a Boeing 320neo' (Note: should be Airbus, not Boeing)
+if (newPlane.startsWith('A320')) console.log('Plane is an Airbus 320neo'); // Outputs: 'Plane is an Airbus 320neo'
 
 // PRACTICE EXERCISE
 console.log(
@@ -1789,7 +1789,7 @@ const formatProductCode = function (code) {
 const isValidProductCode = function (code) {
   const normalized = code.trim().toUpperCase();
   // Check format using regex: 3-4 letters, hyphen, 4 digits, hyphen, 2 letters
-  return /^[A-Z]{3,4}-\d{4}-[A-Z]{2}$/.test(normalized);
+   return /^[A-Z]{3,4}-\d{4}-[A-Z0-9]{2}$/.test(normalized);
 };
 
 // Test the functions
