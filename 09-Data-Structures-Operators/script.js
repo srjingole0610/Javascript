@@ -827,7 +827,7 @@ const myNewRestaurant = {
 
 // Logs the restaurant object
 // Output: {
-//   restaurantName: 'Bella Italia',
+//   newRestaurantName: 'Bella Italia',
 //   location: 'Rome',
 //   rating: 4.5,
 //   status_excellent: true,
@@ -904,7 +904,7 @@ console.log(
 // Optional chaining with methods: checks if the method exists before calling it
 // If orderFood exists, calls it with arguments (0, 1); otherwise, returns undefined
 // Nullish coalescing (??) provides a fallback message
-console.log(restaurant.orderFood?.(0, 1) ?? 'Order is not available'); // Outputs: '['Focaccia', 'Pasta']'
+console.log(restaurant.orderFood?.(0, 1) ?? 'Order is not available'); // Outputs: ['Focaccia', 'Pasta']
 // Tests a non-existent method
 console.log(restaurant.orderRisoto?.(0, 1) ?? 'Method does not exist'); // Outputs: 'Method does not exist'
 
@@ -1395,7 +1395,7 @@ console.log(
 // Assuming openingHours is { thu: { open: 12, close: 22 }, fri: { open: 11, close: 23 }, sat: { open: 0, close: 24 } }
 // new Map(Object.entries()) creates a Map from the object's key-value pairs
 const hoursMap = new Map(Object.entries(openingHours));
-console.log(hoursMap); // Outputs: Map(7) { 'mon' => '9-12', 'tue' => '9-12', 'wed' => '9-12', 'thu' => '9-12', 'fri' => '9-12', 'sat' => '9-12', 'sun' => '9-12' }
+console.log(hoursMap); // Outputs: Map(3) { 'thu' => { open: 12, close: 22 }, 'fri' => { open: 11, close: 23 }, 'sat' => { open: 0, close: 24 } }
 
 // Looping over Maps
 console.log('-------------------------MAP: Looping------------------------');
