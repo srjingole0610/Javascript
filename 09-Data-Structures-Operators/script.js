@@ -778,17 +778,17 @@ const newWeekdays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 const newOpeningHours = {
   // [newWeekdays[3]] evaluates to 'thu' (the 4th element at index 3), so the property name is 'thu'
   [newWeekdays[3]]: {
-    open: 12,  // Restaurant opens at 12 PM
+    open: 12, // Restaurant opens at 12 PM
     close: 22, // Restaurant closes at 10 PM
   },
   // [newWeekdays[4]] evaluates to 'fri', so the property name is 'fri'
   [newWeekdays[4]]: {
-    open: 11,  // Opens at 11 AM
+    open: 11, // Opens at 11 AM
     close: 23, // Closes at 11 PM
   },
   // [newWeekdays[5]] evaluates to 'sat', so the property name is 'sat'
   [newWeekdays[5]]: {
-    open: 0,   // Open 24 hours (0 represents midnight)
+    open: 0, // Open 24 hours (0 represents midnight)
     close: 24, // Closes at midnight (24-hour format)
   },
 };
@@ -808,21 +808,21 @@ const rating = 4.5;
 const myNewRestaurant = {
   // Shorthand property names: when property name matches variable name, omit the value
   newRestaurantName, // Equivalent to newRestaurantName: newRestaurantName
-  myLocation,       // Equivalent to myLocation: myLocation
-  rating,        // Equivalent to rating: rating
-  
+  myLocation, // Equivalent to myLocation: myLocation
+  rating, // Equivalent to rating: rating
+
   // Computed property name using a template literal
   ['status_' + (rating >= 4 ? 'excellent' : 'good')]: true,
-  
+
   // Shorthand method definition: omit 'function' keyword and colon
   getDetails() {
     return `${this.newRestaurantName} in ${this.myLocation} has a rating of ${this.rating}`;
   },
-  
+
   // Method with computed name (less common but possible)
   ['serve_' + 'food']() {
     return 'Serving delicious Italian cuisine!';
-  }
+  },
 };
 
 // Logs the restaurant object
@@ -872,7 +872,9 @@ console.log(restaurant.restroOpeningHours.fri?.open); // Outputs: 11
 console.log(restaurant.openingHours?.fri?.open); // Outputs: undefined (openingHours not defined)
 
 // Example of using optional chaining with a loop
-console.log('----------Example of using optional chaining with a loop-----------');
+console.log(
+  '----------Example of using optional chaining with a loop-----------',
+);
 // newdays is an array: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
 const newdays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 // Iterates over each day to check opening hours
@@ -883,7 +885,7 @@ for (const day of newdays) {
   const open = restaurant.restroOpeningHours[day]?.open ?? null;
   // Ternary operator to format output based on whether open is null
   console.log(
-    `On ${day}, we ${open !== null ? `open at ${open}` : 'are closed all day'}`
+    `On ${day}, we ${open !== null ? `open at ${open}` : 'are closed all day'}`,
   );
   // Outputs:
   // On mon, we are closed all day
@@ -896,7 +898,9 @@ for (const day of newdays) {
 }
 
 // Example of using optional chaining with a method
-console.log('----------Example of using optional chaining with a method-----------');
+console.log(
+  '----------Example of using optional chaining with a method-----------',
+);
 // Optional chaining with methods: checks if the method exists before calling it
 // If orderFood exists, calls it with arguments (0, 1); otherwise, returns undefined
 // Nullish coalescing (??) provides a fallback message
@@ -905,7 +909,9 @@ console.log(restaurant.orderFood?.(0, 1) ?? 'Order is not available'); // Output
 console.log(restaurant.orderRisoto?.(0, 1) ?? 'Method does not exist'); // Outputs: 'Method does not exist'
 
 // Example of using optional chaining with Array
-console.log('----------Example of using optional chaining with Array-----------');
+console.log(
+  '----------Example of using optional chaining with Array-----------',
+);
 // Array of user objects
 const users = [
   { name: 'Suraj', email: 'bV5yJ@example.com' },
@@ -917,7 +923,9 @@ const users = [
 console.log(users[0]?.email ?? 'User not found'); // Outputs: 'bV5yJ@example.com'
 
 // Additional example of optional chaining with nested objects and dynamic keys
-console.log('----------Additional example of optional chaining with nested objects and dynamic keys-----------');
+console.log(
+  '----------Additional example of optional chaining with nested objects and dynamic keys-----------',
+);
 const config = {
   settings: {
     theme: 'dark',
@@ -931,12 +939,497 @@ const config = {
 // Dynamic key to check notification settings
 const notificationType = 'email';
 // Safely access nested property with dynamic key
-console.log(config.settings?.notifications?.[notificationType] ?? 'Setting not found'); // Outputs: true
+console.log(
+  config.settings?.notifications?.[notificationType] ?? 'Setting not found',
+); // Outputs: true
 
 // Try accessing a non-existent notification type
-console.log(config.settings?.notifications?.push ?? 'Push notifications not configured'); // Outputs: 'Push notifications not configured'
+console.log(
+  config.settings?.notifications?.push ?? 'Push notifications not configured',
+); // Outputs: 'Push notifications not configured'
 
 // Safely access deeply nested property that doesn’t exist
 console.log(config.settings?.appearance?.fontSize ?? 'Font size not set'); // Outputs: 'Font size not set'
 
 //////////////////////////////////////////////////////////////////////
+// Looping Objects: Object.keys(), Object.values(), Object.entries()
+// These methods provide ways to iterate over an object's enumerable properties, values, or key-value pairs
+// Assuming restroOpeningHours is an object like:
+// { thu: { open: 12, close: 22 }, fri: { open: 11, close: 23 }, sat: { open: 0, close: 24 } }
+
+// PROPERTY KEYS
+console.log('----------Looping Objects : Object.keys()-----------');
+// Object.keys() returns an array of the object's enumerable property names
+// For restroOpeningHours, it returns ['thu', 'fri', 'sat']
+const properties = Object.keys(restroOpeningHours);
+console.log(properties); // Outputs: ['thu', 'fri', 'sat']
+
+// Using for...of to iterate over the array of property names
+// Each 'day' is a string (e.g., 'thu', 'fri', 'sat')
+for (const day of Object.keys(restroOpeningHours)) {
+  console.log(day); // Outputs: 'thu', 'fri', 'sat' (one per line)
+}
+
+// Building a string to list open days
+// Starts with a base string and appends each day
+let openDays = `We are open on ${properties.length} days: `;
+// Iterates over the properties array to add each day with a comma
+for (const day of properties) {
+  openDays += ` ${day},`;
+}
+// Outputs: 'We are open on 3 days:  thu, fri, sat,'
+console.log(openDays);
+
+// PROPERTY VALUES
+console.log('----------Looping Objects : Object.values()-----------');
+// Object.values() returns an array of the object's enumerable property values
+// For restroOpeningHours, it returns [{ open: 12, close: 22 }, { open: 11, close: 23 }, { open: 0, close: 24 }]
+const values = Object.values(restroOpeningHours);
+console.log(values);
+// Outputs: [{ open: 12, close: 22 }, { open: 11, close: 23 }, { open: 0, close: 24 }]
+
+// ENTIRE OBJECT
+console.log('----------Looping Objects : Object.entries()-----------');
+// Object.entries() returns an array of [key, value] pairs for the object's enumerable properties
+// For restroOpeningHours, it returns:
+// [['thu', { open: 12, close: 22 }], ['fri', { open: 11, close: 23 }], ['sat', { open: 0, close: 24 }]]
+const entries = Object.entries(restroOpeningHours);
+console.log(entries);
+// Outputs: [['thu', { open: 12, close: 22 }], ['fri', { open: 11, close: 23 }], ['sat', { open: 0, close: 24 }]]
+
+// Using for...of with destructuring to iterate over key-value pairs
+// Each entry is an array [day, { open, close }], destructured into 'day' (string) and '{ open, close }' (object)
+for (const [day, { open, close }] of entries) {
+  // Formats a string using the key (day) and values (open, close)
+  console.log(`On ${day}, we open at ${open} and close at ${close}`);
+  // Outputs:
+  // On thu, we open at 12 and close at 22
+  // On fri, we open at 11 and close at 23
+  // On sat, we open at 0 and close at 24
+}
+
+// Additional example: Transforming object data using Object.keys(), Object.values(), Object.entries()
+console.log(
+  '------------------------------Additional Example------------------------------',
+);
+const menuItems = {
+  pizza: { price: 10, category: 'Main' },
+  pasta: { price: 8, category: 'Main' },
+  salad: { price: 6, category: 'Starter' },
+};
+
+// Using Object.keys() to list item names
+console.log('Menu Items:', Object.keys(menuItems)); // Outputs: ['pizza', 'pasta', 'salad']
+
+// Using Object.values() to summarize prices
+const prices = Object.values(menuItems).map(item => item.price);
+console.log('Prices:', prices); // Outputs: [10, 8, 6]
+console.log(
+  'Total Price:',
+  prices.reduce((sum, price) => sum + price, 0),
+); // Outputs: 24
+
+// Using Object.entries() to create a categorized menu
+const categorizedMenu = {};
+for (const [item, { price, category }] of Object.entries(menuItems)) {
+  // Group items by category
+  if (!categorizedMenu[category]) {
+    categorizedMenu[category] = [];
+  }
+  categorizedMenu[category].push({ item, price });
+}
+console.log('Categorized Menu:', categorizedMenu);
+// Outputs: {
+//   Main: [{ item: 'pizza', price: 10 }, { item: 'pasta', price: 8 }],
+//   Starter: [{ item: 'salad', price: 6 }]
+// }
+//////////////////////////////////////////////////////////////////////
+// SETS
+console.log('------------------------------Sets------------------------------');
+// A Set is a collection of unique values; duplicates are automatically removed
+// Values can be of any type (strings, numbers, objects, etc.), but each value appears only once
+const ordersSet = new Set([
+  'pasta',
+  'pizza',
+  'pizza',
+  'risotto',
+  'pasta',
+  'pizza',
+]);
+// Set removes duplicates, keeping only unique values
+console.log(ordersSet); // Outputs: Set(3) { 'pasta', 'pizza', 'risotto' }
+
+console.log('---------String to Set-----------');
+// A string is iterable, so a Set created from a string treats each character as an element
+// Duplicates (e.g., repeated 'a' in 'Suraj') are removed
+console.log(new Set('Suraj')); // Outputs: Set(5) { 'S', 'u', 'r', 'a', 'j' }
+
+console.log('----------Set size-----------');
+// The size property returns the number of unique elements in the Set
+console.log(ordersSet.size); // Outputs: 3 (for 'pasta', 'pizza', 'risotto')
+
+console.log('----------Set has()-----------');
+// The has() method checks if a value exists in the Set, returning true or false
+console.log(ordersSet.has('pizza')); // Outputs: true ('pizza' is in the Set)
+console.log(ordersSet.has('bread')); // Outputs: false ('bread' is not in the Set)
+
+console.log('----------Set add()-----------');
+// The add() method adds a new value to the Set; duplicates are ignored
+ordersSet.add('garlic bread'); // Adds 'garlic bread'
+ordersSet.add('garlic bread'); // Ignored, as 'garlic bread' already exists
+console.log(ordersSet); // Outputs: Set(4) { 'pasta', 'pizza', 'risotto', 'garlic bread' }
+
+console.log('----------Set delete()-----------');
+// The delete() method removes a specified value from the Set
+ordersSet.delete('risotto'); // Removes 'risotto'
+console.log(ordersSet); // Outputs: Set(3) { 'pasta', 'pizza', 'garlic bread' }
+
+// console.log('----------Set clear()-----------');
+// The clear() method removes all elements from the Set
+// ordersSet.clear();
+// console.log(ordersSet); // Outputs: Set(0) {} (commented out to preserve Set contents)
+
+console.log('----------Looping Sets-----------');
+// Sets are iterable, so for...of can be used to loop over elements
+// Each iteration yields a unique value in insertion order
+for (const order of ordersSet) {
+  console.log(order); // Outputs: 'pasta', 'pizza', 'garlic bread' (one per line)
+}
+
+console.log('----------Set of unique staff-----------');
+// Creating a Set from an array with duplicates to get unique values
+const staff = ['Waiter', 'Chef', 'Waiter', 'Manager', 'Chef', 'Waiter'];
+const uniqueStaff = new Set(staff);
+// Duplicates are removed, keeping only unique roles
+console.log(uniqueStaff); // Outputs: Set(3) { 'Waiter', 'Chef', 'Manager' }
+
+console.log('----------Array of unique staff-----------');
+// Spreading a Set into an array converts it to an array of unique values
+const newStaff = [...uniqueStaff];
+console.log(newStaff); // Outputs: ['Waiter', 'Chef', 'Manager']
+
+// SET METHODS
+console.log('----------------Set Methods----------------');
+// Sets store unique values, and ES2022 introduced methods for comparing and combining Sets
+// italianFoods contains unique ingredients used in Italian cuisine
+const italianFoods = new Set([
+  'pasta',
+  'gnocchi',
+  'tomatoes',
+  'olive oil',
+  'garlic',
+  'basil',
+]);
+
+// mexicanFoods contains unique ingredients used in Mexican cuisine
+const mexicanFoods = new Set([
+  'tortillas',
+  'beans',
+  'rice',
+  'tomatoes',
+  'avocado',
+  'garlic',
+]);
+
+console.log(
+  '---------------------Set intersection-----------------------------',
+);
+// intersection() returns a new Set with elements present in both Sets
+// For italianFoods and mexicanFoods, it includes elements common to both
+const commonFoods = italianFoods.intersection(mexicanFoods);
+console.log(commonFoods); // Outputs: Set(2) { 'tomatoes', 'garlic' }
+// Convert the Set to an array using the spread operator for further use
+const newCommonFoods = [...commonFoods];
+console.log(newCommonFoods); // Outputs: ['tomatoes', 'garlic']
+
+console.log('--------------------------Set union--------------------------');
+// union() returns a new Set with all unique elements from both Sets
+// Combines all elements, removing duplicates
+const italianMexicanFoods = italianFoods.union(mexicanFoods);
+console.log(italianMexicanFoods); // Outputs: Set(10) { 'pasta', 'gnocchi', 'tomatoes', 'olive oil', 'garlic', 'basil', 'tortillas', 'beans', 'rice', 'avocado' }
+// Convert the Set to an array
+const newItalianMexicanFoods = [...italianMexicanFoods];
+console.log(newItalianMexicanFoods); // Outputs: ['pasta', 'gnocchi', 'tomatoes', 'olive oil', 'garlic', 'basil', 'tortillas', 'beans', 'rice', 'avocado']
+
+console.log(
+  '--------------------------Set difference--------------------------',
+);
+// difference() returns a new Set with elements in the first Set but not in the second
+// For italianFoods.difference(mexicanFoods), it includes elements unique to italianFoods
+const italianOnlyFoods = italianFoods.difference(mexicanFoods);
+console.log(italianOnlyFoods); // Outputs: Set(4) { 'pasta', 'gnocchi', 'olive oil', 'basil' }
+// For mexicanFoods.difference(italianFoods), it includes elements unique to mexicanFoods
+const mexicanOnlyFoods = mexicanFoods.difference(italianFoods);
+console.log(mexicanOnlyFoods); // Outputs: Set(4) { 'tortillas', 'beans', 'rice', 'avocado' }
+// Convert italianOnlyFoods to an array
+const newItalianOnlyFoods = [...italianOnlyFoods];
+console.log(newItalianOnlyFoods); // Outputs: ['pasta', 'gnocchi', 'olive oil', 'basil']
+
+console.log(
+  '--------------------------Set symmetric difference--------------------------',
+);
+// symmetricDifference() returns a new Set with elements in either Set but not in both
+// Includes elements unique to each Set, excluding common ones
+const symmetricFoods = italianFoods.symmetricDifference(mexicanFoods);
+console.log(symmetricFoods); // Outputs: Set(8) { 'pasta', 'gnocchi', 'olive oil', 'basil', 'tortillas', 'beans', 'rice', 'avocado' }
+// Convert to an array
+const newSymmetricFoods = [...symmetricFoods];
+console.log(newSymmetricFoods); // Outputs: ['pasta', 'gnocchi', 'olive oil', 'basil', 'tortillas', 'beans', 'rice', 'avocado']
+
+console.log('--------------------------Set subset--------------------------');
+// isSubsetOf() checks if all elements of the first Set are in the second Set
+// Returns true if mexicanFoods is a subset of italianFoods, false otherwise
+const isSubset = mexicanFoods.isSubsetOf(italianFoods);
+console.log(isSubset); // Outputs: false (mexicanFoods has 'tortillas', 'beans', 'rice', 'avocado' not in italianFoods)
+
+console.log('--------------------------Set superset--------------------------');
+// isSupersetOf() checks if the first Set contains all elements of the second Set
+// Returns true if italianFoods contains all elements of mexicanFoods, false otherwise
+const isSuperset = italianFoods.isSupersetOf(mexicanFoods);
+console.log(isSuperset); // Outputs: false (italianFoods lacks 'tortillas', 'beans', 'rice', 'avocado')
+
+console.log(
+  '--------------------------Set isDisjoint--------------------------',
+);
+// isDisjointFrom() checks if two Sets have no elements in common
+// Returns true if there are no shared elements, false otherwise
+const isDisjoint = italianFoods.isDisjointFrom(mexicanFoods);
+console.log(isDisjoint); // Outputs: false (they share 'tomatoes' and 'garlic')
+
+console.log(
+  '---------------------------Additional Examples--------------------------',
+);
+// Example: Managing inventory across restaurant locations using Set methods
+const location1Inventory = new Set(['flour', 'tomatoes', 'cheese', 'basil']);
+const location2Inventory = new Set([
+  'tomatoes',
+  'olive oil',
+  'basil',
+  'garlic',
+]);
+const newIngredients = new Set(['pasta', 'tomatoes']);
+
+// Find ingredients available at both locations (intersection)
+const sharedIngredients = location1Inventory.intersection(location2Inventory);
+console.log('Shared Ingredients:', sharedIngredients); // Outputs: Set(2) { 'tomatoes', 'basil' }
+
+// Combine all ingredients across locations and new stock (union)
+const totalInventory = location1Inventory
+  .union(location2Inventory)
+  .union(newIngredients);
+console.log('Total Inventory:', totalInventory); // Outputs: Set(6) { 'flour', 'tomatoes', 'cheese', 'basil', 'olive oil', 'garlic', 'pasta' }
+
+// Find ingredients unique to location1 (difference)
+const location1Unique = location1Inventory.difference(location2Inventory);
+console.log('Location 1 Unique:', location1Unique); // Outputs: Set(2) { 'flour', 'cheese' }
+
+// Check if newIngredients is a subset of total inventory
+const isNewStockCovered = newIngredients.isSubsetOf(totalInventory);
+console.log('New stock fully in inventory?', isNewStockCovered); // Outputs: true
+
+// Check if location1 and location2 have no common ingredients
+const areLocationsDisjoint = location1Inventory.isDisjointFrom(
+  new Set(['rice', 'beans']),
+);
+console.log('Location 1 disjoint from rice/beans?', areLocationsDisjoint); // Outputs: true
+
+// Convert unique ingredients to array for reporting
+const uniqueIngredientsList = [...location1Unique];
+console.log('Unique Ingredients List:', uniqueIngredientsList); // Outputs: ['flour', 'cheese']
+//////////////////////////////////////////////////////////////////////
+// MAPS
+console.log('---------------------------Maps--------------------------');
+// Maps are collections of key-value pairs where keys can be any data type (strings, numbers, objects, etc.)
+// Unlike objects, Maps maintain insertion order and allow non-string keys
+// Maps are ideal for key-value storage with dynamic or complex keys
+
+console.log('------------------------MAP CREATION------------------------');
+// Create a new Map instance
+const rest = new Map();
+// set(key, value) adds a key-value pair to the Map and returns the Map for chaining
+rest.set('name', 'Classico Italiano'); // Key: string 'name', Value: string 'Classico Italiano'
+rest.set(1, 'Firenze, Italy'); // Key: number 1, Value: string 'Firenze, Italy'
+// set() returns the Map, so console.log shows the updated Map
+console.log(rest.set(2, 'Lisbon, Portugal')); // Outputs: Map(3) { 'name' => 'Classico Italiano', 1 => 'Firenze, Italy', 2 => 'Lisbon, Portugal' }
+// Log the entire Map to see its contents
+console.log(rest); // Outputs: Map(3) { 'name' => 'Classico Italiano', 1 => 'Firenze, Italy', 2 => 'Lisbon, Portugal' }
+
+console.log('------------------------MAP MANIPULATION------------------------');
+// Chain multiple set() calls to add more key-value pairs
+// Maps support any data type as keys or values, including arrays and booleans
+rest
+  .set('categories', ['Italian', 'Pizzeria', 'Vegetarian', 'Organic']) // Key: string 'categories', Value: array
+  .set('open', 11) // Key: string 'open', Value: number 11
+  .set('close', 23) // Key: string 'close', Value: number 23
+  .set(true, 'We are open') // Key: boolean true, Value: string 'We are open'
+  .set(false, 'We are closed'); // Key: boolean false, Value: string 'We are closed'
+console.log(rest); // Outputs: Map(7) { 'name' => 'Classico Italiano', 1 => 'Firenze, Italy', 2 => 'Lisbon, Portugal', 'categories' => [...], 'open' => 11, 'close' => 23, true => 'We are open', false => 'We are closed' }
+
+console.log('------------------------READ MAP VALUES------------------------');
+// get(key) retrieves the value associated with the specified key
+console.log(rest.get('name')); // Outputs: 'Classico Italiano'
+console.log(rest.get(true)); // Outputs: 'We are open'
+console.log(rest.get(1)); // Outputs: 'Firenze, Italy'
+console.log(rest.get('1')); // Outputs: undefined (keys are type-sensitive; '1' string ≠ 1 number)
+
+// Use get() with a dynamic expression to check if the restaurant is open
+// time > rest.get('open') && time < rest.get('close') evaluates to false (8 < 11)
+const time = 8;
+console.log(rest.get(time > rest.get('open') && time < rest.get('close'))); // Outputs: 'We are closed'
+
+console.log('------------------------MAP has Method------------------------');
+// has(key) checks if a key exists in the Map, returning true or false
+console.log(rest.has('categories')); // Outputs: true ('categories' exists)
+console.log(rest.has('8')); // Outputs: false ('8' does not exist)
+
+console.log(
+  '------------------------MAP delete Method------------------------',
+);
+// delete(key) removes the key-value pair for the specified key, returning true if successful
+const answer = rest.delete(2); // Removes key 2 ('Lisbon, Portugal')
+console.log(answer); // Outputs: true (deletion successful)
+console.log(rest); // Outputs: Map(6) { 'name' => 'Classico Italiano', 1 => 'Firenze, Italy', 'categories' => [...], 'open' => 11, 'close' => 23, true => 'We are open', false => 'We are closed' }
+
+console.log(
+  '------------------------MAP size Property------------------------',
+);
+// size property returns the number of key-value pairs in the Map
+console.log(rest.size); // Outputs: 6 (after deleting key 2)
+
+// console.log('------------------------MAP CLEAR Method------------------------');
+// clear() removes all key-value pairs from the Map
+// rest.clear();
+// console.log(rest); // Outputs: Map(0) {} (commented out to preserve Map contents)
+
+console.log(
+  '------------------------MAP Additional Example------------------------',
+);
+// Using an array as a key; note that the exact array reference matters
+rest.set([1, 2], 'Test'); // Key: array [1, 2], Value: string 'Test'
+console.log(rest); // Outputs: Map with [1, 2] => 'Test' added
+console.log(rest.get([1, 2])); // Outputs: undefined (new array [1, 2] is a different reference)
+
+// Store the array in a variable to reuse the same reference
+const arrTest = [1, 2];
+rest.set(arrTest, 'Test'); // Key: arrTest reference, Value: 'Test'
+console.log(rest); // Outputs: Map with arrTest => 'Test' added
+console.log(rest.get(arrTest)); // Outputs: 'Test' (same reference works)
+
+// Using a DOM element as a key; same reference rule applies
+rest.set(document.querySelector('h1'), 'Heading'); // Key: h1 DOM element, Value: 'Heading'
+console.log(rest); // Outputs: Map with h1 => 'Heading' added
+console.log(rest.get(document.querySelector('h1'))); // Outputs: 'Heading' (same DOM element reference)
+
+console.log(
+  '------------------------MAP Additional Example MENU------------------------',
+);
+// Example: Using a Map to store restaurant menu items with varied key types
+const newMenuMap = new Map();
+
+// Define a key as an object for categorization
+const mainCourseKey = { type: 'Main Course' };
+const dessertKey = { type: 'Dessert' };
+
+// Add menu items with different key types
+newMenuMap
+  .set('pizza', { name: 'Margherita', price: 10, category: 'Main' })
+  .set(mainCourseKey, [
+    { name: 'Pasta', price: 8 },
+    { name: 'Risotto', price: 12 },
+  ])
+  .set(dessertKey, [
+    { name: 'Tiramisu', price: 6 },
+    { name: 'Gelato', price: 4 },
+  ])
+  .set('special', 'Daily Chef Special');
+
+// Log the entire Map
+console.log(newMenuMap);
+// Outputs: Map(4) { 'pizza' => { name: 'Margherita', price: 10, category: 'Main' }, { type: 'Main Course' } => [...], { type: 'Dessert' } => [...], 'special' => 'Daily Chef Special' }
+
+// Access specific items
+console.log(newMenuMap.get('pizza')); // Outputs: { name: 'Margherita', price: 10, category: 'Main' }
+console.log(newMenuMap.get(mainCourseKey)); // Outputs: [{ name: 'Pasta', price: 8 }, { name: 'Risotto', price: 12 }]
+
+// Iterate over the Map using for...of and Object.entries
+for (const [key, value] of newMenuMap) {
+  // Handle object keys carefully (stringify for display)
+  const keyDisplay = typeof key === 'object' ? JSON.stringify(key) : key;
+  console.log(`Key: ${keyDisplay}, Value: ${JSON.stringify(value)}`);
+}
+// Outputs:
+// Key: pizza, Value: {"name":"Margherita","price":10,"category":"Main"}
+// Key: {"type":"Main Course"}, Value: [{"name":"Pasta","price":8},{"name":"Risotto","price":12}]
+// Key: {"type":"Dessert"}, Value: [{"name":"Tiramisu","price":6},{"name":"Gelato","price":4}]
+// Key: special, Value: "Daily Chef Special"
+
+// Check if a category exists
+console.log(newMenuMap.has(dessertKey)); // Outputs: true
+
+// Calculate total price of main courses
+const mainCourses = newMenuMap.get(mainCourseKey);
+const totalPrice = mainCourses.reduce((sum, item) => sum + item.price, 0);
+console.log('Total Main Course Price:', totalPrice); // Outputs: 20
+
+// MAP: Iteration
+console.log('-------------------------MAP: Iteration------------------------');
+// Maps are iterable collections of key-value pairs, allowing iteration with for...of
+// Keys can be any data type (strings, numbers, booleans, etc.), and iteration follows insertion order
+// Create a Map with an array of [key, value] pairs to represent a quiz question
+const question = new Map([
+  ['question', 'What is the best programming language in the world?'], // Key: string, Value: string
+  [1, 'C'], // Key: number, Value: string
+  [2, 'Java'], // Key: number, Value: string
+  [3, 'JavaScript'], // Key: number, Value: string
+  ['correct', 3], // Key: string, Value: number
+  [true, 'Correct :D'], // Key: boolean, Value: string
+  [false, 'Try again! :('], // Key: boolean, Value: string
+]);
+console.log(question); // Outputs: Map(7) { 'question' => 'What is the best programming language in the world?', 1 => 'C', 2 => 'Java', 3 => 'JavaScript', 'correct' => 3, true => 'Correct :D', false => 'Try again! :(' }
+
+// Convert Object to Map
+console.log('-------------------------MAP: Object to Map------------------------');
+// Object.entries() converts an object to an array of [key, value] pairs
+// Assuming openingHours is { thu: { open: 12, close: 22 }, fri: { open: 11, close: 23 }, sat: { open: 0, close: 24 } }
+// new Map(Object.entries()) creates a Map from the object's key-value pairs
+const hoursMap = new Map(Object.entries(openingHours));
+console.log(hoursMap); // Outputs: Map(7) { 'mon' => '9-12', 'tue' => '9-12', 'wed' => '9-12', 'thu' => '9-12', 'fri' => '9-12', 'sat' => '9-12', 'sun' => '9-12' }
+
+// Looping over Maps
+console.log('-------------------------MAP: Looping------------------------');
+// get(key) retrieves the value for a specific key
+console.log(question.get('question')); // Outputs: 'What is the best programming language in the world?'
+// for...of iterates over Map entries, yielding [key, value] arrays
+// Destructuring [key, value] makes it easy to access both parts
+for (const [key, value] of question) {
+  // Filter to only log numeric keys (answer options)
+  if (typeof key === 'number') {
+    console.log(`Answer ${key}: ${value}`);
+    // Outputs:
+    // Answer 1: C
+    // Answer 2: Java
+    // Answer 3: JavaScript
+  }
+}
+
+// Interactive quiz: Prompt user for an answer and check if it's correct
+// prompt() returns a string, so Number() converts it to a number
+const correctAnswer = Number(prompt('Your answer')); // Example input: '3'
+console.log(correctAnswer); // Outputs: 3
+// question.get('correct') retrieves 3; compare with user input to get true/false
+// question.get(true/false) retrieves 'Correct :D' or 'Try again! :('
+const finalAnswer = question.get(question.get('correct') === correctAnswer);
+console.log(finalAnswer); // Outputs: 'Correct :D' (if input is 3)
+
+// MAP to Array
+console.log('-------------------------MAP to Array------------------------');
+// Spreading a Map (...question) returns an array of [key, value] pairs (same as entries())
+console.log([...question]); // Outputs: [['question', 'What is...'], [1, 'C'], [2, 'Java'], [3, 'JavaScript'], ['correct', 3], [true, 'Correct :D'], [false, 'Try again! :(']]
+// entries() explicitly returns an iterator of [key, value] pairs, spread into an array
+console.log([...question.entries()]); // Outputs: Same as above
+// keys() returns an iterator of keys, spread into an array
+console.log([...question.keys()]); // Outputs: ['question', 1, 2, 3, 'correct', true, false]
+// values() returns an iterator of values, spread into an array
+console.log([...question.values()]); // Outputs: ['What is...', 'C', 'Java', 'JavaScript', 3, 'Correct :D', 'Try again! :(']
+
+///////////////////////////////////////////////////////////////////////////////////
