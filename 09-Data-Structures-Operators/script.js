@@ -1433,3 +1433,66 @@ console.log([...question.keys()]); // Outputs: ['question', 1, 2, 3, 'correct', 
 console.log([...question.values()]); // Outputs: ['What is...', 'C', 'Java', 'JavaScript', 3, 'Correct :D', 'Try again! :(']
 
 ///////////////////////////////////////////////////////////////////////////////////
+// WORKING WITH STRINGS - PART 1
+console.log('-------------------------WORKING WITH STRINGS - PART 1------------------------');
+// Strings in JavaScript are primitive, immutable sequences of characters
+// They can be accessed like arrays and have built-in methods for manipulation
+const airline = 'TAP Air Portugal'; // Example string with 16 characters
+const plane = 'A320'; // Example string with 4 characters
+
+console.log('-------------------------Reading String Values ------------------------');
+// Strings can be indexed like arrays to access individual characters
+// Indices are zero-based; accessing an invalid index returns undefined
+console.log(plane[0]); // Outputs: 'A' (first character at index 0)
+console.log(plane[1]); // Outputs: '3' (second character at index 1)
+console.log(plane[2]); // Outputs: '2' (third character at index 2)
+console.log('b737'[0]); // Outputs: 'b' (first character of string literal)
+
+console.log('-----------------------------Length of String-----------------------------');
+// The length property returns the number of characters in a string
+// Includes spaces and special characters
+console.log(airline.length); // Outputs: 16 (counts all characters in 'TAP Air Portugal')
+console.log('B737'.length); // Outputs: 4 (counts characters in 'B737')
+
+console.log('-----------------------------String Methods-----------------------------');
+console.log('-----------------------------indexOf()-----------------------------');
+// indexOf(searchValue) returns the index of the first occurrence of searchValue
+// Returns -1 if not found; case-sensitive
+console.log(airline.indexOf('r')); // Outputs: 6 (first 'r' in 'Portugal')
+console.log(airline.indexOf('portugal')); // Outputs: -1 (not found, lowercase 'p')
+console.log(airline.indexOf('Portugal')); // Outputs: 8 (found, matches case exactly)
+
+console.log('-----------------------------lastIndexOf()-----------------------------');
+// lastIndexOf(searchValue) returns the index of the last occurrence of searchValue
+// Returns -1 if not found; case-sensitive
+console.log(airline.lastIndexOf('r')); // Outputs: 10 (last 'r' in 'Portugal')
+
+console.log('-----------------------------slice()-----------------------------');
+// slice(start, end) extracts a portion of the string from start index to end-1
+// If end is omitted, extracts to the end; negative indices count from the end
+console.log(airline.slice(4)); // Outputs: 'Air Portugal' (from index 4 to end)
+console.log(airline.slice(4, 7)); // Outputs: 'Air' (from index 4 to 6, excluding 7)
+console.log(airline.slice(0, airline.indexOf(' '))); // Outputs: 'TAP' (from start to first space at index 3)
+console.log(airline.slice(airline.lastIndexOf(' ') + 1)); // Outputs: 'Portugal' (from after last space at index 7 to end)
+console.log(airline.slice(-2)); // Outputs: 'al' (from second-to-last character to end)
+console.log(airline.slice(1, -1)); // Outputs: 'AP Air Portuga' (from index 1 to second-to-last character)
+
+console.log('-------------------------REAL WORLD EXAMPLES of Slice() Method------------------------');
+// Function to check if a seat is a middle seat based on its letter (B or E)
+const checkMiddleSeat = function (seat) {
+  // Middle seats in airplane seating are typically 'B' or 'E' (e.g., in a 3-3 configuration)
+  // slice(-1) extracts the last character of the seat string
+  const middleSeat = seat.slice(-1);
+  if (middleSeat === 'B' || middleSeat === 'E') {
+    console.log('You got the middle seat! 😁');
+  } else {
+    console.log('You got lucky! 🙌');
+  }
+};
+
+// Test the function with example seat numbers
+checkMiddleSeat('11B'); // Outputs: 'You got the middle seat! 😁' (ends with 'B')
+checkMiddleSeat('23C'); // Outputs: 'You got lucky! 🙌' (ends with 'C')
+checkMiddleSeat('3E'); // Outputs: 'You got the middle seat! 😁' (ends with 'E')
+
+
