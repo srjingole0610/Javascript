@@ -778,17 +778,17 @@ const newWeekdays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 const newOpeningHours = {
   // [newWeekdays[3]] evaluates to 'thu' (the 4th element at index 3), so the property name is 'thu'
   [newWeekdays[3]]: {
-    open: 12,  // Restaurant opens at 12 PM
+    open: 12, // Restaurant opens at 12 PM
     close: 22, // Restaurant closes at 10 PM
   },
   // [newWeekdays[4]] evaluates to 'fri', so the property name is 'fri'
   [newWeekdays[4]]: {
-    open: 11,  // Opens at 11 AM
+    open: 11, // Opens at 11 AM
     close: 23, // Closes at 11 PM
   },
   // [newWeekdays[5]] evaluates to 'sat', so the property name is 'sat'
   [newWeekdays[5]]: {
-    open: 0,   // Open 24 hours (0 represents midnight)
+    open: 0, // Open 24 hours (0 represents midnight)
     close: 24, // Closes at midnight (24-hour format)
   },
 };
@@ -808,21 +808,21 @@ const rating = 4.5;
 const myNewRestaurant = {
   // Shorthand property names: when property name matches variable name, omit the value
   newRestaurantName, // Equivalent to newRestaurantName: newRestaurantName
-  myLocation,       // Equivalent to myLocation: myLocation
-  rating,        // Equivalent to rating: rating
-  
+  myLocation, // Equivalent to myLocation: myLocation
+  rating, // Equivalent to rating: rating
+
   // Computed property name using a template literal
   ['status_' + (rating >= 4 ? 'excellent' : 'good')]: true,
-  
+
   // Shorthand method definition: omit 'function' keyword and colon
   getDetails() {
     return `${this.newRestaurantName} in ${this.myLocation} has a rating of ${this.rating}`;
   },
-  
+
   // Method with computed name (less common but possible)
   ['serve_' + 'food']() {
     return 'Serving delicious Italian cuisine!';
-  }
+  },
 };
 
 // Logs the restaurant object
@@ -872,7 +872,9 @@ console.log(restaurant.restroOpeningHours.fri?.open); // Outputs: 11
 console.log(restaurant.openingHours?.fri?.open); // Outputs: undefined (openingHours not defined)
 
 // Example of using optional chaining with a loop
-console.log('----------Example of using optional chaining with a loop-----------');
+console.log(
+  '----------Example of using optional chaining with a loop-----------',
+);
 // newdays is an array: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
 const newdays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 // Iterates over each day to check opening hours
@@ -883,7 +885,7 @@ for (const day of newdays) {
   const open = restaurant.restroOpeningHours[day]?.open ?? null;
   // Ternary operator to format output based on whether open is null
   console.log(
-    `On ${day}, we ${open !== null ? `open at ${open}` : 'are closed all day'}`
+    `On ${day}, we ${open !== null ? `open at ${open}` : 'are closed all day'}`,
   );
   // Outputs:
   // On mon, we are closed all day
@@ -896,7 +898,9 @@ for (const day of newdays) {
 }
 
 // Example of using optional chaining with a method
-console.log('----------Example of using optional chaining with a method-----------');
+console.log(
+  '----------Example of using optional chaining with a method-----------',
+);
 // Optional chaining with methods: checks if the method exists before calling it
 // If orderFood exists, calls it with arguments (0, 1); otherwise, returns undefined
 // Nullish coalescing (??) provides a fallback message
@@ -905,7 +909,9 @@ console.log(restaurant.orderFood?.(0, 1) ?? 'Order is not available'); // Output
 console.log(restaurant.orderRisoto?.(0, 1) ?? 'Method does not exist'); // Outputs: 'Method does not exist'
 
 // Example of using optional chaining with Array
-console.log('----------Example of using optional chaining with Array-----------');
+console.log(
+  '----------Example of using optional chaining with Array-----------',
+);
 // Array of user objects
 const users = [
   { name: 'Suraj', email: 'bV5yJ@example.com' },
@@ -917,7 +923,9 @@ const users = [
 console.log(users[0]?.email ?? 'User not found'); // Outputs: 'bV5yJ@example.com'
 
 // Additional example of optional chaining with nested objects and dynamic keys
-console.log('----------Additional example of optional chaining with nested objects and dynamic keys-----------');
+console.log(
+  '----------Additional example of optional chaining with nested objects and dynamic keys-----------',
+);
 const config = {
   settings: {
     theme: 'dark',
@@ -931,10 +939,14 @@ const config = {
 // Dynamic key to check notification settings
 const notificationType = 'email';
 // Safely access nested property with dynamic key
-console.log(config.settings?.notifications?.[notificationType] ?? 'Setting not found'); // Outputs: true
+console.log(
+  config.settings?.notifications?.[notificationType] ?? 'Setting not found',
+); // Outputs: true
 
 // Try accessing a non-existent notification type
-console.log(config.settings?.notifications?.push ?? 'Push notifications not configured'); // Outputs: 'Push notifications not configured'
+console.log(
+  config.settings?.notifications?.push ?? 'Push notifications not configured',
+); // Outputs: 'Push notifications not configured'
 
 // Safely access deeply nested property that doesn’t exist
 console.log(config.settings?.appearance?.fontSize ?? 'Font size not set'); // Outputs: 'Font size not set'
@@ -973,7 +985,7 @@ console.log('----------Looping Objects : Object.values()-----------');
 // Object.values() returns an array of the object's enumerable property values
 // For restroOpeningHours, it returns [{ open: 12, close: 22 }, { open: 11, close: 23 }, { open: 0, close: 24 }]
 const values = Object.values(restroOpeningHours);
-console.log(values); 
+console.log(values);
 // Outputs: [{ open: 12, close: 22 }, { open: 11, close: 23 }, { open: 0, close: 24 }]
 
 // ENTIRE OBJECT
@@ -994,10 +1006,12 @@ for (const [day, { open, close }] of entries) {
   // On thu, we open at 12 and close at 22
   // On fri, we open at 11 and close at 23
   // On sat, we open at 0 and close at 24
-} 
+}
 
 // Additional example: Transforming object data using Object.keys(), Object.values(), Object.entries()
-console.log('------------------------------Additional Example------------------------------');
+console.log(
+  '------------------------------Additional Example------------------------------',
+);
 const menuItems = {
   pizza: { price: 10, category: 'Main' },
   pasta: { price: 8, category: 'Main' },
@@ -1010,7 +1024,10 @@ console.log('Menu Items:', Object.keys(menuItems)); // Outputs: ['pizza', 'pasta
 // Using Object.values() to summarize prices
 const prices = Object.values(menuItems).map(item => item.price);
 console.log('Prices:', prices); // Outputs: [10, 8, 6]
-console.log('Total Price:', prices.reduce((sum, price) => sum + price, 0)); // Outputs: 24
+console.log(
+  'Total Price:',
+  prices.reduce((sum, price) => sum + price, 0),
+); // Outputs: 24
 
 // Using Object.entries() to create a categorized menu
 const categorizedMenu = {};
@@ -1026,4 +1043,68 @@ console.log('Categorized Menu:', categorizedMenu);
 //   Main: [{ item: 'pizza', price: 10 }, { item: 'pasta', price: 8 }],
 //   Starter: [{ item: 'salad', price: 6 }]
 // }
+//////////////////////////////////////////////////////////////////////
+// SETS
+console.log('------------------------------Sets------------------------------');
+// A Set is a collection of unique values; duplicates are automatically removed
+// Values can be of any type (strings, numbers, objects, etc.), but each value appears only once
+const ordersSet = new Set([
+  'pasta',
+  'pizza',
+  'pizza',
+  'risotto',
+  'pasta',
+  'pizza',
+]);
+// Set removes duplicates, keeping only unique values
+console.log(ordersSet); // Outputs: Set(3) { 'pasta', 'pizza', 'risotto' }
+
+console.log('---------String to Set-----------');
+// A string is iterable, so a Set created from a string treats each character as an element
+// Duplicates (e.g., repeated 'a' in 'Suraj') are removed
+console.log(new Set('Suraj')); // Outputs: Set(5) { 'S', 'u', 'r', 'a', 'j' }
+
+console.log('----------Set size-----------');
+// The size property returns the number of unique elements in the Set
+console.log(ordersSet.size); // Outputs: 3 (for 'pasta', 'pizza', 'risotto')
+
+console.log('----------Set has()-----------');
+// The has() method checks if a value exists in the Set, returning true or false
+console.log(ordersSet.has('pizza')); // Outputs: true ('pizza' is in the Set)
+console.log(ordersSet.has('bread')); // Outputs: false ('bread' is not in the Set)
+
+console.log('----------Set add()-----------');
+// The add() method adds a new value to the Set; duplicates are ignored
+ordersSet.add('garlic bread'); // Adds 'garlic bread'
+ordersSet.add('garlic bread'); // Ignored, as 'garlic bread' already exists
+console.log(ordersSet); // Outputs: Set(4) { 'pasta', 'pizza', 'risotto', 'garlic bread' }
+
+console.log('----------Set delete()-----------');
+// The delete() method removes a specified value from the Set
+ordersSet.delete('risotto'); // Removes 'risotto'
+console.log(ordersSet); // Outputs: Set(3) { 'pasta', 'pizza', 'garlic bread' }
+
+// console.log('----------Set clear()-----------');
+// The clear() method removes all elements from the Set
+// ordersSet.clear();
+// console.log(ordersSet); // Outputs: Set(0) {} (commented out to preserve Set contents)
+
+console.log('----------Looping Sets-----------');
+// Sets are iterable, so for...of can be used to loop over elements
+// Each iteration yields a unique value in insertion order
+for (const order of ordersSet) {
+  console.log(order); // Outputs: 'pasta', 'pizza', 'garlic bread' (one per line)
+}
+
+console.log('----------Set of unique staff-----------');
+// Creating a Set from an array with duplicates to get unique values
+const staff = ['Waiter', 'Chef', 'Waiter', 'Manager', 'Chef', 'Waiter'];
+const uniqueStaff = new Set(staff);
+// Duplicates are removed, keeping only unique roles
+console.log(uniqueStaff); // Outputs: Set(3) { 'Waiter', 'Chef', 'Manager' }
+
+console.log('----------Array of unique staff-----------');
+// Spreading a Set into an array converts it to an array of unique values
+const newStaff = [...uniqueStaff];
+console.log(newStaff); // Outputs: ['Waiter', 'Chef', 'Manager']
 //////////////////////////////////////////////////////////////////////
