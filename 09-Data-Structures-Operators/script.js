@@ -940,3 +940,90 @@ console.log(config.settings?.notifications?.push ?? 'Push notifications not conf
 console.log(config.settings?.appearance?.fontSize ?? 'Font size not set'); // Outputs: 'Font size not set'
 
 //////////////////////////////////////////////////////////////////////
+// Looping Objects: Object.keys(), Object.values(), Object.entries()
+// These methods provide ways to iterate over an object's enumerable properties, values, or key-value pairs
+// Assuming restroOpeningHours is an object like:
+// { thu: { open: 12, close: 22 }, fri: { open: 11, close: 23 }, sat: { open: 0, close: 24 } }
+
+// PROPERTY KEYS
+console.log('----------Looping Objects : Object.keys()-----------');
+// Object.keys() returns an array of the object's enumerable property names
+// For restroOpeningHours, it returns ['thu', 'fri', 'sat']
+const properties = Object.keys(restroOpeningHours);
+console.log(properties); // Outputs: ['thu', 'fri', 'sat']
+
+// Using for...of to iterate over the array of property names
+// Each 'day' is a string (e.g., 'thu', 'fri', 'sat')
+for (const day of Object.keys(restroOpeningHours)) {
+  console.log(day); // Outputs: 'thu', 'fri', 'sat' (one per line)
+}
+
+// Building a string to list open days
+// Starts with a base string and appends each day
+let openDays = `We are open on ${properties.length} days: `;
+// Iterates over the properties array to add each day with a comma
+for (const day of properties) {
+  openDays += ` ${day},`;
+}
+// Outputs: 'We are open on 3 days:  thu, fri, sat,'
+console.log(openDays);
+
+// PROPERTY VALUES
+console.log('----------Looping Objects : Object.values()-----------');
+// Object.values() returns an array of the object's enumerable property values
+// For restroOpeningHours, it returns [{ open: 12, close: 22 }, { open: 11, close: 23 }, { open: 0, close: 24 }]
+const values = Object.values(restroOpeningHours);
+console.log(values); 
+// Outputs: [{ open: 12, close: 22 }, { open: 11, close: 23 }, { open: 0, close: 24 }]
+
+// ENTIRE OBJECT
+console.log('----------Looping Objects : Object.entries()-----------');
+// Object.entries() returns an array of [key, value] pairs for the object's enumerable properties
+// For restroOpeningHours, it returns:
+// [['thu', { open: 12, close: 22 }], ['fri', { open: 11, close: 23 }], ['sat', { open: 0, close: 24 }]]
+const entries = Object.entries(restroOpeningHours);
+console.log(entries);
+// Outputs: [['thu', { open: 12, close: 22 }], ['fri', { open: 11, close: 23 }], ['sat', { open: 0, close: 24 }]]
+
+// Using for...of with destructuring to iterate over key-value pairs
+// Each entry is an array [day, { open, close }], destructured into 'day' (string) and '{ open, close }' (object)
+for (const [day, { open, close }] of entries) {
+  // Formats a string using the key (day) and values (open, close)
+  console.log(`On ${day}, we open at ${open} and close at ${close}`);
+  // Outputs:
+  // On thu, we open at 12 and close at 22
+  // On fri, we open at 11 and close at 23
+  // On sat, we open at 0 and close at 24
+} 
+
+// Additional example: Transforming object data using Object.keys(), Object.values(), Object.entries()
+console.log('------------------------------Additional Example------------------------------');
+const menuItems = {
+  pizza: { price: 10, category: 'Main' },
+  pasta: { price: 8, category: 'Main' },
+  salad: { price: 6, category: 'Starter' },
+};
+
+// Using Object.keys() to list item names
+console.log('Menu Items:', Object.keys(menuItems)); // Outputs: ['pizza', 'pasta', 'salad']
+
+// Using Object.values() to summarize prices
+const prices = Object.values(menuItems).map(item => item.price);
+console.log('Prices:', prices); // Outputs: [10, 8, 6]
+console.log('Total Price:', prices.reduce((sum, price) => sum + price, 0)); // Outputs: 24
+
+// Using Object.entries() to create a categorized menu
+const categorizedMenu = {};
+for (const [item, { price, category }] of Object.entries(menuItems)) {
+  // Group items by category
+  if (!categorizedMenu[category]) {
+    categorizedMenu[category] = [];
+  }
+  categorizedMenu[category].push({ item, price });
+}
+console.log('Categorized Menu:', categorizedMenu);
+// Outputs: {
+//   Main: [{ item: 'pizza', price: 10 }, { item: 'pasta', price: 8 }],
+//   Starter: [{ item: 'salad', price: 6 }]
+// }
+//////////////////////////////////////////////////////////////////////
