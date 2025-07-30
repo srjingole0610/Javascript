@@ -428,3 +428,55 @@ console.log(addVATNew(19));  // 23.37
 */
 
 ////////////////////////////////////////////////////////////////////////////////////
+//------------------------ IIFE (Immediately Invoked Function Expression) ---------------------------//
+// IIFE is a function that runs immediately after it is defined.
+// It is wrapped in parentheses to make it an expression, and then followed by () to invoke it.
+// IIFEs are useful to create a new scope, avoid polluting the global namespace, 
+// and run code only once without needing to call the function again.
+
+// CLASSIC FUNCTION - NOT IIFE:
+// Here, runOnce is a function that you must explicitly call to run the code inside it.
+const runOnce = function() {
+    console.log('This will never run again');
+};
+runOnce(); // We call the function explicitly once
+
+// IIFE - FUNCTION IS RUN IMMEDIATELY:
+// This function runs directly as soon as JavaScript reads it, no explicit call needed.
+(function() {
+    console.log('This will never run again');
+})();
+
+// IIFE USING ARROW FUNCTION:
+// Same as above but uses ES6 arrow function syntax.
+// Useful for short inline code that runs immediately.
+(() => console.log('This will never run again'))();
+
+//------------------------ REAL-TIME EXAMPLE ---------------------------//
+// Imagine you want to initialize some app settings or do some setup code 
+// that should only run once and not interfere or pollute other code variables or functions.
+// Using an IIFE helps encapsulate your initialization logic safely.
+
+// Example:
+const app = (function() {
+    const secretAPIKey = '1234567890';  // Private to this IIFE, not accessible outside
+    console.log('App initialized with secret API key');
+
+    return {
+        // Public method to use within the app
+        getKey: function() {
+            return secretAPIKey;
+        }
+    };
+})();
+
+console.log(app.getKey()); // Access public method
+// secretAPIKey is not accessible directly from outside; encapsulation achieved.
+
+//------------------------ SUMMARY ---------------------------//
+// - IIFEs are immediately invoked functions used to create private scopes.
+// - They prevent polluting global namespace.
+// - Useful for initialization code that runs once.
+// - Modern JS modules reduce the need for IIFEs but they are still relevant in many scenarios.
+
+///////////////////////////////////////////////////////////////////////////////////////
