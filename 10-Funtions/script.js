@@ -74,12 +74,15 @@ const passenger = {
 
 const checkIn = function (flightNum, passenger) {
   flightNum = 'LH999'; // This only changes the local copy. Original flightNum is unchanged.
-  passenger.fullName = 'Mr. ' + passenger.fullName; // This changes the passed-in object's property (will be visible outside).
+  // This changes the passed-in object's property, but we first check to avoid adding "Mr. " multiple times.
+  if (!passenger.fullName.startsWith('Mr. ')) {
+    passenger.fullName = 'Mr. ' + passenger.fullName;
+  }
 
   if (passenger.passport === 123456789) {
-    alert('Checked in');
+    console.log('Checked in');
   } else {
-    alert('Wrong passport!');
+    console.log('Wrong passport!');
   }
 };
 
@@ -230,16 +233,16 @@ function greetUser() {
 // - You can create more specific functions from general ones.
 // - Enables patterns like "function factories" and "partial application".
 
-const greetNew = function(greeting) {
-    // greetNew returns a function that remembers the 'greeting' argument!
-    return function(name) {
-        console.log(`${greeting} ${name}`);
-    }
-}
+const greetNew = function (greeting) {
+  // greetNew returns a function that remembers the 'greeting' argument!
+  return function (name) {
+    console.log(`${greeting} ${name}`);
+  };
+};
 
 const greeterHey = greetNew('Hey'); // greeterHey is now a function expecting just a name
-greeterHey('Suraj');  // Output: "Hey Suraj"
-greeterHey('Priya');  // Output: "Hey Priya"
+greeterHey('Suraj'); // Output: "Hey Suraj"
+greeterHey('Priya'); // Output: "Hey Priya"
 // You can also call both functions at once:
 greetNew('Hello')('Suraj'); // Output: "Hello Suraj"
 
@@ -267,14 +270,19 @@ greetNewArrow('Hi')('Suraj'); // Output: "Hi Suraj"
 
 // Example airline objects with booking functionality using 'this' keyword
 const lufthansaAirlines = {
-    airlineName: 'Lufthansa',
-    iataCode: 'LH',
-    flightBookings: [],
-    book(flightNum, passengerName) {
-        // 'this' refers to the airline object calling this method
-        console.log(`${passengerName} booked a seat on ${this.airlineName} flight ${this.iataCode}${flightNum}`);
-        this.flightBookings.push({flight: `${this.iataCode}${flightNum}`, passengerName});
-    }
+  airlineName: 'Lufthansa',
+  iataCode: 'LH',
+  flightBookings: [],
+  book(flightNum, passengerName) {
+    // 'this' refers to the airline object calling this method
+    console.log(
+      `${passengerName} booked a seat on ${this.airlineName} flight ${this.iataCode}${flightNum}`,
+    );
+    this.flightBookings.push({
+      flight: `${this.iataCode}${flightNum}`,
+      passengerName,
+    });
+  },
 };
 
 // Calling the method normally on lufthansaAirlines object
@@ -283,9 +291,9 @@ lufthansaAirlines.book(635, 'John Smith');
 console.log(lufthansaAirlines);
 
 const eurowingAirlines = {
-    airlineName: 'Eurowings',
-    iataCode: 'EW',
-    flightBookings: [],
+  airlineName: 'Eurowings',
+  iataCode: 'EW',
+  flightBookings: [],
 };
 
 // Extracting the book method from lufthansaAirlines
@@ -299,22 +307,24 @@ const bookingFlight = lufthansaAirlines.book;
 console.log('------------------------ CALL METHOD ---------------------------');
 bookingFlight.call(lufthansaAirlines, 23, 'Sarah Williams'); // Works because 'this' = lufthansaAirlines
 console.log(lufthansaAirlines);
-bookingFlight.call(eurowingAirlines, 239, 'Mary Cooper');    // 'this' = eurowingAirlines
+bookingFlight.call(eurowingAirlines, 239, 'Mary Cooper'); // 'this' = eurowingAirlines
 console.log(eurowingAirlines);
 
 const swissAirlines = {
-    airlineName: 'Swiss Air Lines',
-    iataCode: 'LX',
-    flightBookings: [],
+  airlineName: 'Swiss Air Lines',
+  iataCode: 'LX',
+  flightBookings: [],
 };
 
-bookingFlight.call(swissAirlines, 583, 'Steven Gerrard');    // 'this' = swissAirlines
+bookingFlight.call(swissAirlines, 583, 'Steven Gerrard'); // 'this' = swissAirlines
 console.log(swissAirlines);
 
 //------------------------ APPLY METHOD ---------------------------//
 // Similar to call method, but accepts arguments as an array
 // Syntax: function.apply(thisArg, [arg1, arg2, ...])
-console.log('------------------------ APPLY METHOD ---------------------------');
+console.log(
+  '------------------------ APPLY METHOD ---------------------------',
+);
 
 const flightData = [583, 'George Cooper'];
 bookingFlight.apply(swissAirlines, flightData);
@@ -322,7 +332,9 @@ console.log(swissAirlines);
 
 //------------------------ CALL METHOD using spread operator ---------------------------//
 // Modern ES6 features allow call usage with spread to mimic apply
-console.log('------------------------ CALL METHOD using Array ---------------------------');
+console.log(
+  '------------------------ CALL METHOD using Array ---------------------------',
+);
 
 const flightData1 = [683, 'Lando Norris'];
 bookingFlight.call(swissAirlines, ...flightData1);
@@ -339,11 +351,11 @@ const bookFlightLH = bookingFlight.bind(lufthansaAirlines);
 const bookFlightLX = bookingFlight.bind(swissAirlines);
 
 // Now we can call these bound functions normally
-bookFlightEW(14,'Mark Zuckerberg');
+bookFlightEW(14, 'Mark Zuckerberg');
 console.log(eurowingAirlines);
-bookFlightLH(561,'Bill Gates');
+bookFlightLH(561, 'Bill Gates');
 console.log(lufthansaAirlines);
-bookFlightLX(141,'Elon Musk');
+bookFlightLX(141, 'Elon Musk');
 console.log(swissAirlines);
 
 // Partial application example: presetting the flight number 23 for Eurowings
@@ -354,30 +366,37 @@ bookFlightEW23('John Doe');
 console.log(eurowingAirlines);
 
 //------------------------ BIND WITH EVENT LISTENER ---------------------------//
-// When passing methods as callbacks (such as event handlers), 
+// When passing methods as callbacks (such as event handlers),
 // they lose their original 'this' binding unless bound explicitly.
 // Hence, we use bind to ensure 'this' inside buyPlane refers to lufthansaAirlines object.
 
-console.log('------------------------ BIND WITH EVENT LISTENER ---------------------------');
+console.log(
+  '------------------------ BIND WITH EVENT LISTENER ---------------------------',
+);
 
 lufthansaAirlines.planes = 300;
 lufthansaAirlines.buyPlane = function () {
-    console.log(this);         // Logs the lufthansaAirlines object
-    this.planes++;
-    console.log(this.planes);  // Increments the planes count correctly
-    alert('Plane Purchased!');
+  console.log(this); // Logs the lufthansaAirlines object
+  this.planes++;
+  console.log(this.planes); // Increments the planes count correctly
+  alert('Plane Purchased!');
 };
 
 // Bind the method so that 'this' inside it refers to lufthansaAirlines
 document
-    .querySelector('.buy')
-    .addEventListener('click', lufthansaAirlines.buyPlane.bind(lufthansaAirlines));
+  .querySelector('.buy')
+  .addEventListener(
+    'click',
+    lufthansaAirlines.buyPlane.bind(lufthansaAirlines),
+  );
 
 //------------------------ PARTIAL APPLICATION ---------------------------//
 // Partial application means presetting some arguments for a function,
 // making a new function that takes fewer parameters.
 
-console.log('------------------------ PARTIAL APPLICATION ---------------------------');
+console.log(
+  '------------------------ PARTIAL APPLICATION ---------------------------',
+);
 
 const addTaxValue = (rate, value) => value + value * rate;
 console.log(addTaxValue(0.1, 200)); // 220
@@ -385,23 +404,25 @@ console.log(addTaxValue(0.1, 200)); // 220
 // Using bind to create a new function where rate is preset to 0.23 (i.e., VAT = 23%)
 const addVAT = addTaxValue.bind(null, 0.23);
 console.log(addVAT(100)); // 123
-console.log(addVAT(23));  // 28.29
-console.log(addVAT(19));  // 23.37
+console.log(addVAT(23)); // 28.29
+console.log(addVAT(19)); // 23.37
 
 //------------------------ Using function returning function (alternative partial application) ---------------------------//
-console.log('------------------------ Using function returning function ---------------------------');
+console.log(
+  '------------------------ Using function returning function ---------------------------',
+);
 
-const addTaxRate = function(rate){
-    // Returns another function that expects the value and applies tax
-    return function(value) {
-        return value + value * rate;
-    }
-}
+const addTaxRate = function (rate) {
+  // Returns another function that expects the value and applies tax
+  return function (value) {
+    return value + value * rate;
+  };
+};
 
 const addVATNew = addTaxRate(0.23); // Fixing rate 0.23
 console.log(addVATNew(100)); // 123
-console.log(addVATNew(23));  // 28.29
-console.log(addVATNew(19));  // 23.37
+console.log(addVATNew(23)); // 28.29
+console.log(addVATNew(19)); // 23.37
 
 /*
   Real-time Example for Call, Apply, and Bind:
@@ -431,20 +452,20 @@ console.log(addVATNew(19));  // 23.37
 //------------------------ IIFE (Immediately Invoked Function Expression) ---------------------------//
 // IIFE is a function that runs immediately after it is defined.
 // It is wrapped in parentheses to make it an expression, and then followed by () to invoke it.
-// IIFEs are useful to create a new scope, avoid polluting the global namespace, 
+// IIFEs are useful to create a new scope, avoid polluting the global namespace,
 // and run code only once without needing to call the function again.
 
 // CLASSIC FUNCTION - NOT IIFE:
 // Here, runOnce is a function that you must explicitly call to run the code inside it.
-const runOnce = function() {
-    console.log('This will never run again');
+const runOnce = function () {
+  console.log('This will never run again');
 };
 runOnce(); // We call the function explicitly once
 
 // IIFE - FUNCTION IS RUN IMMEDIATELY:
 // This function runs directly as soon as JavaScript reads it, no explicit call needed.
-(function() {
-    console.log('This will never run again');
+(function () {
+  console.log('This will never run again');
 })();
 
 // IIFE USING ARROW FUNCTION:
@@ -453,21 +474,21 @@ runOnce(); // We call the function explicitly once
 (() => console.log('This will never run again'))();
 
 //------------------------ REAL-TIME EXAMPLE ---------------------------//
-// Imagine you want to initialize some app settings or do some setup code 
+// Imagine you want to initialize some app settings or do some setup code
 // that should only run once and not interfere or pollute other code variables or functions.
 // Using an IIFE helps encapsulate your initialization logic safely.
 
 // Example:
-const app = (function() {
-    const secretAPIKey = '1234567890';  // Private to this IIFE, not accessible outside
-    console.log('App initialized with secret API key');
+const app = (function () {
+  const secretAPIKey = '1234567890'; // Private to this IIFE. WARNING: In a real app, never expose secrets on the client-side!
+  console.log('App initialized with secret API key');
 
-    return {
-        // Public method to use within the app
-        getKey: function() {
-            return secretAPIKey;
-        }
-    };
+  return {
+    // Public method to use within the app
+    getKey: function () {
+      return secretAPIKey;
+    },
+  };
 })();
 
 console.log(app.getKey()); // Access public method
