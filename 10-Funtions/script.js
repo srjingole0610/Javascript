@@ -221,3 +221,46 @@ function greetUser() {
 // - Higher-order functions: Functions that operate on other functions (take them as params or return them).
 
 //////////////////////////////////////////////////////////////////////////////////////////////
+//------------------------ FUNCTIONS RETURNING FUNCTIONS ---------------------------//
+// In JavaScript, functions are "first-class citizens," which means:
+// - You can return a function from another function.
+// - The returned function can be called later, with its original context (closure).
+//
+// Why is this useful?
+// - You can create more specific functions from general ones.
+// - Enables patterns like "function factories" and "partial application".
+
+const greetNew = function(greeting) {
+    // greetNew returns a function that remembers the 'greeting' argument!
+    return function(name) {
+        console.log(`${greeting} ${name}`);
+    }
+}
+
+const greeterHey = greetNew('Hey'); // greeterHey is now a function expecting just a name
+greeterHey('Suraj');  // Output: "Hey Suraj"
+greeterHey('Priya');  // Output: "Hey Priya"
+// You can also call both functions at once:
+greetNew('Hello')('Suraj'); // Output: "Hello Suraj"
+
+// Real-time Example:
+// Imagine you want to create personalized greeting functions for a website:
+// - One for morning: greetNew('Good morning')
+// - One for evening: greetNew('Good evening')
+// - Now you only need to pass the name each time, keeping code DRY and readable.
+
+//------------------------ ARROW FUNCTIONS RETURNING FUNCTIONS ---------------------------//
+// The same logic, but with ES6 arrow function shortcut!
+const greetNewArrow = greeting => name => console.log(`${greeting} ${name}`);
+// greetNewArrow('Hi') returns a function, then ('Suraj') calls it:
+greetNewArrow('Hi')('Suraj'); // Output: "Hi Suraj"
+
+/*
+    What you'll learn from this code:
+      - You can return a function from another function.
+      - The inner (returned) function "remembers" values from the outer function (closure).
+      - This is useful for creating partially-applied or specialized functions.
+      - Common in event handling, configuration, or when building APIs.
+*/
+//////////////////////////////////////////////////////////////////////////////////////////////
+
