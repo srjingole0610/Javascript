@@ -45,3 +45,56 @@ console.log(flightBooking);
 */
 
 ///////////////////////////////////////////////////////////////////////////
+//----------------- HOW PASSING ARGUMENTS WORKS: VALUE VS. REFERENCE ----------------------//
+// In JavaScript:
+// - Primitive values (like strings, numbers, booleans) are passed BY VALUE: the function gets a copy.
+// - Objects (including arrays, functions) are passed BY REFERENCE: the function gets a reference to the original object.
+
+// This means changes to primitives inside the function do NOT affect the original value,
+// but changes to objects INSIDE a function DO affect the original object outside.
+
+// Real-World Analogy:
+// Imagine you give your friend a copy of a ticket (primitive value) -- whatever they do with their copy doesn't affect your original.
+// But if you give them your car keys (object reference), whatever they do with the car affects your actual car!
+
+console.log('------------------------ VALUE VS. REFERENCE ---------------------------');
+
+// Primitive value (string)
+const flightNum = 'LH234';
+
+// Object (passenger)
+const passenger = {
+    fullName: 'Suraj Ingole',
+    passport: 123456789
+}
+
+const checkIn = function(flightNum, passenger){
+    flightNum = 'LH999';                           // This only changes the local copy. Original flightNum is unchanged.
+    passenger.fullName = 'Mr. ' + passenger.fullName; // This changes the passed-in object's property (will be visible outside).
+
+    if(passenger.passport === 123456789){
+        alert('Checked in');
+    } else {
+        alert('Wrong passport!');
+    }
+}
+
+checkIn(flightNum, passenger);
+console.log(flightNum);    // Output: 'LH234' --> Unchanged, because primitives are passed by value.
+console.log(passenger);    // Output: fullName has changed, as objects are passed by reference.
+
+const newPassport = function(person){
+    person.passport = Math.trunc(Math.random() * 1000000000);
+}
+
+newPassport(passenger);    // The passport property is changed permanently.
+checkIn(flightNum, passenger); // This time the passport is different, so the check-in alert will show "Wrong passport!"
+console.log(passenger);
+
+/*
+    Real-Time Example:
+    - Let's say you're registering a passenger for a flight.
+    - The flight number they book is stored as a primitive value; if you change it inside a function, the outside value doesn't update.
+    - The passenger's data (as an object) is updated inside functions (e.g. adding "Mr."), and those changes persist everywhere.
+    - If the passport number is changed, the check-in system will detect the mismatch.
+*/
