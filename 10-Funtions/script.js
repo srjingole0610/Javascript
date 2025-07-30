@@ -263,4 +263,168 @@ greetNewArrow('Hi')('Suraj'); // Output: "Hi Suraj"
       - Common in event handling, configuration, or when building APIs.
 */
 //////////////////////////////////////////////////////////////////////////////////////////////
+//------------------------ CALL, APPLY, AND BIND METHODS ---------------------------//
 
+// Example airline objects with booking functionality using 'this' keyword
+const lufthansaAirlines = {
+    airlineName: 'Lufthansa',
+    iataCode: 'LH',
+    flightBookings: [],
+    book(flightNum, passengerName) {
+        // 'this' refers to the airline object calling this method
+        console.log(`${passengerName} booked a seat on ${this.airlineName} flight ${this.iataCode}${flightNum}`);
+        this.flightBookings.push({flight: `${this.iataCode}${flightNum}`, passengerName});
+    }
+};
+
+// Calling the method normally on lufthansaAirlines object
+lufthansaAirlines.book(239, 'Suraj Ingole');
+lufthansaAirlines.book(635, 'John Smith');
+console.log(lufthansaAirlines);
+
+const eurowingAirlines = {
+    airlineName: 'Eurowings',
+    iataCode: 'EW',
+    flightBookings: [],
+};
+
+// Extracting the book method from lufthansaAirlines
+const bookingFlight = lufthansaAirlines.book;
+// bookingFlight(23, 'Sarah Williams'); // ❌ This would fail because 'this' is undefined in this context.
+
+//------------------------ CALL METHOD ---------------------------//
+// 'call' allows you to call a function and explicitly set 'this' keyword
+// Syntax: function.call(thisArg, arg1, arg2, ...)
+
+console.log('------------------------ CALL METHOD ---------------------------');
+bookingFlight.call(lufthansaAirlines, 23, 'Sarah Williams'); // Works because 'this' = lufthansaAirlines
+console.log(lufthansaAirlines);
+bookingFlight.call(eurowingAirlines, 239, 'Mary Cooper');    // 'this' = eurowingAirlines
+console.log(eurowingAirlines);
+
+const swissAirlines = {
+    airlineName: 'Swiss Air Lines',
+    iataCode: 'LX',
+    flightBookings: [],
+};
+
+bookingFlight.call(swissAirlines, 583, 'Steven Gerrard');    // 'this' = swissAirlines
+console.log(swissAirlines);
+
+//------------------------ APPLY METHOD ---------------------------//
+// Similar to call method, but accepts arguments as an array
+// Syntax: function.apply(thisArg, [arg1, arg2, ...])
+console.log('------------------------ APPLY METHOD ---------------------------');
+
+const flightData = [583, 'George Cooper'];
+bookingFlight.apply(swissAirlines, flightData);
+console.log(swissAirlines);
+
+//------------------------ CALL METHOD using spread operator ---------------------------//
+// Modern ES6 features allow call usage with spread to mimic apply
+console.log('------------------------ CALL METHOD using Array ---------------------------');
+
+const flightData1 = [683, 'Lando Norris'];
+bookingFlight.call(swissAirlines, ...flightData1);
+console.log(swissAirlines);
+
+//------------------------ BIND METHOD ---------------------------//
+// bind returns a new function where 'this' keyword is permanently bound to the provided object
+// Useful to create copies of functions with preset 'this' or preset parameters (partial application)
+
+console.log('------------------------ BIND METHOD ---------------------------');
+
+const bookFlightEW = bookingFlight.bind(eurowingAirlines);
+const bookFlightLH = bookingFlight.bind(lufthansaAirlines);
+const bookFlightLX = bookingFlight.bind(swissAirlines);
+
+// Now we can call these bound functions normally
+bookFlightEW(14,'Mark Zuckerberg');
+console.log(eurowingAirlines);
+bookFlightLH(561,'Bill Gates');
+console.log(lufthansaAirlines);
+bookFlightLX(141,'Elon Musk');
+console.log(swissAirlines);
+
+// Partial application example: presetting the flight number 23 for Eurowings
+const bookFlightEW23 = bookingFlight.bind(eurowingAirlines, 23);
+bookFlightEW23('Suraj Ingole');
+bookFlightEW23('Priya Ingole');
+bookFlightEW23('John Doe');
+console.log(eurowingAirlines);
+
+//------------------------ BIND WITH EVENT LISTENER ---------------------------//
+// When passing methods as callbacks (such as event handlers), 
+// they lose their original 'this' binding unless bound explicitly.
+// Hence, we use bind to ensure 'this' inside buyPlane refers to lufthansaAirlines object.
+
+console.log('------------------------ BIND WITH EVENT LISTENER ---------------------------');
+
+lufthansaAirlines.planes = 300;
+lufthansaAirlines.buyPlane = function () {
+    console.log(this);         // Logs the lufthansaAirlines object
+    this.planes++;
+    console.log(this.planes);  // Increments the planes count correctly
+    alert('Plane Purchased!');
+};
+
+// Bind the method so that 'this' inside it refers to lufthansaAirlines
+document
+    .querySelector('.buy')
+    .addEventListener('click', lufthansaAirlines.buyPlane.bind(lufthansaAirlines));
+
+//------------------------ PARTIAL APPLICATION ---------------------------//
+// Partial application means presetting some arguments for a function,
+// making a new function that takes fewer parameters.
+
+console.log('------------------------ PARTIAL APPLICATION ---------------------------');
+
+const addTaxValue = (rate, value) => value + value * rate;
+console.log(addTaxValue(0.1, 200)); // 220
+
+// Using bind to create a new function where rate is preset to 0.23 (i.e., VAT = 23%)
+const addVAT = addTaxValue.bind(null, 0.23);
+console.log(addVAT(100)); // 123
+console.log(addVAT(23));  // 28.29
+console.log(addVAT(19));  // 23.37
+
+//------------------------ Using function returning function (alternative partial application) ---------------------------//
+console.log('------------------------ Using function returning function ---------------------------');
+
+const addTaxRate = function(rate){
+    // Returns another function that expects the value and applies tax
+    return function(value) {
+        return value + value * rate;
+    }
+}
+
+const addVATNew = addTaxRate(0.23); // Fixing rate 0.23
+console.log(addVATNew(100)); // 123
+console.log(addVATNew(23));  // 28.29
+console.log(addVATNew(19));  // 23.37
+
+/*
+  Real-time Example for Call, Apply, and Bind:
+
+  Imagine you own several airline companies and have a shared booking function.
+  Each airline object has its own details ('this' context).
+
+  1. call()
+     - You have a function that belongs to Lufthansa but want to use it to book a flight for Eurowings, so you call it with Eurowings as the context.
+     - Like borrowing the booking system temporarily.
+
+  2. apply()
+     - Similar to call, but the arguments are passed as an array.
+     - Useful when data is already in array format (like user input).
+
+  3. bind()
+     - Returns a new function permanently bound to one airline.
+     - Like creating a personalized booking function for each airline that you can reuse without setting context again.
+     - Also, partial application lets you preset some arguments (e.g., default flight number).
+
+  4. bind with event listeners
+     - When handling browser events, 'this' often loses meaning.
+     - bind keeps 'this' tied to the expected object even when used as a callback.
+*/
+
+////////////////////////////////////////////////////////////////////////////////////
