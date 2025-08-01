@@ -503,7 +503,9 @@ console.log(app.getKey()); // Access public method
 ///////////////////////////////////////////////////////////////////////////////////////
 // CLOSURES IN JAVASCRIPT
 
-console.log('-------------------------------CLOSURE------------------------------------------');
+console.log(
+  '-------------------------------CLOSURE------------------------------------------',
+);
 
 /*
   Closures allow functions to "remember" and access variables from their lexical scope,
@@ -511,87 +513,91 @@ console.log('-------------------------------CLOSURE-----------------------------
 */
 
 // secureBooking is an outer function
-const secureBooking = function(){
-  let passengerCount = 0;        // passengerCount is in the closure scope of the inner function
-  
+const secureBooking = function () {
+  let passengerCount = 0; // passengerCount is in the closure scope of the inner function
+
   // Inner function forms a closure over passengerCount
-  return function(){
+  return function () {
     passengerCount++;
     console.log(`${passengerCount} passengers`);
-  }
-}
+  };
+};
 
-// booker is a function returned by secureBooking, 
+// booker is a function returned by secureBooking,
 // and it "remembers" passengerCount even after secureBooking has finished executing.
 const booker = secureBooking();
-console.log(booker);           // Prints the function definition
-booker();                      // 1 passengers
-booker();                      // 2 passengers
-booker();                      // 3 passengers
-console.dir(booker);           // You can inspect the closure in the browser console
-
+console.log(booker); // Prints the function definition
+booker(); // 1 passengers
+booker(); // 2 passengers
+booker(); // 3 passengers
+console.dir(booker); // You can inspect the closure in the browser console
 
 // Additional Example: Closures in Variable Reassignment
-console.log('-------------------------------Additional Example-1 ------------------------------------------');
+console.log(
+  '-------------------------------Additional Example-1 ------------------------------------------',
+);
 
-let logDoubleValue ;              // Declared in the global scope
+let logDoubleValue; // Declared in the global scope
 
-const genericFunction = function(){
-  const a = 23;                  // 'a' is in the closure of the returned function
+const genericFunction = function () {
+  const a = 23; // 'a' is in the closure of the returned function
   // Assigning to global variable logDoubleValue references 'a'
-  logDoubleValue = function(){
-    console.log(a*2);            // Accesses 'a' from outer scope (closure)
-  }
-}
+  logDoubleValue = function () {
+    console.log(a * 2); // Accesses 'a' from outer scope (closure)
+  };
+};
 
 // Changing what logDoubleValue "closes over"
-const newGenericFunction = function(){
+const newGenericFunction = function () {
   const b = 777;
-  logDoubleValue = function(){
-    console.log(b*2);            // Now closes over 'b'
-  }
-}
-genericFunction();               // Now logDoubleValue closes over 'a'
+  logDoubleValue = function () {
+    console.log(b * 2); // Now closes over 'b'
+  };
+};
+genericFunction(); // Now logDoubleValue closes over 'a'
 console.log(logDoubleValue);
-logDoubleValue();                // Output: 46
+logDoubleValue(); // Output: 46
 console.dir(logDoubleValue);
-
 
 // Reassigning logDoubleValue to close over a different variable
-console.log('-------------------------------Reassigning logDoubleValue------------------------------------------');
+console.log(
+  '-------------------------------Reassigning logDoubleValue------------------------------------------',
+);
 newGenericFunction();
 console.log(logDoubleValue);
-logDoubleValue();                // Output: 1554
+logDoubleValue(); // Output: 1554
 console.dir(logDoubleValue);
 
-
 // Closure in Asynchronous Code (setTimeout)
-console.log('-------------------------------Additional Example-2 ------------------------------------------');
+console.log(
+  '-------------------------------Additional Example-2 ------------------------------------------',
+);
 /*
   Even after boardPassengers has finished executing,
   the callback function passed to setTimeout "remembers" the passengerNum and perGroup variables.
 */
-const boardPassengers = function(passengerNum, waitTime){
-  const perGroup = passengerNum/3;
-  setTimeout(function(){
+const boardPassengers = function (passengerNum, waitTime) {
+  const perGroup = passengerNum / 3;
+  setTimeout(function () {
     // This function forms a closure over passengerNum and perGroup
     console.log(`We are now boarding all ${passengerNum} passengers`);
     console.log(`There are 3 groups, each with ${perGroup} passengers`);
-  },waitTime*1000);
+  }, waitTime * 1000);
 
   console.log(`Will start boarding in ${waitTime} seconds`);
-}
+};
 const perGroup = 900; // This is not used inside setTimeout (demonstrates closure selects correct scope)
-boardPassengers(180,3);
-boardPassengers(60,1);
-
+boardPassengers(180, 3);
+boardPassengers(60, 1);
 
 // Real-world Closure Example: Simple Private Counter - Button Click Example
-console.log('-------------------------------Real World Example ------------------------------------------');
+console.log(
+  '-------------------------------Real World Example ------------------------------------------',
+);
 function makeCounter() {
   let count = 0; // Private variable
   // Returns a function that can access and modify 'count' variable
-  return function() {
+  return function () {
     count++;
     console.log(`Button clicked ${count} times`);
   };
@@ -599,9 +605,9 @@ function makeCounter() {
 
 const counter = makeCounter();
 // Simulate button clicks:
-counter();     // Button clicked 1 times
-counter();     // Button clicked 2 times
-counter();     // Button clicked 3 times
+counter(); // Button clicked 1 times
+counter(); // Button clicked 2 times
+counter(); // Button clicked 3 times
 
 /*
 In a web application,
@@ -610,12 +616,13 @@ you could write:
 Each click would increase the private count.
 */
 
-
 // Additional Closure Example: Factory Function
-console.log('-------------------------------Additional Closure Example - Factory Function ------------------------------------------');
+console.log(
+  '-------------------------------Additional Closure Example - Factory Function ------------------------------------------',
+);
 function power(exponent) {
   // Returns a function that raises its argument to the captured exponent
-  return function(base) {
+  return function (base) {
     return Math.pow(base, exponent);
   };
 }
@@ -623,8 +630,8 @@ function power(exponent) {
 const square = power(2);
 const cube = power(3);
 
-console.log("7 squared:", square(7));   // 49
-console.log("3 cubed:", cube(3));       // 27
+console.log('7 squared:', square(7)); // 49
+console.log('3 cubed:', cube(3)); // 27
 
 /*
 Explanation:
