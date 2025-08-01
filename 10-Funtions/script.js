@@ -575,8 +575,8 @@ const boardPassengers = function(passengerNum, waitTime){
   const perGroup = passengerNum/3;
   setTimeout(function(){
     // This function forms a closure over passengerNum and perGroup
-    console.log(`We are now boarding all ${passengerNum} passenges`);
-    console.log(`There are 3 groups, each with ${perGroup} passenges`);
+    console.log(`We are now boarding all ${passengerNum} passengers`);
+    console.log(`There are 3 groups, each with ${perGroup} passengers`);
   },waitTime*1000);
 
   console.log(`Will start boarding in ${waitTime} seconds`);
