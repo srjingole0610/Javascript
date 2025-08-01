@@ -75,3 +75,99 @@ const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 
 /////////////////////////////////////////////////
+// ARRAY METHODS - JavaScript
+
+console.log('-----------------ARRAY METHODS-----------------');
+
+let arr = ['a', 'b', 'c', 'd', 'e'];
+
+// ===================== SLICE =====================
+console.log('-----------------SLICE-----------------');
+/*
+  .slice(start, end) returns a shallow copy of a portion of an array into a new array object
+  - Does NOT modify (mutate) the original array
+  - end is exclusive
+*/
+
+console.log(arr.slice(2));        // ['c', 'd', 'e']      (from index 2 to end)
+console.log(arr.slice(2,4));      // ['c', 'd']           (from index 2 up to, but not including, 4)
+console.log(arr.slice(-2));       // ['d', 'e']           (last 2 elements)
+console.log(arr.slice(-1));       // ['e']                (last element)
+console.log(arr.slice(1, -2));    // ['b', 'c']           (from index 1 to index -2, i.e., up to 'c')
+console.log(arr.slice());         // ['a', 'b', 'c', 'd', 'e'] (handy for making a shallow copy)
+console.log(arr);                 // Original array remains unchanged
+
+// Practical example: Getting the last n items without changing the original array
+const lastTwo = arr.slice(-2);    // Use to get last elements for e.g. recent messages
+
+// ===================== SPLICE =====================
+console.log('-----------------SPLICE-----------------');
+/*
+  .splice(start, deleteCount) changes (mutates) the contents of an array by removing, replacing or adding elements
+  - Returns an array of removed elements
+  - Modifies the original array!
+*/
+
+console.log(arr.splice(2));   // ['c', 'd', 'e'] (removes from index 2 to end, returns them)
+console.log(arr);             // ['a', 'b']      (original array is now just first two elements)
+arr.splice(-1);               // removes the last element (mutates the array)
+console.log(arr);             // ['a']
+
+// Practical Example: Removing a user from a list by index
+let users = ['Alice', 'Bob', 'Charlie'];
+users.splice(1, 1);           // Removes 'Bob'
+console.log(users);           // ['Alice', 'Charlie']
+
+
+// ===================== REVERSE =====================
+console.log('-----------------REVERSE-----------------');
+arr = ['a', 'b', 'c', 'd', 'e'];
+const arr2 = ['j', 'i', 'h', 'g', 'f'];
+/*
+  .reverse() reverses the order of the elements in place (mutates the array)
+  - Returns the reversed array
+*/
+console.log(arr2.reverse());   // ['f', 'g', 'h', 'i', 'j']
+console.log(arr2);             // ['f', 'g', 'h', 'i', 'j']
+
+// Use-case: Sorting scores descending
+let scores = [1,3,5,7,9];
+scores.reverse();              // Now [9,7,5,3,1]
+console.log(scores);
+
+
+// ===================== CONCAT =====================
+console.log('-----------------CONCAT-----------------');
+/*
+  .concat() is used to merge two or more arrays, returns a new array without changing the originals
+  - Also possible with spread syntax [...]
+*/
+const letters = arr.concat(arr2);
+console.log(letters);               // ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
+console.log([...arr, ...arr2]);     // (Same as above, using modern spread syntax)
+
+// Real-world: Combining multiple product lists
+const fruits = ['apple', 'banana'];
+const veggies = ['carrot', 'lettuce'];
+const shopping = fruits.concat(veggies); // ['apple', 'banana', 'carrot', 'lettuce']
+console.log(shopping);
+
+
+// ===================== JOIN =====================
+console.log('-----------------JOIN-----------------');
+/*
+  .join(separator) joins all elements of an array into a single string, separated by 'separator'
+*/
+console.log(letters.join(' - '));   // 'a - b - c - d - e - f - g - h - i - j'
+
+// Example: Building a CSV line
+const fields = ['ID', 'Name', 'Email'];
+console.log(fields.join(','));      // 'ID,Name,Email'
+
+/* 
+  Summary: 
+  - slice/splice let you select or remove items,
+  - reverse lets you flip order,
+  - concat/join let you combine and output arrays,
+*/
+
