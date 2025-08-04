@@ -171,3 +171,123 @@ console.log(fields.join(','));      // 'ID,Name,Email'
   - concat/join let you combine and output arrays,
 */
 
+///////////////////////////////////////////////////////////////
+//==========================================================
+// THE NEW AT() METHOD - COMPREHENSIVE EXAMPLES
+//==========================================================
+
+console.log('-----------------THE NEW AT METHOD-----------------');
+
+// Basic array for demonstration
+let randomArr = [23, 11, 64, 89, 102];
+
+// POSITIVE INDEXING - Both methods work the same
+console.log(randomArr[0]);     // 23 - Traditional bracket notation
+console.log(randomArr.at(0));  // 23 - Modern at() method
+
+// ACCESSING LAST ELEMENT
+console.log(randomArr[randomArr.length - 1]); // 102 - Traditional way (verbose)
+console.log(randomArr.at(-1));                // 102 - Clean way with at()
+
+// NEGATIVE INDEXING - The real power of at()
+console.log(randomArr.at(-2)); // 89  - Second last element
+console.log(randomArr.at(-3)); // 64  - Third last element
+console.log(randomArr.at(-4)); // 11  - Fourth last element
+console.log(randomArr.at(-5)); // 23  - Fifth last element (first element)
+
+// OUT OF BOUNDS BEHAVIOR
+console.log(randomArr.at(10));  // undefined - Index doesn't exist
+console.log(randomArr.at(-10)); // undefined - Negative index out of bounds
+
+console.log('---------------------------STRING AT METHOD-----------------------------');
+
+let sampleString = 'JavaScript';
+
+// POSITIVE INDEXING
+console.log(sampleString.at(0));  // 'J' - First character
+console.log(sampleString.at(4));  // 'S' - Fifth character
+
+// NEGATIVE INDEXING
+console.log(sampleString.at(-1)); // 't' - Last character
+console.log(sampleString.at(-2)); // 'p' - Second last character
+console.log(sampleString.at(-4)); // 'r' - Fourth last character
+
+// COMPARISON: Traditional vs at() method
+console.log('Traditional:', sampleString[sampleString.length - 1]); // 't'
+console.log('at() method:', sampleString.at(-1));                  // 't'
+
+//==========================================================
+// PRACTICAL REAL-WORLD EXAMPLES
+//==========================================================
+
+console.log('---------------------------PRACTICAL REAL-WORLD EXAMPLES-----------------------------');
+// Example 1: Processing User Data
+const bankUsers = ['Alice', 'Bob', 'Charlie', 'Diana', 'Eve'];
+
+function getFirstAndLastUser(userArray) {
+    console.log(`First user: ${userArray.at(0)}`);     // Alice
+    console.log(`Last user: ${userArray.at(-1)}`);     // Eve
+    console.log(`Second last: ${userArray.at(-2)}`);   // Diana
+}
+getFirstAndLastUser(bankUsers);
+
+// Example 2: File Extension Checker
+function getFileExtension(filename) {
+    const parts = filename.split('.');
+    return parts.at(-1); // Get the last part (extension)
+}
+console.log(getFileExtension('document.pdf'));        // 'pdf'
+console.log(getFileExtension('archive.tar.gz'));      // 'gz'
+
+// Example 3: Recent Activity Tracker
+const activityLog = [
+    'User logged in',
+    'File uploaded',
+    'Settings changed',
+    'Password updated',
+    'User logged out'
+];
+
+function getRecentActivities(log, count = 3) {
+    console.log('Most recent activities:');
+    for (let i = 1; i <= count; i++) {
+        const activity = log.at(-i);
+        if (activity) {
+            console.log(`${i}. ${activity}`);
+        }
+    }
+}
+getRecentActivities(activityLog);
+// Output:
+// 1. User logged out
+// 2. Password updated
+// 3. Settings changed
+
+// Example 4: Palindrome Checker using at()
+function isPalindrome(str) {
+    const cleanStr = str.toLowerCase().replace(/[^a-z]/g, '');
+    const length = cleanStr.length;
+    
+    for (let i = 0; i < Math.floor(length / 2); i++) {
+        if (cleanStr.at(i) !== cleanStr.at(-i - 1)) {
+            return false;
+        }
+    }
+    return true;
+}
+console.log(isPalindrome('racecar'));    // true
+console.log(isPalindrome('hello'));      // false
+
+// Example 5: Dynamic Array Processing
+const numbers = [10, 20, 30, 40, 50];
+
+function processArray(arr) {
+    // Get elements from both ends moving inward
+    for (let i = 0; i < Math.ceil(arr.length / 2); i++) {
+        const fromStart = arr.at(i);
+        const fromEnd = arr.at(-i - 1);
+        
+        console.log(`Position ${i}: Start=${fromStart}, End=${fromEnd}`);
+    }
+}
+processArray(numbers);
