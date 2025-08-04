@@ -291,3 +291,91 @@ function processArray(arr) {
     }
 }
 processArray(numbers);
+
+/////////////////////////////////////////////////////////////////
+//======================================================================
+// LOOPING ARRAYS : FOREACH METHOD - LEARN AND COMPARE
+//======================================================================
+
+console.log('-----------------LOOPING ARRAYS : FOREACH METHOD-----------------');
+
+// Example array of bank movements: positive values for deposits, negative for withdrawals.
+const movementsArray = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+//-----------------------
+// Using for...of loop
+//-----------------------
+
+console.log('-----------------USING FOR ...OF LOOP-----------------');
+
+// The for...of loop lets you iterate over elements. 
+// To get the index, use .entries() which gives [index, element] pairs.
+for (const [i, mov] of movementsArray.entries()){
+  // If movement is positive, it means deposit; otherwise, it's a withdrawal (take the absolute value)
+  if(mov > 0){
+    console.log(`Movement ${i+1}: You deposited ${mov}`);
+  } else {
+    console.log(`Movement ${i+1}: You withdrew ${Math.abs(mov)}`);
+  }
+}
+
+//-----------------------
+// Using forEach method
+//-----------------------
+
+console.log('-----------------USING FOREACH METHOD-----------------');
+
+// forEach is a modern way to loop through arrays.
+// It uses a callback function, which gets value, index, and the whole array as parameters.
+movementsArray.forEach(function(mov, index, arr) {
+  // mov    -> current element (movement value)
+  // index  -> current index
+  // arr    -> entire movementsArray
+  if(mov > 0){
+    console.log(`Movement ${index+1}: You deposited ${mov}`);
+  } else {
+    console.log(`Movement ${index+1}: You withdrew ${Math.abs(mov)}`);
+  }
+});
+
+//----------------------------
+// Differences and notes:
+//----------------------------
+//
+// - forEach always loops through the **entire** array (can't use 'break' or 'continue').
+// - for...of can be used with 'break' or 'continue'.
+// - forEach is often preferred for concise operations on each element.
+
+//======================================================================
+// REAL-WORLD EXAMPLE: PROCESSING ORDERS WITH forEach
+//======================================================================
+
+console.log('----------------REAL-WORLD EXAMPLE: ORDER PROCESSING-----------------');
+
+const customerOrders = [
+  { id: 1, customer: 'Alice', amount: 250 },
+  { id: 2, customer: 'Bob', amount: 450 },
+  { id: 3, customer: 'Carol', amount: 120 }
+];
+
+// Let's iterate over each order and print a summary message
+customerOrders.forEach(function(order, idx) {
+  console.log(`Order ${order.id} for ${order.customer}: Amount $${order.amount}`);
+  // You can also access the index (idx) or the whole array if needed
+});
+
+// Example output:
+// Order 1 for Alice: Amount $250
+// Order 2 for Bob: Amount $450
+// Order 3 for Carol: Amount $120
+
+//======================================================================
+// KEY TAKEAWAYS:
+// - Use forEach when you want to run a function for every item in an array.
+// - forEach provides its callback with: (element, index, array).
+// - It's great for applying side effects (like logging or updating a DOM), not for creating new arrays.
+// - If you need a new array, use .map() instead.
+//======================================================================
+
+
+///////////////////////////////////////////////////////////////////////////////////
