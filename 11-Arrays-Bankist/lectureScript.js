@@ -393,3 +393,70 @@ enrolledUsers.forEach(function(userId) {
 // - Map forEach gives you (value, key, map), Set forEach gives you (value, value, set).
 // - forEach with Maps is great for easily looping key-value pairs.
 // - forEach with Sets allows for quickly processing all unique items (like user IDs, tags, etc.).
+
+////////////////////////////////////////////////////////////////////////////////////
+// DATA TRANSFORMATION USING MAP, FILTER, REDUCE
+////////////////////////////////////////////////////////////////////////////////////
+
+console.log('----------------DATA TRANSFORMATION USING MAPS, FILTERS, REDUCE-----------------');
+
+const movementsArrayNew = [200, 450, -400, 3000, -650, -130, 70, 1300];
+const euroToUsd = 1.1;
+
+//=============================================================================
+// MAP - Transforms arrays (returns a new array of same length)
+//=============================================================================
+console.log('----------------USING MAPS-----------------');
+
+// Example: Convert each Euro movement value to USD
+const movementsUSD = movementsArrayNew.map(mov => mov * euroToUsd);
+// Print original and mapped arrays
+console.log('Original (EUR):', movementsArrayNew);
+console.log('To USD:', movementsUSD);
+
+//=============================================================================
+// Alternative approaches to transformation: for...of and forEach
+//=============================================================================
+console.log('----------------USING For ...of-----------------');
+const movementsUSD2 = [];
+for (const mov of movementsArrayNew) {
+  movementsUSD2.push(mov * euroToUsd);
+}
+console.log('USD using for...of:', movementsUSD2);
+
+console.log('----------------USING forEach-----------------');
+const movementsUSD3 = [];
+movementsArrayNew.forEach(function(mov) {
+  movementsUSD3.push(mov * euroToUsd);
+});
+console.log('USD using forEach:', movementsUSD3);
+
+//=============================================================================
+// Another MAP Example: Describe each movement
+//=============================================================================
+console.log('---------------USING MAP Example 2-----------------');
+const movementsDescription = movementsArrayNew.map((mov, i) => {
+  const type = mov > 0 ? 'deposited' : 'withdrew';
+  return `Movement ${i + 1}: You ${type} ${Math.abs(mov)}`;
+});
+console.log(movementsDescription);
+
+//=============================================================================
+// REAL-WORLD EXAMPLE: Transform & summarize an order's data
+//=============================================================================
+console.log('----------------REAL-WORLD EXAMPLE-----------------');
+const orders = [
+  { id: 1, amountEUR: 120 },
+  { id: 2, amountEUR: 50 },
+  { id: 3, amountEUR: 400 },
+  { id: 4, amountEUR: 85 }
+];
+
+// MAP: Convert all order amounts to USD
+const orderAmountsUSD = orders.map(order => ({
+  id: order.id,
+  amountUSD: order.amountEUR * euroToUsd
+}));
+console.log('Orders in USD:', orderAmountsUSD);
+
+
