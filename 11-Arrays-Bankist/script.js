@@ -1,10 +1,16 @@
 'use strict';
 
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
-// BANKIST APP
+//============================================================
+// BANKIST APP - COMPLETE CODE WITH EXPLANATORY COMMENTS
+//============================================================
 
-// Data
+/////////////////////////////////////////////////
+// 1. ACCOUNT DATA SETUP
+/////////////////////////////////////////////////
+
+// Each account represents a user object, with data like
+// owner name, account movements (positive = deposit, negative = withdrawal),
+// interest rate (in %), and a PIN for login.
 const account1 = {
   owner: 'Jonas Schmedtmann',
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
@@ -33,26 +39,34 @@ const account4 = {
   pin: 4444,
 };
 
+// All account objects are grouped in an array to allow searching and looping
 const accounts = [account1, account2, account3, account4];
 
-// Elements
-const labelWelcome = document.querySelector('.welcome');
-const labelDate = document.querySelector('.date');
-const labelBalance = document.querySelector('.balance__value');
-const labelSumIn = document.querySelector('.summary__value--in');
-const labelSumOut = document.querySelector('.summary__value--out');
-const labelSumInterest = document.querySelector('.summary__value--interest');
-const labelTimer = document.querySelector('.timer');
+/////////////////////////////////////////////////
+// 2. ELEMENT SELECTION FROM THE DOM
+/////////////////////////////////////////////////
 
-const containerApp = document.querySelector('.app');
-const containerMovements = document.querySelector('.movements');
+// Here we get references to each HTML element we’ll dynamically update or listen to
 
+const labelWelcome = document.querySelector('.welcome'); // Welcome message
+const labelDate = document.querySelector('.date'); // Date of current login/operation
+const labelBalance = document.querySelector('.balance__value'); // Account balance label
+const labelSumIn = document.querySelector('.summary__value--in'); // Summary: total deposits
+const labelSumOut = document.querySelector('.summary__value--out'); // Summary: total withdrawals
+const labelSumInterest = document.querySelector('.summary__value--interest'); // Summary: total interest earned
+const labelTimer = document.querySelector('.timer'); // Inactivity or logout timer
+
+const containerApp = document.querySelector('.app'); // The main app container (to show/hide UI)
+const containerMovements = document.querySelector('.movements'); // The container for transaction rows
+
+// Buttons for user actions (login, transfer, request loan, logout, sort)
 const btnLogin = document.querySelector('.login__btn');
 const btnTransfer = document.querySelector('.form__btn--transfer');
 const btnLoan = document.querySelector('.form__btn--loan');
 const btnClose = document.querySelector('.form__btn--close');
 const btnSort = document.querySelector('.btn--sort');
 
+// Input fields for login credentials and transaction data
 const inputLoginUsername = document.querySelector('.login__input--user');
 const inputLoginPin = document.querySelector('.login__input--pin');
 const inputTransferTo = document.querySelector('.form__input--to');
@@ -62,320 +76,69 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 /////////////////////////////////////////////////
+// 3. APPLICATION LOGIC - DISPLAY MOVEMENTS
 /////////////////////////////////////////////////
-// LECTURES
 
-const currencies = new Map([
-  ['USD', 'United States dollar'],
-  ['EUR', 'Euro'],
-  ['GBP', 'Pound sterling'],
-]);
+// This function takes an array of "movements" (transactions) and
+// displays each one as a row in the .movements container.
+// "movements" is an array of amounts: positive for deposits, negative for withdrawals.
+const displayMovements = function (movements) {
+  // 1. Clear any previous movement rows in the container
+  containerMovements.innerHTML = '';
 
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+  // 2. Loop through each movement (transaction)
+  movements.forEach(function (mov, i) {
+    // Determine if movement is a 'deposit' or 'withdrawal'
+    const movementType = mov > 0 ? 'deposit' : 'withdrawal';
 
+    // 3. Build the HTML for one row using a template string
+    const htmlTemplate = `<div class="movements__row">
+        <div class="movements__type movements__type--${movementType}">
+          ${i + 1} ${movementType}
+        </div>
+        <div class="movements__value">${mov}</div>
+      </div>`;
+
+    // 4. Insert this transaction row at the top of the container (afterbegin)
+    containerMovements.insertAdjacentHTML('afterbegin', htmlTemplate);
+  });
+};
+
+// Call the displayMovements function so the UI shows Jonas' transactions as a demo
+displayMovements(account1.movements);
 
 /////////////////////////////////////////////////
-// ARRAY METHODS - JavaScript
+// 4. APPLICATION LOGIC - COMPUTE USERNAME
+/////////////////////////////////////////////////
 
-console.log('-----------------ARRAY METHODS-----------------');
+// This function takes the array of account objects.
+// For every account, it creates a new 'username' property.
+// The username is built by taking the first letter of each part of the owner's name (all lowercase).
+// For example, "Steven Thomas Williams" becomes "stw".
+const createUsernames = function (accounts) {
+  accounts.forEach(function (account) {
+    // 1. Convert the full owner name to lowercase for consistency.
+    // 2. Split the string into an array of name parts (e.g., ['steven', 'thomas', 'williams']).
+    // 3. Use map to pick the first character of each name part.
+    // 4. Join all initials together to form the username.
+    account.username = account.owner
+      .toLowerCase()
+      .split(' ')
+      .map(name => name[0])
+      .join('');
+  });
+};
 
-let arr = ['a', 'b', 'c', 'd', 'e'];
+// Run the function to assign usernames to all account objects
+createUsernames(accounts);
 
-// ===================== SLICE =====================
-console.log('-----------------SLICE-----------------');
-/*
-  .slice(start, end) returns a shallow copy of a portion of an array into a new array object
-  - Does NOT modify (mutate) the original array
-  - end is exclusive
-*/
-
-console.log(arr.slice(2));        // ['c', 'd', 'e']      (from index 2 to end)
-console.log(arr.slice(2,4));      // ['c', 'd']           (from index 2 up to, but not including, 4)
-console.log(arr.slice(-2));       // ['d', 'e']           (last 2 elements)
-console.log(arr.slice(-1));       // ['e']                (last element)
-console.log(arr.slice(1, -2));    // ['b', 'c']           (from index 1 to index -2, i.e., up to 'c')
-console.log(arr.slice());         // ['a', 'b', 'c', 'd', 'e'] (handy for making a shallow copy)
-console.log(arr);                 // Original array remains unchanged
-
-// Practical example: Getting the last n items without changing the original array
-const lastTwo = arr.slice(-2);    // Use to get last elements for e.g. recent messages
-
-// ===================== SPLICE =====================
-console.log('-----------------SPLICE-----------------');
-/*
-  .splice(start, deleteCount) changes (mutates) the contents of an array by removing, replacing or adding elements
-  - Returns an array of removed elements
-  - Modifies the original array!
-*/
-
-console.log(arr.splice(2));   // ['c', 'd', 'e'] (removes from index 2 to end, returns them)
-console.log(arr);             // ['a', 'b']      (original array is now just first two elements)
-arr.splice(-1);               // removes the last element (mutates the array)
-console.log(arr);             // ['a']
-
-// Practical Example: Removing a user from a list by index
-let users = ['Alice', 'Bob', 'Charlie'];
-users.splice(1, 1);           // Removes 'Bob'
-console.log(users);           // ['Alice', 'Charlie']
-
-
-// ===================== REVERSE =====================
-console.log('-----------------REVERSE-----------------');
-arr = ['a', 'b', 'c', 'd', 'e'];
-const arr2 = ['j', 'i', 'h', 'g', 'f'];
-/*
-  .reverse() reverses the order of the elements in place (mutates the array)
-  - Returns the reversed array
-*/
-console.log(arr2.reverse());   // ['f', 'g', 'h', 'i', 'j']
-console.log(arr2);             // ['f', 'g', 'h', 'i', 'j']
-
-// Use-case: Sorting scores descending
-let scores = [1,3,5,7,9];
-scores.reverse();              // Now [9,7,5,3,1]
-console.log(scores);
-
-
-// ===================== CONCAT =====================
-console.log('-----------------CONCAT-----------------');
-/*
-  .concat() is used to merge two or more arrays, returns a new array without changing the originals
-  - Also possible with spread syntax [...]
-*/
-const letters = arr.concat(arr2);
-console.log(letters);               // ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
-console.log([...arr, ...arr2]);     // (Same as above, using modern spread syntax)
-
-// Real-world: Combining multiple product lists
-const fruits = ['apple', 'banana'];
-const veggies = ['carrot', 'lettuce'];
-const shopping = fruits.concat(veggies); // ['apple', 'banana', 'carrot', 'lettuce']
-console.log(shopping);
-
-
-// ===================== JOIN =====================
-console.log('-----------------JOIN-----------------');
-/*
-  .join(separator) joins all elements of an array into a single string, separated by 'separator'
-*/
-console.log(letters.join(' - '));   // 'a - b - c - d - e - f - g - h - i - j'
-
-// Example: Building a CSV line
-const fields = ['ID', 'Name', 'Email'];
-console.log(fields.join(','));      // 'ID,Name,Email'
-
+// Now, every account object has a 'username' property! Useful for logins, etc.
+console.log(accounts);
 /* 
-  Summary: 
-  - slice/splice let you select or remove items,
-  - reverse lets you flip order,
-  - concat/join let you combine and output arrays,
+  [
+    { owner: "Jonas Schmedtmann", username: "js", ... },
+    { owner: "Jessica Davis", username: "jd", ... },
+    ...
+  ]
 */
 
-///////////////////////////////////////////////////////////////
-//==========================================================
-// THE NEW AT() METHOD - COMPREHENSIVE EXAMPLES
-//==========================================================
-
-console.log('-----------------THE NEW AT METHOD-----------------');
-
-// Basic array for demonstration
-let randomArr = [23, 11, 64, 89, 102];
-
-// POSITIVE INDEXING - Both methods work the same
-console.log(randomArr[0]);     // 23 - Traditional bracket notation
-console.log(randomArr.at(0));  // 23 - Modern at() method
-
-// ACCESSING LAST ELEMENT
-console.log(randomArr[randomArr.length - 1]); // 102 - Traditional way (verbose)
-console.log(randomArr.at(-1));                // 102 - Clean way with at()
-
-// NEGATIVE INDEXING - The real power of at()
-console.log(randomArr.at(-2)); // 89  - Second last element
-console.log(randomArr.at(-3)); // 64  - Third last element
-console.log(randomArr.at(-4)); // 11  - Fourth last element
-console.log(randomArr.at(-5)); // 23  - Fifth last element (first element)
-
-// OUT OF BOUNDS BEHAVIOR
-console.log(randomArr.at(10));  // undefined - Index doesn't exist
-console.log(randomArr.at(-10)); // undefined - Negative index out of bounds
-
-console.log('---------------------------STRING AT METHOD-----------------------------');
-
-let sampleString = 'JavaScript';
-
-// POSITIVE INDEXING
-console.log(sampleString.at(0));  // 'J' - First character
-console.log(sampleString.at(4));  // 'S' - Fifth character
-
-// NEGATIVE INDEXING
-console.log(sampleString.at(-1)); // 't' - Last character
-console.log(sampleString.at(-2)); // 'p' - Second last character
-console.log(sampleString.at(-4)); // 'r' - Fourth last character
-
-// COMPARISON: Traditional vs at() method
-console.log('Traditional:', sampleString[sampleString.length - 1]); // 't'
-console.log('at() method:', sampleString.at(-1));                  // 't'
-
-//==========================================================
-// PRACTICAL REAL-WORLD EXAMPLES
-//==========================================================
-
-console.log('---------------------------PRACTICAL REAL-WORLD EXAMPLES-----------------------------');
-// Example 1: Processing User Data
-const bankUsers = ['Alice', 'Bob', 'Charlie', 'Diana', 'Eve'];
-
-function getFirstAndLastUser(userArray) {
-    console.log(`First user: ${userArray.at(0)}`);     // Alice
-    console.log(`Last user: ${userArray.at(-1)}`);     // Eve
-    console.log(`Second last: ${userArray.at(-2)}`);   // Diana
-}
-getFirstAndLastUser(bankUsers);
-
-// Example 2: File Extension Checker
-function getFileExtension(filename) {
-    const parts = filename.split('.');
-    return parts.at(-1); // Get the last part (extension)
-}
-console.log(getFileExtension('document.pdf'));        // 'pdf'
-console.log(getFileExtension('archive.tar.gz'));      // 'gz'
-
-// Example 3: Recent Activity Tracker
-const activityLog = [
-    'User logged in',
-    'File uploaded',
-    'Settings changed',
-    'Password updated',
-    'User logged out'
-];
-
-function getRecentActivities(log, count = 3) {
-    console.log('Most recent activities:');
-    for (let i = 1; i <= count; i++) {
-        const activity = log.at(-i);
-        if (activity) {
-            console.log(`${i}. ${activity}`);
-        }
-    }
-}
-getRecentActivities(activityLog);
-// Output:
-// 1. User logged out
-// 2. Password updated
-// 3. Settings changed
-
-// Example 4: Palindrome Checker using at()
-function isPalindrome(str) {
-    const cleanStr = str.toLowerCase().replace(/[^a-z]/g, '');
-    const length = cleanStr.length;
-    
-    for (let i = 0; i < Math.floor(length / 2); i++) {
-        if (cleanStr.at(i) !== cleanStr.at(-i - 1)) {
-            return false;
-        }
-    }
-    return true;
-}
-console.log(isPalindrome('racecar'));    // true
-console.log(isPalindrome('hello'));      // false
-
-// Example 5: Dynamic Array Processing
-const numbers = [10, 20, 30, 40, 50];
-
-function processArray(arr) {
-    // Get elements from both ends moving inward
-    for (let i = 0; i < Math.ceil(arr.length / 2); i++) {
-        const fromStart = arr.at(i);
-        const fromEnd = arr.at(-i - 1);
-        
-        console.log(`Position ${i}: Start=${fromStart}, End=${fromEnd}`);
-    }
-}
-processArray(numbers);
-
-/////////////////////////////////////////////////////////////////
-//======================================================================
-// LOOPING ARRAYS : FOREACH METHOD - LEARN AND COMPARE
-//======================================================================
-
-console.log('-----------------LOOPING ARRAYS : FOREACH METHOD-----------------');
-
-// Example array of bank movements: positive values for deposits, negative for withdrawals.
-const movementsArray = [200, 450, -400, 3000, -650, -130, 70, 1300];
-
-//-----------------------
-// Using for...of loop
-//-----------------------
-
-console.log('-----------------USING FOR ...OF LOOP-----------------');
-
-// The for...of loop lets you iterate over elements. 
-// To get the index, use .entries() which gives [index, element] pairs.
-for (const [i, mov] of movementsArray.entries()){
-  // If movement is positive, it means deposit; otherwise, it's a withdrawal (take the absolute value)
-  if(mov > 0){
-    console.log(`Movement ${i+1}: You deposited ${mov}`);
-  } else {
-    console.log(`Movement ${i+1}: You withdrew ${Math.abs(mov)}`);
-  }
-}
-
-//-----------------------
-// Using forEach method
-//-----------------------
-
-console.log('-----------------USING FOREACH METHOD-----------------');
-
-// forEach is a modern way to loop through arrays.
-// It uses a callback function, which gets value, index, and the whole array as parameters.
-movementsArray.forEach(function(mov, index, arr) {
-  // mov    -> current element (movement value)
-  // index  -> current index
-  // arr    -> entire movementsArray
-  if(mov > 0){
-    console.log(`Movement ${index+1}: You deposited ${mov}`);
-  } else {
-    console.log(`Movement ${index+1}: You withdrew ${Math.abs(mov)}`);
-  }
-});
-
-//----------------------------
-// Differences and notes:
-//----------------------------
-//
-// - forEach always loops through the **entire** array (can't use 'break' or 'continue').
-// - for...of can be used with 'break' or 'continue'.
-// - forEach is often preferred for concise operations on each element.
-
-//======================================================================
-// REAL-WORLD EXAMPLE: PROCESSING ORDERS WITH forEach
-//======================================================================
-
-console.log('----------------REAL-WORLD EXAMPLE: ORDER PROCESSING-----------------');
-
-const customerOrders = [
-  { id: 1, customer: 'Alice', amount: 250 },
-  { id: 2, customer: 'Bob', amount: 450 },
-  { id: 3, customer: 'Carol', amount: 120 }
-];
-
-// Let's iterate over each order and print a summary message
-customerOrders.forEach(function(order, idx) {
-  console.log(`Order ${order.id} for ${order.customer}: Amount $${order.amount}`);
-  // You can also access the index (idx) or the whole array if needed
-});
-
-// Example output:
-// Order 1 for Alice: Amount $250
-// Order 2 for Bob: Amount $450
-// Order 3 for Carol: Amount $120
-
-//======================================================================
-// KEY TAKEAWAYS:
-// - Use forEach when you want to run a function for every item in an array.
-// - forEach provides its callback with: (element, index, array).
-// - It's great for applying side effects (like logging or updating a DOM), not for creating new arrays.
-// - If you need a new array, use .map() instead.
-//======================================================================
-
-
-///////////////////////////////////////////////////////////////////////////////////
