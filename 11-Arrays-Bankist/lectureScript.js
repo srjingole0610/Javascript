@@ -459,4 +459,72 @@ const orderAmountsUSD = orders.map(order => ({
 }));
 console.log('Orders in USD:', orderAmountsUSD);
 
+//=============================================================================
+// FILTER - Returns a new array of filtered values
+//=============================================================================
+console.log('----------------USING FILTERS-----------------');
 
+// The filter method creates a new array containing only the elements that pass a test.
+// Here: Keep only DEPOSIT values (positive numbers)
+const depositValue = movementsArrayNew.filter(function(mov) {
+  // Only keep movements greater than 0 (deposits)
+  return mov > 0;
+});
+console.log('Deposits (filter):', depositValue);
+// Original array remains unchanged:
+console.log('Original array:', movementsArrayNew);
+
+//=============================================================================
+// Alternative: for...of loop for filtering (traditional way)
+//=============================================================================
+console.log('----------------USING For ...of-----------------');
+// Create a new array to store deposits
+const depositValue2 = [];
+for (const mov of movementsArrayNew) {
+  if (mov > 0) {
+    depositValue2.push(mov);
+  }
+}
+console.log('Deposits (for...of):', depositValue2);
+
+//=============================================================================
+// Alternative: forEach for filtering (less common, more manual)
+//=============================================================================
+console.log('----------------USING forEach-----------------');
+const depositValue3 = [];
+movementsArrayNew.forEach(function(mov) {
+  if (mov > 0) {
+    depositValue3.push(mov);
+  }
+});
+console.log('Deposits (forEach):', depositValue3);
+
+//=============================================================================
+// REAL-WORLD EXAMPLE: Filtering active users from a user list
+//=============================================================================
+console.log('---------------REAL-WORLD FILTER EXAMPLE-----------------');
+
+// Example array: user records with isActive property
+const newUsers = [
+  { id: 1, name: 'Alice', isActive: true },
+  { id: 2, name: 'Bob', isActive: false },
+  { id: 3, name: 'Carol', isActive: true },
+];
+
+// Filter out only active users:
+const activeUsers = newUsers.filter(user => user.isActive);
+console.log('Active Users:', activeUsers);
+/*
+Output:
+[
+  { id: 1, name: 'Alice', isActive: true },
+  { id: 3, name: 'Carol', isActive: true },
+]
+*/
+
+//=============================================================================
+// KEY LEARNING POINTS:
+// - .filter() keeps elements where the callback returns TRUE.
+// - Returns a NEW array; original array is unchanged.
+// - Common use: filter records by condition (status, value, etc).
+//=============================================================================
