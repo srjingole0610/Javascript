@@ -141,4 +141,33 @@ console.log(accounts);
     ...
   ]
 */
+/////////////////////////////////////////////////
+// 5. APPLICATION LOGIC - COMPUTE BALANCE
+/////////////////////////////////////////////////
+
+// This function computes and displays the account balance for the given movements array.
+// "movements" is an array of numbers (positive for deposits, negative for withdrawals).
+const calcDisplayBalance = function(movements) {
+  // 1. Use .reduce() to sum up all amounts in the movements array.
+  //    - acc: accumulator for the sum (starts at 0)
+  //    - cur: the current transaction (movement) value as we loop through
+  const balance = movements.reduce((acc, cur) => acc + cur, 0);
+
+  // 2. Update the UI: set the text content of the balance label to show the balance and €
+  //    - labelBalance is a reference to the HTML element where the balance appears
+  labelBalance.textContent = `${balance}€`;
+
+  // 3. Return the balance (optional, in case you want to use it elsewhere)
+  return balance;
+}
+
+// Example usage: Compute and display the balance for account1
+calcDisplayBalance(account1.movements);
+
+/*
+LEARNING POINTS:
+- .reduce() efficiently calculates the sum of all movements (deposits & withdrawals).
+- The balance is then updated in the DOM so the user sees their total account funds.
+- This pattern (calculate ➔ display) is common in UI web applications.
+*/
 
