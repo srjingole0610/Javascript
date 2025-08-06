@@ -13,16 +13,16 @@ console.log('-----------------SLICE-----------------');
   - end is exclusive
 */
 
-console.log(arr.slice(2));        // ['c', 'd', 'e']      (from index 2 to end)
-console.log(arr.slice(2,4));      // ['c', 'd']           (from index 2 up to, but not including, 4)
-console.log(arr.slice(-2));       // ['d', 'e']           (last 2 elements)
-console.log(arr.slice(-1));       // ['e']                (last element)
-console.log(arr.slice(1, -2));    // ['b', 'c']           (from index 1 to index -2, i.e., up to 'c')
-console.log(arr.slice());         // ['a', 'b', 'c', 'd', 'e'] (handy for making a shallow copy)
-console.log(arr);                 // Original array remains unchanged
+console.log(arr.slice(2)); // ['c', 'd', 'e']      (from index 2 to end)
+console.log(arr.slice(2, 4)); // ['c', 'd']           (from index 2 up to, but not including, 4)
+console.log(arr.slice(-2)); // ['d', 'e']           (last 2 elements)
+console.log(arr.slice(-1)); // ['e']                (last element)
+console.log(arr.slice(1, -2)); // ['b', 'c']           (from index 1 to index -2, i.e., up to 'c')
+console.log(arr.slice()); // ['a', 'b', 'c', 'd', 'e'] (handy for making a shallow copy)
+console.log(arr); // Original array remains unchanged
 
 // Practical example: Getting the last n items without changing the original array
-const lastTwo = arr.slice(-2);    // Use to get last elements for e.g. recent messages
+const lastTwo = arr.slice(-2); // Use to get last elements for e.g. recent messages
 
 // ===================== SPLICE =====================
 console.log('-----------------SPLICE-----------------');
@@ -32,16 +32,15 @@ console.log('-----------------SPLICE-----------------');
   - Modifies the original array!
 */
 
-console.log(arr.splice(2));   // ['c', 'd', 'e'] (removes from index 2 to end, returns them)
-console.log(arr);             // ['a', 'b']      (original array is now just first two elements)
-arr.splice(-1);               // removes the last element (mutates the array)
-console.log(arr);             // ['a']
+console.log(arr.splice(2)); // ['c', 'd', 'e'] (removes from index 2 to end, returns them)
+console.log(arr); // ['a', 'b']      (original array is now just first two elements)
+arr.splice(-1); // removes the last element (mutates the array)
+console.log(arr); // ['a']
 
 // Practical Example: Removing a user from a list by index
 let users = ['Alice', 'Bob', 'Charlie'];
-users.splice(1, 1);           // Removes 'Bob'
-console.log(users);           // ['Alice', 'Charlie']
-
+users.splice(1, 1); // Removes 'Bob'
+console.log(users); // ['Alice', 'Charlie']
 
 // ===================== REVERSE =====================
 console.log('-----------------REVERSE-----------------');
@@ -51,14 +50,13 @@ const arr2 = ['j', 'i', 'h', 'g', 'f'];
   .reverse() reverses the order of the elements in place (mutates the array)
   - Returns the reversed array
 */
-console.log(arr2.reverse());   // ['f', 'g', 'h', 'i', 'j']
-console.log(arr2);             // ['f', 'g', 'h', 'i', 'j']
+console.log(arr2.reverse()); // ['f', 'g', 'h', 'i', 'j']
+console.log(arr2); // ['f', 'g', 'h', 'i', 'j']
 
 // Use-case: Sorting scores descending
-let scores = [1,3,5,7,9];
-scores.reverse();              // Now [9,7,5,3,1]
+let scores = [1, 3, 5, 7, 9];
+scores.reverse(); // Now [9,7,5,3,1]
 console.log(scores);
-
 
 // ===================== CONCAT =====================
 console.log('-----------------CONCAT-----------------');
@@ -67,8 +65,8 @@ console.log('-----------------CONCAT-----------------');
   - Also possible with spread syntax [...]
 */
 const letters = arr.concat(arr2);
-console.log(letters);               // ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
-console.log([...arr, ...arr2]);     // (Same as above, using modern spread syntax)
+console.log(letters); // ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
+console.log([...arr, ...arr2]); // (Same as above, using modern spread syntax)
 
 // Real-world: Combining multiple product lists
 const fruits = ['apple', 'banana'];
@@ -76,17 +74,16 @@ const veggies = ['carrot', 'lettuce'];
 const shopping = fruits.concat(veggies); // ['apple', 'banana', 'carrot', 'lettuce']
 console.log(shopping);
 
-
 // ===================== JOIN =====================
 console.log('-----------------JOIN-----------------');
 /*
   .join(separator) joins all elements of an array into a single string, separated by 'separator'
 */
-console.log(letters.join(' - '));   // 'a - b - c - d - e - f - g - h - i - j'
+console.log(letters.join(' - ')); // 'a - b - c - d - e - f - g - h - i - j'
 
 // Example: Building a CSV line
 const fields = ['ID', 'Name', 'Email'];
-console.log(fields.join(','));      // 'ID,Name,Email'
+console.log(fields.join(',')); // 'ID,Name,Email'
 
 /* 
   Summary: 
@@ -106,12 +103,12 @@ console.log('-----------------THE NEW AT METHOD-----------------');
 let randomArr = [23, 11, 64, 89, 102];
 
 // POSITIVE INDEXING - Both methods work the same
-console.log(randomArr[0]);     // 23 - Traditional bracket notation
-console.log(randomArr.at(0));  // 23 - Modern at() method
+console.log(randomArr[0]); // 23 - Traditional bracket notation
+console.log(randomArr.at(0)); // 23 - Modern at() method
 
 // ACCESSING LAST ELEMENT
 console.log(randomArr[randomArr.length - 1]); // 102 - Traditional way (verbose)
-console.log(randomArr.at(-1));                // 102 - Clean way with at()
+console.log(randomArr.at(-1)); // 102 - Clean way with at()
 
 // NEGATIVE INDEXING - The real power of at()
 console.log(randomArr.at(-2)); // 89  - Second last element
@@ -120,16 +117,18 @@ console.log(randomArr.at(-4)); // 11  - Fourth last element
 console.log(randomArr.at(-5)); // 23  - Fifth last element (first element)
 
 // OUT OF BOUNDS BEHAVIOR
-console.log(randomArr.at(10));  // undefined - Index doesn't exist
+console.log(randomArr.at(10)); // undefined - Index doesn't exist
 console.log(randomArr.at(-10)); // undefined - Negative index out of bounds
 
-console.log('---------------------------STRING AT METHOD-----------------------------');
+console.log(
+  '---------------------------STRING AT METHOD-----------------------------',
+);
 
 let sampleString = 'JavaScript';
 
 // POSITIVE INDEXING
-console.log(sampleString.at(0));  // 'J' - First character
-console.log(sampleString.at(4));  // 'S' - Fifth character
+console.log(sampleString.at(0)); // 'J' - First character
+console.log(sampleString.at(4)); // 'S' - Fifth character
 
 // NEGATIVE INDEXING
 console.log(sampleString.at(-1)); // 't' - Last character
@@ -138,48 +137,50 @@ console.log(sampleString.at(-4)); // 'r' - Fourth last character
 
 // COMPARISON: Traditional vs at() method
 console.log('Traditional:', sampleString[sampleString.length - 1]); // 't'
-console.log('at() method:', sampleString.at(-1));                  // 't'
+console.log('at() method:', sampleString.at(-1)); // 't'
 
 //==========================================================
 // PRACTICAL REAL-WORLD EXAMPLES
 //==========================================================
 
-console.log('---------------------------PRACTICAL REAL-WORLD EXAMPLES-----------------------------');
+console.log(
+  '---------------------------PRACTICAL REAL-WORLD EXAMPLES-----------------------------',
+);
 // Example 1: Processing User Data
 const bankUsers = ['Alice', 'Bob', 'Charlie', 'Diana', 'Eve'];
 
 function getFirstAndLastUser(userArray) {
-    console.log(`First user: ${userArray.at(0)}`);     // Alice
-    console.log(`Last user: ${userArray.at(-1)}`);     // Eve
-    console.log(`Second last: ${userArray.at(-2)}`);   // Diana
+  console.log(`First user: ${userArray.at(0)}`); // Alice
+  console.log(`Last user: ${userArray.at(-1)}`); // Eve
+  console.log(`Second last: ${userArray.at(-2)}`); // Diana
 }
 getFirstAndLastUser(bankUsers);
 
 // Example 2: File Extension Checker
 function getFileExtension(filename) {
-    const parts = filename.split('.');
-    return parts.at(-1); // Get the last part (extension)
+  const parts = filename.split('.');
+  return parts.at(-1); // Get the last part (extension)
 }
-console.log(getFileExtension('document.pdf'));        // 'pdf'
-console.log(getFileExtension('archive.tar.gz'));      // 'gz'
+console.log(getFileExtension('document.pdf')); // 'pdf'
+console.log(getFileExtension('archive.tar.gz')); // 'gz'
 
 // Example 3: Recent Activity Tracker
 const activityLog = [
-    'User logged in',
-    'File uploaded',
-    'Settings changed',
-    'Password updated',
-    'User logged out'
+  'User logged in',
+  'File uploaded',
+  'Settings changed',
+  'Password updated',
+  'User logged out',
 ];
 
 function getRecentActivities(log, count = 3) {
-    console.log('Most recent activities:');
-    for (let i = 1; i <= count; i++) {
-        const activity = log.at(-i);
-        if (activity) {
-            console.log(`${i}. ${activity}`);
-        }
+  console.log('Most recent activities:');
+  for (let i = 1; i <= count; i++) {
+    const activity = log.at(-i);
+    if (activity) {
+      console.log(`${i}. ${activity}`);
     }
+  }
 }
 getRecentActivities(activityLog);
 // Output:
@@ -189,30 +190,30 @@ getRecentActivities(activityLog);
 
 // Example 4: Palindrome Checker using at()
 function isPalindrome(str) {
-    const cleanStr = str.toLowerCase().replace(/[^a-z]/g, '');
-    const length = cleanStr.length;
-    
-    for (let i = 0; i < Math.floor(length / 2); i++) {
-        if (cleanStr.at(i) !== cleanStr.at(-i - 1)) {
-            return false;
-        }
+  const cleanStr = str.toLowerCase().replace(/[^a-z]/g, '');
+  const length = cleanStr.length;
+
+  for (let i = 0; i < Math.floor(length / 2); i++) {
+    if (cleanStr.at(i) !== cleanStr.at(-i - 1)) {
+      return false;
     }
-    return true;
+  }
+  return true;
 }
-console.log(isPalindrome('racecar'));    // true
-console.log(isPalindrome('hello'));      // false
+console.log(isPalindrome('racecar')); // true
+console.log(isPalindrome('hello')); // false
 
 // Example 5: Dynamic Array Processing
 const numbers = [10, 20, 30, 40, 50];
 
 function processArray(arr) {
-    // Get elements from both ends moving inward
-    for (let i = 0; i < Math.ceil(arr.length / 2); i++) {
-        const fromStart = arr.at(i);
-        const fromEnd = arr.at(-i - 1);
-        
-        console.log(`Position ${i}: Start=${fromStart}, End=${fromEnd}`);
-    }
+  // Get elements from both ends moving inward
+  for (let i = 0; i < Math.ceil(arr.length / 2); i++) {
+    const fromStart = arr.at(i);
+    const fromEnd = arr.at(-i - 1);
+
+    console.log(`Position ${i}: Start=${fromStart}, End=${fromEnd}`);
+  }
 }
 processArray(numbers);
 
@@ -221,7 +222,9 @@ processArray(numbers);
 // LOOPING ARRAYS : FOREACH METHOD - LEARN AND COMPARE
 //======================================================================
 
-console.log('-----------------LOOPING ARRAYS : FOREACH METHOD-----------------');
+console.log(
+  '-----------------LOOPING ARRAYS : FOREACH METHOD-----------------',
+);
 
 // Example array of bank movements: positive values for deposits, negative for withdrawals.
 const movementsArray = [200, 450, -400, 3000, -650, -130, 70, 1300];
@@ -232,14 +235,14 @@ const movementsArray = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 console.log('-----------------USING FOR ...OF LOOP-----------------');
 
-// The for...of loop lets you iterate over elements. 
+// The for...of loop lets you iterate over elements.
 // To get the index, use .entries() which gives [index, element] pairs.
-for (const [i, mov] of movementsArray.entries()){
+for (const [i, mov] of movementsArray.entries()) {
   // If movement is positive, it means deposit; otherwise, it's a withdrawal (take the absolute value)
-  if(mov > 0){
-    console.log(`Movement ${i+1}: You deposited ${mov}`);
+  if (mov > 0) {
+    console.log(`Movement ${i + 1}: You deposited ${mov}`);
   } else {
-    console.log(`Movement ${i+1}: You withdrew ${Math.abs(mov)}`);
+    console.log(`Movement ${i + 1}: You withdrew ${Math.abs(mov)}`);
   }
 }
 
@@ -251,14 +254,14 @@ console.log('-----------------USING FOREACH METHOD-----------------');
 
 // forEach is a modern way to loop through arrays.
 // It uses a callback function, which gets value, index, and the whole array as parameters.
-movementsArray.forEach(function(mov, index, arr) {
+movementsArray.forEach(function (mov, index, arr) {
   // mov    -> current element (movement value)
   // index  -> current index
   // arr    -> entire movementsArray
-  if(mov > 0){
-    console.log(`Movement ${index+1}: You deposited ${mov}`);
+  if (mov > 0) {
+    console.log(`Movement ${index + 1}: You deposited ${mov}`);
   } else {
-    console.log(`Movement ${index+1}: You withdrew ${Math.abs(mov)}`);
+    console.log(`Movement ${index + 1}: You withdrew ${Math.abs(mov)}`);
   }
 });
 
@@ -274,17 +277,21 @@ movementsArray.forEach(function(mov, index, arr) {
 // REAL-WORLD EXAMPLE: PROCESSING ORDERS WITH forEach
 //======================================================================
 
-console.log('----------------REAL-WORLD EXAMPLE: ORDER PROCESSING-----------------');
+console.log(
+  '----------------REAL-WORLD EXAMPLE: ORDER PROCESSING-----------------',
+);
 
 const customerOrders = [
   { id: 1, customer: 'Alice', amount: 250 },
   { id: 2, customer: 'Bob', amount: 450 },
-  { id: 3, customer: 'Carol', amount: 120 }
+  { id: 3, customer: 'Carol', amount: 120 },
 ];
 
 // Let's iterate over each order and print a summary message
-customerOrders.forEach(function(order, idx) {
-  console.log(`Order ${order.id} for ${order.customer}: Amount $${order.amount}`);
+customerOrders.forEach(function (order, idx) {
+  console.log(
+    `Order ${order.id} for ${order.customer}: Amount $${order.amount}`,
+  );
   // You can also access the index (idx) or the whole array if needed
 });
 
@@ -320,7 +327,7 @@ const currencies = new Map([
 
 // forEach method for Maps
 // The callback receives (value, key, map) as arguments.
-currencies.forEach(function(value, key, map) {
+currencies.forEach(function (value, key, map) {
   // value -> The currency name
   // key   -> The currency code
   // map   -> The entire Map object
@@ -339,9 +346,9 @@ const currenciesUnique = new Set(['USD', 'EUR', 'GBP', 'USD', 'GBP', 'INR']);
 console.log(currenciesUnique); // Set(4) { 'USD', 'EUR', 'GBP', 'INR' }
 
 // forEach method for Sets
-// The callback receives (value, valueAgain, set) as arguments; 
+// The callback receives (value, valueAgain, set) as arguments;
 // value and valueAgain are identical.
-currenciesUnique.forEach(function(value, valueAgain, set) {
+currenciesUnique.forEach(function (value, valueAgain, set) {
   // value     -> The value in set
   // valueAgain-> Same as value (for compatibility, since Maps supply key,value)
   // set       -> The entire Set object
@@ -360,7 +367,9 @@ currenciesUnique.forEach(function(value, valueAgain, set) {
 // REAL-WORLD EXAMPLE: TRACKING STOCK SYMBOLS
 //======================================================================
 
-console.log('----------------REAL-WORLD EXAMPLE: PROCESSING STOCKS-----------------');
+console.log(
+  '----------------REAL-WORLD EXAMPLE: PROCESSING STOCKS-----------------',
+);
 
 // Example with a Map: ticker->company name pairing
 const stocks = new Map([
@@ -370,7 +379,7 @@ const stocks = new Map([
 ]);
 
 // Display info for each stock
-stocks.forEach(function(company, ticker) {
+stocks.forEach(function (company, ticker) {
   console.log(`Stock: ${ticker}, Company: ${company}`);
 });
 // Output: Each stock and its corresponding company
@@ -380,7 +389,7 @@ const enrolledUsers = new Set([101, 203, 101, 405, 203]);
 console.log('Unique User IDs:', enrolledUsers); // Only unique IDs
 
 // Send message to each unique user
-enrolledUsers.forEach(function(userId) {
+enrolledUsers.forEach(function (userId) {
   // Here, we could send notifications, emails, etc.
   console.log(`Send reminder to user #${userId}`);
 });
@@ -398,7 +407,9 @@ enrolledUsers.forEach(function(userId) {
 // DATA TRANSFORMATION USING MAP, FILTER, REDUCE
 ////////////////////////////////////////////////////////////////////////////////////
 
-console.log('----------------DATA TRANSFORMATION USING MAPS, FILTERS, REDUCE-----------------');
+console.log(
+  '----------------DATA TRANSFORMATION USING MAPS, FILTERS, REDUCE-----------------',
+);
 
 const movementsArrayNew = [200, 450, -400, 3000, -650, -130, 70, 1300];
 const euroToUsd = 1.1;
@@ -426,7 +437,7 @@ console.log('USD using for...of:', movementsUSD2);
 
 console.log('----------------USING forEach-----------------');
 const movementsUSD3 = [];
-movementsArrayNew.forEach(function(mov) {
+movementsArrayNew.forEach(function (mov) {
   movementsUSD3.push(mov * euroToUsd);
 });
 console.log('USD using forEach:', movementsUSD3);
@@ -449,13 +460,13 @@ const orders = [
   { id: 1, amountEUR: 120 },
   { id: 2, amountEUR: 50 },
   { id: 3, amountEUR: 400 },
-  { id: 4, amountEUR: 85 }
+  { id: 4, amountEUR: 85 },
 ];
 
 // MAP: Convert all order amounts to USD
 const orderAmountsUSD = orders.map(order => ({
   id: order.id,
-  amountUSD: order.amountEUR * euroToUsd
+  amountUSD: order.amountEUR * euroToUsd,
 }));
 console.log('Orders in USD:', orderAmountsUSD);
 
@@ -466,7 +477,7 @@ console.log('----------------USING FILTERS-----------------');
 
 // The filter method creates a new array containing only the elements that pass a test.
 // Here: Keep only DEPOSIT values (positive numbers)
-const depositValue = movementsArrayNew.filter(function(mov) {
+const depositValue = movementsArrayNew.filter(function (mov) {
   // Only keep movements greater than 0 (deposits)
   return mov > 0;
 });
@@ -492,7 +503,7 @@ console.log('Deposits (for...of):', depositValue2);
 //=============================================================================
 console.log('----------------USING forEach-----------------');
 const depositValue3 = [];
-movementsArrayNew.forEach(function(mov) {
+movementsArrayNew.forEach(function (mov) {
   if (mov > 0) {
     depositValue3.push(mov);
   }
@@ -527,4 +538,69 @@ Output:
 // - .filter() keeps elements where the callback returns TRUE.
 // - Returns a NEW array; original array is unchanged.
 // - Common use: filter records by condition (status, value, etc).
+//=============================================================================
+
+////////////////////////////////////////////////////////////////////////////////
+//=============================================================================
+// REDUCE - Returns a single value (like a sum, average, etc.)
+//=============================================================================
+console.log('----------------USING REDUCE-----------------');
+
+// The reduce method processes an array from left-to-right, running a function for each value
+// and "accumulating" it to a single result (like sum, product, max, etc).
+
+const balance = movementsArrayNew.reduce(function (acc, mov, i) {
+  // acc: Accumulator - holds the ongoing total/result
+  // mov: Current element (movement) in the array
+  // i:   Current iteration index
+  console.log(`Iteration ${i} : Accumulator = ${acc}`);
+  return acc + mov; // Add current movement to accumulator
+}, 0); // 0 is the initial value of the accumulator
+
+console.log('Balance (using reduce):', balance);
+
+//=============================================================================
+// Equivalent calculation using for...of loop (traditional approach)
+//=============================================================================
+console.log('----------------USING For ...of-----------------');
+let balance2 = 0;
+for (const mov of movementsArrayNew) {
+  balance2 += mov; // Add each movement to balance2
+}
+console.log('Balance using for...of:', balance2);
+
+//=============================================================================
+// REDUCE - Find the maximum movement value
+//=============================================================================
+console.log('----------------USING REDUCE TO FIND MAX VALUE-----------------');
+const maxMovement = movementsArrayNew.reduce((max, mov) => {
+  // Compare current max to the current movement value
+  return mov > max ? mov : max;
+}, movementsArrayNew[0]); // Initial value: first array element
+console.log('Maximum movement:', maxMovement);
+
+//=============================================================================
+// REAL-WORLD EXAMPLE: Find total sales from orders
+//=============================================================================
+console.log('----------------REAL-WORLD REDUCE EXAMPLE-----------------');
+
+const newOrders = [
+  { id: 101, amount: 300 },
+  { id: 102, amount: 120 },
+  { id: 103, amount: 450 },
+  { id: 104, amount: 80 }
+];
+
+// Use reduce to sum up all amounts from the orders array
+const totalSales = newOrders.reduce((total, order) => total + order.amount, 0);
+console.log('Total sales from all orders:', totalSales);
+
+//=============================================================================
+// KEY LEARNING POINTS
+//=============================================================================
+// - .reduce() takes a callback and an initial value for the accumulator.
+// - It returns a SINGLE value (number, string, object, etc.)
+// - Callback signature: (accumulator, currentValue, index, array) => result
+// - Most commonly used for totals, averaging, finding min/max, flattening arrays, etc.
+// - For more complex reductions, the accumulator can even be an object or array.
 //=============================================================================
