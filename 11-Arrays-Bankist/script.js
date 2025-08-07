@@ -147,7 +147,7 @@ console.log(accounts);
 
 // This function computes and displays the account balance for the given movements array.
 // "movements" is an array of numbers (positive for deposits, negative for withdrawals).
-const calcDisplayBalance = function(movements) {
+const calcDisplayBalance = function (movements) {
   // 1. Use .reduce() to sum up all amounts in the movements array.
   //    - acc: accumulator for the sum (starts at 0)
   //    - cur: the current transaction (movement) value as we loop through
@@ -159,7 +159,7 @@ const calcDisplayBalance = function(movements) {
 
   // 3. Return the balance (optional, in case you want to use it elsewhere)
   return balance;
-}
+};
 
 // Example usage: Compute and display the balance for account1
 calcDisplayBalance(account1.movements);
@@ -169,5 +169,53 @@ LEARNING POINTS:
 - .reduce() efficiently calculates the sum of all movements (deposits & withdrawals).
 - The balance is then updated in the DOM so the user sees their total account funds.
 - This pattern (calculate ➔ display) is common in UI web applications.
+*/
+
+/////////////////////////////////////////////////
+// 6. APPLICATION LOGIC - COMPUTE SUMMARY
+/////////////////////////////////////////////////
+
+/*
+This function computes and displays three account statistics:
+1. Total income (sum of deposits)
+2. Total outgoings (sum of withdrawals)
+3. Total interest earned on deposits (only if interest per deposit is at least €1)
+It updates the UI in the respective .summary__value--* elements.
+*/
+const calcDisplaySummary = function (movements) {
+  // 1. Calculate total INCOMINGS (sum of all positive values = deposits)
+  const incomes = movements
+    .filter(mov => mov > 0)        // Filter to keep only deposits
+    .reduce((acc, mov) => acc + mov, 0); // Sum all deposits
+
+  // 2. Calculate total OUTGOINGS (sum of all negative values = withdrawals)
+  const outgoings = movements
+    .filter(mov => mov < 0)        // Keep only withdrawals
+    .reduce((acc, mov) => acc + mov, 0); // Sum all withdrawals (will be negative)
+
+  // 3. Calculate total INTEREST (bank pays 1.2% on every deposit; only count if >= €1)
+  const interest = movements
+    .filter(mov => mov > 0)                // Work with only deposits
+    .map(deposit => deposit * 0.012)       // Compute interest for each deposit (e.g., 1.2%)
+    .filter(int => int >= 1)               // Only keep if computed interest is at least €1
+    .reduce((acc, mov) => acc + mov, 0);   // Sum all qualifying interests
+
+  // 4. Update the UI labels for summary
+  labelSumIn.textContent = `${incomes}€`;               // Show total deposits
+  labelSumOut.textContent = `${Math.abs(outgoings)}€`;  // Show withdrawals as positive value
+  labelSumInterest.textContent = `${interest}€`;        // Show interest
+};
+
+// Run the summary calculation for account1 to see results in the UI
+calcDisplaySummary(account1.movements);
+
+/*
+LEARNING POINTS:
+- You can chain .filter(), .map(), and .reduce() for concise, powerful data calculations.
+- .filter() extracts the relevant transactions (deposits or withdrawals).
+- .map() transforms data (calculating interest per deposit).
+- Only interests ≥ €1 are counted for realism.
+- Results are written directly to the DOM (document) for live user feedback.
+- Structure like this keeps your logic organized and readable.
 */
 
