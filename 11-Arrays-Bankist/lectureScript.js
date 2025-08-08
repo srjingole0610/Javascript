@@ -588,7 +588,7 @@ const newOrders = [
   { id: 101, amount: 300 },
   { id: 102, amount: 120 },
   { id: 103, amount: 450 },
-  { id: 104, amount: 80 }
+  { id: 104, amount: 80 },
 ];
 
 // Use reduce to sum up all amounts from the orders array
@@ -604,3 +604,57 @@ console.log('Total sales from all orders:', totalSales);
 // - Most commonly used for totals, averaging, finding min/max, flattening arrays, etc.
 // - For more complex reductions, the accumulator can even be an object or array.
 //=============================================================================
+
+////////////////////////////////////////////////////////////////////////////////
+//CHAINING METHODS
+console.log('----------------CHAINING METHODS-----------------');
+
+// Chaining: Each array method returns a new array (or value, for reduce),
+// so you can link one after the other for powerful data transformations!
+
+// 1. .filter(mov => mov > 0): Keeps only DEPOSIT values (>0) from movementsArrayNew.
+// 2. .map((mov, i) => mov * euroToUsd): Converts each deposit from EUR to USD.
+// 3. .reduce((acc, mov) => acc + mov, 0): Sums up all converted deposits to get total deposits in USD.
+const totalDepositsUSD = movementsArrayNew
+  .filter(mov => mov > 0)
+  .map(mov => mov * euroToUsd)
+  .reduce((acc, mov) => acc + mov, 0);
+
+console.log('Total deposits in USD:', totalDepositsUSD);
+
+//-------------------------------------------------------------------------------
+// What you learn:
+// - Chaining keeps code concise and logical: filter > map > reduce
+// - Each method does one thing: select, transform, then summarize
+// - No temporary variables or intermediate arrays are needed!
+//-------------------------------------------------------------------------------
+
+//===============================================================================
+// REAL-WORLD EXAMPLE: Calculate total paid orders over $100 (including 5% tax)
+//===============================================================================
+
+const chainingOrders = [
+  { id: 1, amount: 120, paid: true },
+  { id: 2, amount: 50, paid: true },
+  { id: 3, amount: 400, paid: true },
+  { id: 4, amount: 85, paid: false },
+];
+
+// Chain: Only paid ("paid: true"), amounts > $100, add tax, then total
+const totalHighValuePaidOrders = chainingOrders
+  .filter(order => order.paid && order.amount > 100) // Only paid orders above $100
+  .map(order => order.amount * 1.05) // Add 5% tax to each order
+  .reduce((sum, orderWithTax) => sum + orderWithTax, 0); // Sum up all qualifying orders
+
+console.log(
+  'Total of high-value paid orders (with tax):',
+  totalHighValuePaidOrders,
+);
+
+//===============================================================================
+// KEY TAKEAWAYS
+//===============================================================================
+// - Chaining .filter(), .map(), .reduce() is a best-practice for expressive, readable code[1][4][5].
+// - Use chaining when you need to transform, filter, and summarize data in a single flow.
+// - Every method returns a new array (except .reduce(), which returns a single value).
+//===============================================================================
