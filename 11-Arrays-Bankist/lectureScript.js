@@ -658,3 +658,61 @@ console.log(
 // - Use chaining when you need to transform, filter, and summarize data in a single flow.
 // - Every method returns a new array (except .reduce(), which returns a single value).
 //===============================================================================
+
+//=============================================================================
+// FIND - Returns the FIRST element in the array that matches a given condition
+//=============================================================================
+console.log('----------------USING FIND-----------------');
+
+// The .find() method searches the array element by element.
+// It stops and returns the FIRST value for which the callback returns TRUE.
+// If no element matches, it returns undefined.
+
+const firstWithdrawal = movementsArrayNew.find(mov => mov < 0); 
+// In this example: Find the first negative movement from movementsArrayNew
+
+console.log('First withdrawal:', firstWithdrawal); // e.g., -400
+console.log('Original movements array:', movementsArrayNew);
+
+//=============================================================================
+// FIND vs FILTER
+//=============================================================================
+// - .filter() returns ALL elements that match the condition (as an array).
+// - .find() returns ONLY the FIRST match (as a single value).
+// Example:
+console.log('----------------FIND vs FILTER-----------------');
+const allWithdrawals = movementsArrayNew.filter(mov => mov < 0);
+console.log('All withdrawals (filter):', allWithdrawals);
+console.log('First withdrawal (find):', firstWithdrawal);
+
+//=============================================================================
+// REAL-WORLD EXAMPLE: Find a user by username
+//=============================================================================
+console.log('----------------REAL-WORLD EXAMPLE: Find a user by username-----------------');
+const userAccounts = [
+  { owner: 'Jonas Schmedtmann', username: 'js', pin: 1111 },
+  { owner: 'Jessica Davis', username: 'jd', pin: 2222 },
+  { owner: 'Steven Thomas Williams', username: 'stw', pin: 3333 }
+];
+
+// Suppose we want to find the account object for username 'jd'
+const accountJD = userAccounts.find(acc => acc.username === 'jd');
+
+console.log('Found account JD:', accountJD);
+// Output:
+// {
+//   owner: 'Jessica Davis',
+//   username: 'jd',
+//   pin: 2222
+// }
+
+//=============================================================================
+// KEY LEARNING POINTS:
+//=============================================================================
+// - .find() returns the first match, not an array.
+// - Stops searching as soon as it finds a match, making it efficient.
+// - Useful when you want ONE item (object or primitive) based on a condition.
+// - If nothing matches, it returns undefined.
+//=============================================================================
+
+
