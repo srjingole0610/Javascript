@@ -315,7 +315,7 @@ btnLogin.addEventListener('click', function (e) {
     }!`;
 
     // Show the app screen
-    containerApp.style.opacity = 100;
+    containerApp.style.opacity = 1;
 
     updateUI(currentAccount);
   } else {
