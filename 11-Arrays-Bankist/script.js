@@ -104,9 +104,6 @@ const displayMovements = function (movements) {
   });
 };
 
-// Call the displayMovements function so the UI shows Jonas' transactions as a demo
-displayMovements(account1.movements);
-
 /////////////////////////////////////////////////
 // 4. APPLICATION LOGIC - COMPUTE USERNAME
 /////////////////////////////////////////////////
@@ -161,9 +158,6 @@ const calcDisplayBalance = function (movements) {
   return balance;
 };
 
-// Example usage: Compute and display the balance for account1
-calcDisplayBalance(account1.movements);
-
 /*
 LEARNING POINTS:
 - .reduce() efficiently calculates the sum of all movements (deposits & withdrawals).
@@ -176,46 +170,109 @@ LEARNING POINTS:
 /////////////////////////////////////////////////
 
 /*
-This function computes and displays three account statistics:
-1. Total income (sum of deposits)
-2. Total outgoings (sum of withdrawals)
-3. Total interest earned on deposits (only if interest per deposit is at least €1)
-It updates the UI in the respective .summary__value--* elements.
+This function computes and displays three key bank account statistics:
+  1. Total deposits (income)
+  2. Total withdrawals (outgoings)
+  3. Total interest earned on deposits (with realistic rule: ≥ €1 per deposit)
+
+It takes one account object (with `movements` and `interestRate`) 
+and updates the summary section of the UI.
 */
-const calcDisplaySummary = function (movements) {
-  // 1. Calculate total INCOMINGS (sum of all positive values = deposits)
-  const incomes = movements
-    .filter(mov => mov > 0)        // Filter to keep only deposits
-    .reduce((acc, mov) => acc + mov, 0); // Sum all deposits
+const calcDisplaySummary = function (account) {
+  
+  // ===================================================
+  // 1. Calculate TOTAL INCOME
+  // ===================================================
+  const incomes = account.movements
+    .filter(mov => mov > 0)                // Keep only positive values → deposits
+    .reduce((acc, mov) => acc + mov, 0);   // Sum all deposits into a single number
+  
+  // ===================================================
+  // 2. Calculate TOTAL OUTGOINGS
+  // ===================================================
+  const outgoings = account.movements
+    .filter(mov => mov < 0)                // Keep only negative values → withdrawals
+    .reduce((acc, mov) => acc + mov, 0);   // Sum all withdrawals (result will be negative)
 
-  // 2. Calculate total OUTGOINGS (sum of all negative values = withdrawals)
-  const outgoings = movements
-    .filter(mov => mov < 0)        // Keep only withdrawals
-    .reduce((acc, mov) => acc + mov, 0); // Sum all withdrawals (will be negative)
+  // ===================================================
+  // 3. Calculate TOTAL INTEREST
+  // ===================================================
+  const interest = account.movements
+    .filter(mov => mov > 0)                                  // Work with deposits only
+    .map(deposit => (deposit * account.interestRate) / 100)  // Interest per deposit
+    .filter(int => int >= 1)                                 // Bank only credits ≥ €1
+    .reduce((acc, int) => acc + int, 0);                     // Sum all qualifying interests
 
-  // 3. Calculate total INTEREST (bank pays 1.2% on every deposit; only count if >= €1)
-  const interest = movements
-    .filter(mov => mov > 0)                // Work with only deposits
-    .map(deposit => deposit * 0.012)       // Compute interest for each deposit (e.g., 1.2%)
-    .filter(int => int >= 1)               // Only keep if computed interest is at least €1
-    .reduce((acc, mov) => acc + mov, 0);   // Sum all qualifying interests
-
-  // 4. Update the UI labels for summary
-  labelSumIn.textContent = `${incomes}€`;               // Show total deposits
-  labelSumOut.textContent = `${Math.abs(outgoings)}€`;  // Show withdrawals as positive value
-  labelSumInterest.textContent = `${interest}€`;        // Show interest
+  // ===================================================
+  // 4. Update the UI labels
+  // ===================================================
+  // Use `toFixed(2)` for cleaner currency display (2 decimal places)
+  labelSumIn.textContent = `${incomes.toFixed(2)}€`;                  
+  labelSumOut.textContent = `${Math.abs(outgoings).toFixed(2)}€`;     
+  labelSumInterest.textContent = `${interest.toFixed(2)}€`;           
 };
-
-// Run the summary calculation for account1 to see results in the UI
-calcDisplaySummary(account1.movements);
 
 /*
 LEARNING POINTS:
-- You can chain .filter(), .map(), and .reduce() for concise, powerful data calculations.
-- .filter() extracts the relevant transactions (deposits or withdrawals).
-- .map() transforms data (calculating interest per deposit).
-- Only interests ≥ €1 are counted for realism.
-- Results are written directly to the DOM (document) for live user feedback.
-- Structure like this keeps your logic organized and readable.
+- `filter()` → selects only the transactions matching the condition (deposits or withdrawals).
+- `map()` → transforms each item (here: calculate interest per deposit).
+- `reduce()` → accumulates all values to a single result (sum of deposits/withdrawals/interest).
+- Chaining these methods allows clean "data → transformation → result" flow without extra variables.
+- `Math.abs()` ensures withdrawals show as positive numbers when displayed.
+- Rounding with `toFixed(2)` makes it display nicely as currency values.
 */
+
+//////////////////////////////////////////////////////
+// 7. APPLICATION LOGIC - Implementing User Login (with error handling)
+//////////////////////////////////////////////////////
+
+let currentAccount;
+
+// Add a click event listener to the login button
+btnLogin.addEventListener('click', function (e) {
+  console.log('Login button clicked');
+  e.preventDefault(); // Prevent form reload
+
+  // 1️⃣ Find matching account by entered username
+  currentAccount = accounts.find(
+    acc => acc.username === inputLoginUsername.value
+  );
+  console.log('Matched account:', currentAccount);
+
+  // 2️⃣ Check both account existence and PIN match
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    // ✅ SUCCESSFUL LOGIN
+
+    // Show welcome message
+    labelWelcome.textContent = `Welcome back, ${
+      currentAccount.owner.split(' ')[0]
+    }!`;
+
+    // Show the app screen
+    containerApp.style.opacity = 100;
+
+    // Update UI with this account's details
+    displayMovements(currentAccount.movements);
+    calcDisplayBalance(currentAccount.movements);
+    calcDisplaySummary(currentAccount);
+
+  } else {
+    // ❌ LOGIN FAILED — username not found or PIN incorrect
+
+    // Show error in console
+    console.error('Login failed: Invalid username or PIN');
+
+    // Option 1: Simple alert (works everywhere)
+    alert('Incorrect username or PIN. Please try again.');
+
+    // Option 2 (Better UX): Show inline error in welcome label
+    labelWelcome.textContent = 'Login failed! Please check credentials.';
+    containerApp.style.opacity = 0; // Keep app hidden
+  }
+
+  // 3️⃣ Clear input fields in both cases for security
+  inputLoginUsername.value = inputLoginPin.value = '';
+  inputLoginUsername.blur();
+  inputLoginPin.blur();
+});
 
