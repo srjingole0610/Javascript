@@ -715,4 +715,55 @@ console.log('Found account JD:', accountJD);
 // - If nothing matches, it returns undefined.
 //=============================================================================
 
+//=============================================================================
+// FINDINDEX - Returns the INDEX of the first element that matches a condition
+//=============================================================================
+console.log('----------------USING FINDINDEX-----------------');
+
+/*
+The findIndex() method searches an array and returns the index (position)
+of the first element that satisfies the provided testing function (condition).
+If no element matches, it returns -1.
+*/
+
+// Example: Find the index of the first negative movement (withdrawal) in an array
+const movementsArrayNewest = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+const firstWithdrawalIndex = movementsArrayNewest.findIndex(mov => mov < 0);
+console.log('Index of first withdrawal:', firstWithdrawalIndex); 
+// Output: e.g., 2 (because -400 is at index 2)
+
+// To prove it, show the element at that index
+console.log('First withdrawal amount:', movementsArrayNewest[firstWithdrawalIndex]);
+
+//==============================================================================
+// Real-world example: Find the position of a user account with a certain username
+//==============================================================================
+console.log('----------------REAL-WORLD EXAMPLE: Find the position of a user account with a certain username-----------------');
+const userAccountsNew = [
+  { owner: 'Jonas Schmedtmann', username: 'js', pin: 1111 },
+  { owner: 'Jessica Davis', username: 'jd', pin: 2222 },
+  { owner: 'Steven Thomas Williams', username: 'stw', pin: 3333 },
+  { owner: 'Sarah Smith', username: 'ss', pin: 4444 },
+];
+
+// Suppose we want the INDEX of the account with username 'stw'
+const index = userAccountsNew.findIndex(acc => acc.username === 'stw');
+console.log('Index of account with username "stw":', index); 
+
+// This index can be used to directly access or modify that account
+if (index !== -1) {
+  console.log('Found account:', userAccountsNew[index]);
+} else {
+  console.log('Account not found!');
+}
+
+/*
+LEARNING POINTS:
+- findIndex() returns the position of the first element satisfying the condition.
+- Returns -1 if no element is found.
+- Useful for updating or deleting elements at a known position in arrays.
+- Different from .find(), which returns the element itself.
+- Works well with complex conditions and arrays of objects.
+*/
 

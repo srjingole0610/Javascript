@@ -399,3 +399,58 @@ btnTransfer.addEventListener('click', function (e) {
     // You could show a UI error message here in a real app
   }
 });
+
+///////////////////////////////////////////////////////////////
+// 10. APPLICATION LOGIC - Close Account + Log Closure Event
+///////////////////////////////////////////////////////////////
+
+// We'll keep a separate log of account closures
+const closureLog = []; // Each entry will have { username, date }
+
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+  console.log('Close button clicked');
+
+  if (
+    inputCloseUsername.value === currentAccount.username &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    // ✅ Credentials match — proceed with account closure
+
+    // Find the index of the current account
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username,
+    );
+
+    // 1️⃣ Create a closure event log entry
+    const closureEntry = {
+      username: currentAccount.username,
+      owner: currentAccount.owner,
+      date: new Date().toISOString(), // store in ISO standard format
+    };
+    closureLog.push(closureEntry);
+
+    // 2️⃣ Remove the account from the accounts array
+    accounts.splice(index, 1);
+
+    // 3️⃣ Hide the UI (logout effect)
+    containerApp.style.opacity = 0;
+
+    // 4️⃣ Clear the input fields
+    inputCloseUsername.value = inputClosePin.value = '';
+
+    console.log('Account closed successfully.');
+    console.log('Closure log updated:', closureLog);
+
+    // 5️⃣ Confirm to user
+    alert(
+      `Account closed successfully on ${new Date(
+        closureEntry.date,
+      ).toLocaleString()}`,
+    );
+  } else {
+    // ❌ Closure failed
+    console.warn('Close account failed: Invalid username or PIN.');
+    alert('Close account failed: Invalid username or PIN.');
+  }
+});
