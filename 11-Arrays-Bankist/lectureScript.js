@@ -856,3 +856,73 @@ if (!Array.prototype.findLast) {
   };
 }
 
+//=============================================================================
+// SOME vs EVERY
+//=============================================================================
+
+/*
+ some()  → Returns TRUE if at least one element in the array passes the given test.
+ every() → Returns TRUE if ALL elements in the array pass the given test.
+
+ IMPORTANT:
+ - Both stop checking as soon as the result is determined (short-circuiting).
+ - .some() is like "OR" logic — needs just ONE match.
+ - .every() is like "AND" logic — needs ALL matches.
+*/
+
+// ---------------- USAGE OF some() ----------------
+console.log('----------------USING SOME-----------------');
+
+// At least one deposit?
+const anyDeposits = movementsArrayNew.some(mov => mov > 0);
+console.log('Any deposits?', anyDeposits); // true (there are positive numbers)
+
+// Any deposits over 5000?
+const anyDepositsOver5000 = movementsArrayNew.some(mov => mov > 5000);
+console.log('Any deposits over 5000?', anyDepositsOver5000); // false (no such case)
+
+// ---------------- USAGE OF every() ----------------
+console.log('----------------USING EVERY-----------------');
+
+// Are all movements deposits (positive)?
+const allDeposits = movementsArrayNew.every(mov => mov > 0);
+console.log('All deposits?', allDeposits); // false (there are withdrawals)
+
+// Are all movements less than 5000?
+const allMovementsUnder5000 = movementsArrayNew.every(mov => mov < 5000);
+console.log('All movements under 5000?', allMovementsUnder5000); // true
+
+//=============================================================================
+// REAL-WORLD EXAMPLE: E-commerce Cart Validation
+//=============================================================================
+
+const shoppingCart = [
+  { id: 1, name: 'Laptop', price: 999, inStock: true },
+  { id: 2, name: 'Headphones', price: 199, inStock: true },
+  { id: 3, name: 'Mouse', price: 49, inStock: true }
+];
+
+// Check if at least one item costs more than $500
+const hasExpensiveItem = shoppingCart.some(item => item.price > 500);
+console.log('Cart contains expensive item?', hasExpensiveItem); // true
+
+// Check if all items are in stock
+const allItemsInStock = shoppingCart.every(item => item.inStock === true);
+console.log('All items in stock?', allItemsInStock); // true
+
+/*
+LEARNING POINTS:
+----------------
+1. some() → Great when you just need to know if ANY element meets a condition.
+   e.g., "Does the cart have any expensive items?"
+2. every() → Great when all data must meet the condition for it to be valid.
+   e.g., "Are all cart items available in stock?"
+3. Both methods:
+   - Don’t change the original array.
+   - Return a boolean (true/false).
+   - Stop checking early (short-circuit) for performance.
+4. Real-life uses:
+   - some(): Security checks like "Has the password any special characters?"
+   - every(): Form validation like "Have all required fields been filled?"
+*/
+

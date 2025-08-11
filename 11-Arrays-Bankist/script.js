@@ -454,3 +454,38 @@ btnClose.addEventListener('click', function (e) {
     alert('Close account failed: Invalid username or PIN.');
   }
 });
+
+///////////////////////////////////////////////////////////////
+// 11. APPLICATION LOGIC - Implement Loan Functionality (with delay & date)
+///////////////////////////////////////////////////////////////
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault(); // Prevent form submit/reload
+  console.log('Loan button clicked');
+
+  const loanAmount = Math.floor(Number(inputLoanAmount.value)); // floor to simulate whole € loans
+
+  // Check eligibility (amount > 0 and at least one deposit >= 10% of the loan)
+  if (
+    loanAmount > 0 &&
+    currentAccount.movements.some(mov => mov >= loanAmount * 0.1)
+  ) {
+    // Simulate loan processing delay (3 seconds)
+    console.log('Processing loan request...');
+    setTimeout(function () {
+      // 1️⃣ Add loan amount as a deposit
+      currentAccount.movements.push(loanAmount);
+
+      // 3️⃣ Update the UI
+      updateUI(currentAccount);
+
+      console.log(`Loan of €${loanAmount} granted on ${new Date().toLocaleString()}`);
+    }, 3000); // 3 seconds delay
+  } else {
+    console.warn('Loan request failed: Check amount or movements.');
+    alert('Loan request failed: Check amount or movements.');
+  }
+
+  // Clear the loan input immediately after request
+  inputLoanAmount.value = '';
+});
+
