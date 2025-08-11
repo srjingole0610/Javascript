@@ -668,7 +668,7 @@ console.log('----------------USING FIND-----------------');
 // It stops and returns the FIRST value for which the callback returns TRUE.
 // If no element matches, it returns undefined.
 
-const firstWithdrawal = movementsArrayNew.find(mov => mov < 0); 
+const firstWithdrawal = movementsArrayNew.find(mov => mov < 0);
 // In this example: Find the first negative movement from movementsArrayNew
 
 console.log('First withdrawal:', firstWithdrawal); // e.g., -400
@@ -688,11 +688,13 @@ console.log('First withdrawal (find):', firstWithdrawal);
 //=============================================================================
 // REAL-WORLD EXAMPLE: Find a user by username
 //=============================================================================
-console.log('----------------REAL-WORLD EXAMPLE: Find a user by username-----------------');
+console.log(
+  '----------------REAL-WORLD EXAMPLE: Find a user by username-----------------',
+);
 const userAccounts = [
   { owner: 'Jonas Schmedtmann', username: 'js', pin: 1111 },
   { owner: 'Jessica Davis', username: 'jd', pin: 2222 },
-  { owner: 'Steven Thomas Williams', username: 'stw', pin: 3333 }
+  { owner: 'Steven Thomas Williams', username: 'stw', pin: 3333 },
 ];
 
 // Suppose we want to find the account object for username 'jd'
@@ -730,16 +732,21 @@ If no element matches, it returns -1.
 const movementsArrayNewest = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 const firstWithdrawalIndex = movementsArrayNewest.findIndex(mov => mov < 0);
-console.log('Index of first withdrawal:', firstWithdrawalIndex); 
+console.log('Index of first withdrawal:', firstWithdrawalIndex);
 // Output: e.g., 2 (because -400 is at index 2)
 
 // To prove it, show the element at that index
-console.log('First withdrawal amount:', movementsArrayNewest[firstWithdrawalIndex]);
+console.log(
+  'First withdrawal amount:',
+  movementsArrayNewest[firstWithdrawalIndex],
+);
 
 //==============================================================================
 // Real-world example: Find the position of a user account with a certain username
 //==============================================================================
-console.log('----------------REAL-WORLD EXAMPLE: Find the position of a user account with a certain username-----------------');
+console.log(
+  '----------------REAL-WORLD EXAMPLE: Find the position of a user account with a certain username-----------------',
+);
 const userAccountsNew = [
   { owner: 'Jonas Schmedtmann', username: 'js', pin: 1111 },
   { owner: 'Jessica Davis', username: 'jd', pin: 2222 },
@@ -749,7 +756,7 @@ const userAccountsNew = [
 
 // Suppose we want the INDEX of the account with username 'stw'
 const index = userAccountsNew.findIndex(acc => acc.username === 'stw');
-console.log('Index of account with username "stw":', index); 
+console.log('Index of account with username "stw":', index);
 
 // This index can be used to directly access or modify that account
 if (index !== -1) {
@@ -780,24 +787,28 @@ LEARNING POINTS:
 */
 
 // ------------------- findLast -------------------
-console.log('----------------FINDLAST-----------------')
+console.log('----------------FINDLAST-----------------');
 const lastWithdrawal = movementsArrayNew.findLast(mov => mov < 0);
-console.log('Last withdrawal (value):', lastWithdrawal); 
+console.log('Last withdrawal (value):', lastWithdrawal);
 // -130 in this case
 
 // ------------------- findLastIndex -------------------
-console.log('----------------FINDLASTINDEX-----------------')
+console.log('----------------FINDLASTINDEX-----------------');
 const lastWithdrawalIndex = movementsArrayNew.findLastIndex(mov => mov < 0);
 console.log('Last withdrawal index:', lastWithdrawalIndex);
 // 5 in this case (because -130 is at index 5)
 
 // Example output message for user
-console.log(`Your last withdrawal of ${lastWithdrawal}€ happened at index ${lastWithdrawalIndex} in your transaction history.`);
+console.log(
+  `Your last withdrawal of ${lastWithdrawal}€ happened at index ${lastWithdrawalIndex} in your transaction history.`,
+);
 
 //=============================================================================
 // FINDLAST vs FINDLASTINDEX vs FILTER DEMO
 //=============================================================================
-console.log('----------------FINDLAST vs FINDLASTINDEX vs FILTER-----------------');
+console.log(
+  '----------------FINDLAST vs FINDLASTINDEX vs FILTER-----------------',
+);
 
 // filter() → returns ALL matching values
 const allWithdrawalsNew = movementsArrayNew.filter(mov => mov < 0);
@@ -820,16 +831,24 @@ const loginAttempts = [
 ];
 
 // findLast: Get the OBJECT of the last failed attempt
-const lastFailedAttempt = loginAttempts.findLast(attempt => attempt.success === false);
+const lastFailedAttempt = loginAttempts.findLast(
+  attempt => attempt.success === false,
+);
 console.log('Last failed attempt:', lastFailedAttempt);
 
 // findLastIndex: Get the position of the last failed attempt
-const lastFailedAttemptIndex = loginAttempts.findLastIndex(attempt => attempt.success === false);
+const lastFailedAttemptIndex = loginAttempts.findLastIndex(
+  attempt => attempt.success === false,
+);
 console.log('Last failed attempt index:', lastFailedAttemptIndex);
 
 // Nice UI message
 if (lastFailedAttempt) {
-  console.log(`Your last failed login was on ${new Date(lastFailedAttempt.time).toLocaleString()}`);
+  console.log(
+    `Your last failed login was on ${new Date(
+      lastFailedAttempt.time,
+    ).toLocaleString()}`,
+  );
 }
 
 /*
@@ -899,7 +918,7 @@ console.log('All movements under 5000?', allMovementsUnder5000); // true
 const shoppingCart = [
   { id: 1, name: 'Laptop', price: 999, inStock: true },
   { id: 2, name: 'Headphones', price: 199, inStock: true },
-  { id: 3, name: 'Mouse', price: 49, inStock: true }
+  { id: 3, name: 'Mouse', price: 49, inStock: true },
 ];
 
 // Check if at least one item costs more than $500
@@ -926,3 +945,131 @@ LEARNING POINTS:
    - every(): Form validation like "Have all required fields been filled?"
 */
 
+//=============================================================================
+// FLAT and FLATMAP
+//=============================================================================
+
+/*
+flat()   → Creates a new array with all sub-array elements concatenated into it,
+           up to the specified depth.
+flatMap()→ First maps each element, then flattens the result by ONE level.
+*/
+
+// -----------------------------------------------------------------------------
+// USING flat()
+// -----------------------------------------------------------------------------
+console.log('----------------USING FLAT-----------------');
+
+const nestedArray = [[1, 2], [3, 4], [5, 6], 7, 8];
+console.log('Original nested array:', nestedArray);
+
+// Flatten by 1 level (default)
+console.log('Flattened 1 level:', nestedArray.flat());
+// Output: [1, 2, 3, 4, 5, 6, 7, 8]
+
+// -----------------------------------------------------------------------------
+// Deeply nested array example
+// -----------------------------------------------------------------------------
+const deepNestedArray = [
+  [
+    [1, 2],
+    [
+      [3, 4],
+      [5, 6],
+    ],
+  ],
+  7,
+  8,
+];
+
+// flat(depth) → specify how many levels should be flattened
+console.log('Deep flattened (3 levels):', deepNestedArray.flat(3));
+// Output: [1, 2, 3, 4, 5, 6, 7, 8]
+
+//=============================================================================
+// USING flatMap()
+//=============================================================================
+console.log('----------------USING FLATMAP-----------------');
+
+/*
+flatMap() = map() + flat(1) combined in one call
+- Runs a mapping function on each element
+- Flattens the result by ONE LEVEL (depth is fixed to 1)
+- More performant than doing map().flat()
+*/
+
+const bankDeposits = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000];
+console.log('Bank deposits:', bankDeposits);
+
+// Example: compute 10% interest for each deposit, then flatten (though here it's already flat)
+console.log(
+  'Interest amounts (flatMap):',
+  bankDeposits.flatMap(mov => mov * 0.1),
+);
+// Output: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+
+//=============================================================================
+// REAL-WORLD EXAMPLE 1: Nested transaction arrays
+//=============================================================================
+console.log('----------------REAL-WORLD EXAMPLE 1-----------------');
+
+const accountJonas = { owner: 'Jonas', movements: [200, -100, 340] };
+const accountJessica = { owner: 'Jessica', movements: [5000, -500, -1500, 300] };
+const accountSteven = { owner: 'Steven', movements: [430, 1000, -50] };
+
+// Array of accounts
+const allAccounts = [accountJonas, accountJessica, accountSteven];
+
+// Get all movements from all accounts into a single flat array
+const allMovements = allAccounts.map(acc => acc.movements).flat();
+console.log('All movements (map + flat):', allMovements);
+
+// Same using flatMap (shorter & slightly faster)
+const allMovementsFM = allAccounts.flatMap(acc => acc.movements);
+console.log('All movements (flatMap):', allMovementsFM);
+
+// Calculate total balance from all accounts
+const overallBalance = allAccounts
+  .flatMap(acc => acc.movements)
+  .reduce((sum, mov) => sum + mov, 0);
+
+console.log('Overall balance from all accounts:', overallBalance);
+
+//=============================================================================
+// REAL-WORLD EXAMPLE 2: Breaking paragraphs into words
+//=============================================================================
+console.log('----------------REAL-WORLD EXAMPLE 2-----------------');
+
+const paragraphs = [
+  'JavaScript is awesome',
+  'Flat and FlatMap make life easier',
+  'Coding is fun',
+];
+
+// flatMap to split by spaces → array of all words
+const words = paragraphs.flatMap(sentence => sentence.split(' '));
+console.log('All words from paragraphs:', words);
+
+//=============================================================================
+// LEARNING POINTS:
+//=============================================================================
+/*
+1. flat():
+   - Flattens nested arrays.
+   - Accepts depth argument (default = 1).
+   - Useful for merging 2D/3D data into a single list.
+
+2. flatMap():
+   - Combines map() + flat(1) in one step.
+   - Faster than map().flat() because it avoids creating an intermediate array.
+   - Always flattens by exactly ONE level.
+   - Perfect for extracting & transforming data in one pass.
+
+3. When to use:
+   - flat(): when you ONLY need flattening (choose depth as needed).
+   - flatMap(): when you need to transform AND flatten right after.
+
+4. Real-world banking example:
+   - Extract all movements from multiple accounts using flatMap.
+   - Process and sum all transactions for reporting.
+*/
