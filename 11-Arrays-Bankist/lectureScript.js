@@ -658,3 +658,418 @@ console.log(
 // - Use chaining when you need to transform, filter, and summarize data in a single flow.
 // - Every method returns a new array (except .reduce(), which returns a single value).
 //===============================================================================
+
+//=============================================================================
+// FIND - Returns the FIRST element in the array that matches a given condition
+//=============================================================================
+console.log('----------------USING FIND-----------------');
+
+// The .find() method searches the array element by element.
+// It stops and returns the FIRST value for which the callback returns TRUE.
+// If no element matches, it returns undefined.
+
+const firstWithdrawal = movementsArrayNew.find(mov => mov < 0);
+// In this example: Find the first negative movement from movementsArrayNew
+
+console.log('First withdrawal:', firstWithdrawal); // e.g., -400
+console.log('Original movements array:', movementsArrayNew);
+
+//=============================================================================
+// FIND vs FILTER
+//=============================================================================
+// - .filter() returns ALL elements that match the condition (as an array).
+// - .find() returns ONLY the FIRST match (as a single value).
+// Example:
+console.log('----------------FIND vs FILTER-----------------');
+const allWithdrawals = movementsArrayNew.filter(mov => mov < 0);
+console.log('All withdrawals (filter):', allWithdrawals);
+console.log('First withdrawal (find):', firstWithdrawal);
+
+//=============================================================================
+// REAL-WORLD EXAMPLE: Find a user by username
+//=============================================================================
+console.log(
+  '----------------REAL-WORLD EXAMPLE: Find a user by username-----------------',
+);
+const userAccounts = [
+  { owner: 'Jonas Schmedtmann', username: 'js', pin: 1111 },
+  { owner: 'Jessica Davis', username: 'jd', pin: 2222 },
+  { owner: 'Steven Thomas Williams', username: 'stw', pin: 3333 },
+];
+
+// Suppose we want to find the account object for username 'jd'
+const accountJD = userAccounts.find(acc => acc.username === 'jd');
+
+console.log('Found account JD:', accountJD);
+// Output:
+// {
+//   owner: 'Jessica Davis',
+//   username: 'jd',
+//   pin: 2222
+// }
+
+//=============================================================================
+// KEY LEARNING POINTS:
+//=============================================================================
+// - .find() returns the first match, not an array.
+// - Stops searching as soon as it finds a match, making it efficient.
+// - Useful when you want ONE item (object or primitive) based on a condition.
+// - If nothing matches, it returns undefined.
+//=============================================================================
+
+//=============================================================================
+// FINDINDEX - Returns the INDEX of the first element that matches a condition
+//=============================================================================
+console.log('----------------USING FINDINDEX-----------------');
+
+/*
+The findIndex() method searches an array and returns the index (position)
+of the first element that satisfies the provided testing function (condition).
+If no element matches, it returns -1.
+*/
+
+// Example: Find the index of the first negative movement (withdrawal) in an array
+const movementsArrayNewest = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+const firstWithdrawalIndex = movementsArrayNewest.findIndex(mov => mov < 0);
+console.log('Index of first withdrawal:', firstWithdrawalIndex);
+// Output: e.g., 2 (because -400 is at index 2)
+
+// To prove it, show the element at that index
+console.log(
+  'First withdrawal amount:',
+  movementsArrayNewest[firstWithdrawalIndex],
+);
+
+//==============================================================================
+// Real-world example: Find the position of a user account with a certain username
+//==============================================================================
+console.log(
+  '----------------REAL-WORLD EXAMPLE: Find the position of a user account with a certain username-----------------',
+);
+const userAccountsNew = [
+  { owner: 'Jonas Schmedtmann', username: 'js', pin: 1111 },
+  { owner: 'Jessica Davis', username: 'jd', pin: 2222 },
+  { owner: 'Steven Thomas Williams', username: 'stw', pin: 3333 },
+  { owner: 'Sarah Smith', username: 'ss', pin: 4444 },
+];
+
+// Suppose we want the INDEX of the account with username 'stw'
+const index = userAccountsNew.findIndex(acc => acc.username === 'stw');
+console.log('Index of account with username "stw":', index);
+
+// This index can be used to directly access or modify that account
+if (index !== -1) {
+  console.log('Found account:', userAccountsNew[index]);
+} else {
+  console.log('Account not found!');
+}
+
+/*
+LEARNING POINTS:
+- findIndex() returns the position of the first element satisfying the condition.
+- Returns -1 if no element is found.
+- Useful for updating or deleting elements at a known position in arrays.
+- Different from .find(), which returns the element itself.
+- Works well with complex conditions and arrays of objects.
+*/
+
+//=============================================================================
+// FINDLAST and FINDLASTINDEX
+//=============================================================================
+
+/*
+ findLast()      → Returns the VALUE of the last element that matches a condition.
+ findLastIndex() → Returns the INDEX of the last element that matches a condition.
+
+ These methods work similarly to find() / findIndex(), but start searching from the END
+ of the array moving backwards.
+*/
+
+// ------------------- findLast -------------------
+console.log('----------------FINDLAST-----------------');
+const lastWithdrawal = movementsArrayNew.findLast(mov => mov < 0);
+console.log('Last withdrawal (value):', lastWithdrawal);
+// -130 in this case
+
+// ------------------- findLastIndex -------------------
+console.log('----------------FINDLASTINDEX-----------------');
+const lastWithdrawalIndex = movementsArrayNew.findLastIndex(mov => mov < 0);
+console.log('Last withdrawal index:', lastWithdrawalIndex);
+// 5 in this case (because -130 is at index 5)
+
+// Example output message for user
+console.log(
+  `Your last withdrawal of ${lastWithdrawal}€ happened at index ${lastWithdrawalIndex} in your transaction history.`,
+);
+
+//=============================================================================
+// FINDLAST vs FINDLASTINDEX vs FILTER DEMO
+//=============================================================================
+console.log(
+  '----------------FINDLAST vs FINDLASTINDEX vs FILTER-----------------',
+);
+
+// filter() → returns ALL matching values
+const allWithdrawalsNew = movementsArrayNew.filter(mov => mov < 0);
+console.log('All withdrawals (filter):', allWithdrawalsNew);
+
+// findLast() → returns ONLY the last matching value
+console.log('Last withdrawal (findLast):', lastWithdrawal);
+
+// findLastIndex() → returns ONLY the index of the last matching value
+console.log('Index of last withdrawal (findLastIndex):', lastWithdrawalIndex);
+
+//=============================================================================
+// REAL-WORLD EXAMPLE: Finding the last failed login attempt
+//=============================================================================
+const loginAttempts = [
+  { time: '2025-08-09T10:15:00', success: true },
+  { time: '2025-08-10T14:30:00', success: false },
+  { time: '2025-08-10T15:00:00', success: true },
+  { time: '2025-08-11T09:45:00', success: false }, // Last failed attempt
+];
+
+// findLast: Get the OBJECT of the last failed attempt
+const lastFailedAttempt = loginAttempts.findLast(
+  attempt => attempt.success === false,
+);
+console.log('Last failed attempt:', lastFailedAttempt);
+
+// findLastIndex: Get the position of the last failed attempt
+const lastFailedAttemptIndex = loginAttempts.findLastIndex(
+  attempt => attempt.success === false,
+);
+console.log('Last failed attempt index:', lastFailedAttemptIndex);
+
+// Nice UI message
+if (lastFailedAttempt) {
+  console.log(
+    `Your last failed login was on ${new Date(
+      lastFailedAttempt.time,
+    ).toLocaleString()}`,
+  );
+}
+
+/*
+LEARNING POINTS:
+----------------
+1. .findLast() starts from the END of the array and returns the last matching VALUE.
+2. .findLastIndex() starts from the END and returns the last matching INDEX.
+3. Use findLast when you care about the data itself, findLastIndex when you care where it is.
+4. Both stop searching once they find the last match — more efficient than reversing the array + find().
+5. These are NEWER methods (ES2023), so may need polyfills in older environments.
+*/
+
+//=============================================================================
+// Polyfill example for older browsers:
+//=============================================================================
+if (!Array.prototype.findLast) {
+  Array.prototype.findLast = function (callback, thisArg) {
+    for (let i = this.length - 1; i >= 0; i--) {
+      if (callback.call(thisArg, this[i], i, this)) {
+        return this[i];
+      }
+    }
+    return undefined;
+  };
+}
+
+//=============================================================================
+// SOME vs EVERY
+//=============================================================================
+
+/*
+ some()  → Returns TRUE if at least one element in the array passes the given test.
+ every() → Returns TRUE if ALL elements in the array pass the given test.
+
+ IMPORTANT:
+ - Both stop checking as soon as the result is determined (short-circuiting).
+ - .some() is like "OR" logic — needs just ONE match.
+ - .every() is like "AND" logic — needs ALL matches.
+*/
+
+// ---------------- USAGE OF some() ----------------
+console.log('----------------USING SOME-----------------');
+
+// At least one deposit?
+const anyDeposits = movementsArrayNew.some(mov => mov > 0);
+console.log('Any deposits?', anyDeposits); // true (there are positive numbers)
+
+// Any deposits over 5000?
+const anyDepositsOver5000 = movementsArrayNew.some(mov => mov > 5000);
+console.log('Any deposits over 5000?', anyDepositsOver5000); // false (no such case)
+
+// ---------------- USAGE OF every() ----------------
+console.log('----------------USING EVERY-----------------');
+
+// Are all movements deposits (positive)?
+const allDeposits = movementsArrayNew.every(mov => mov > 0);
+console.log('All deposits?', allDeposits); // false (there are withdrawals)
+
+// Are all movements less than 5000?
+const allMovementsUnder5000 = movementsArrayNew.every(mov => mov < 5000);
+console.log('All movements under 5000?', allMovementsUnder5000); // true
+
+//=============================================================================
+// REAL-WORLD EXAMPLE: E-commerce Cart Validation
+//=============================================================================
+
+const shoppingCart = [
+  { id: 1, name: 'Laptop', price: 999, inStock: true },
+  { id: 2, name: 'Headphones', price: 199, inStock: true },
+  { id: 3, name: 'Mouse', price: 49, inStock: true },
+];
+
+// Check if at least one item costs more than $500
+const hasExpensiveItem = shoppingCart.some(item => item.price > 500);
+console.log('Cart contains expensive item?', hasExpensiveItem); // true
+
+// Check if all items are in stock
+const allItemsInStock = shoppingCart.every(item => item.inStock === true);
+console.log('All items in stock?', allItemsInStock); // true
+
+/*
+LEARNING POINTS:
+----------------
+1. some() → Great when you just need to know if ANY element meets a condition.
+   e.g., "Does the cart have any expensive items?"
+2. every() → Great when all data must meet the condition for it to be valid.
+   e.g., "Are all cart items available in stock?"
+3. Both methods:
+   - Don’t change the original array.
+   - Return a boolean (true/false).
+   - Stop checking early (short-circuit) for performance.
+4. Real-life uses:
+   - some(): Security checks like "Has the password any special characters?"
+   - every(): Form validation like "Have all required fields been filled?"
+*/
+
+//=============================================================================
+// FLAT and FLATMAP
+//=============================================================================
+
+/*
+flat()   → Creates a new array with all sub-array elements concatenated into it,
+           up to the specified depth.
+flatMap()→ First maps each element, then flattens the result by ONE level.
+*/
+
+// -----------------------------------------------------------------------------
+// USING flat()
+// -----------------------------------------------------------------------------
+console.log('----------------USING FLAT-----------------');
+
+const nestedArray = [[1, 2], [3, 4], [5, 6], 7, 8];
+console.log('Original nested array:', nestedArray);
+
+// Flatten by 1 level (default)
+console.log('Flattened 1 level:', nestedArray.flat());
+// Output: [1, 2, 3, 4, 5, 6, 7, 8]
+
+// -----------------------------------------------------------------------------
+// Deeply nested array example
+// -----------------------------------------------------------------------------
+const deepNestedArray = [
+  [
+    [1, 2],
+    [
+      [3, 4],
+      [5, 6],
+    ],
+  ],
+  7,
+  8,
+];
+
+// flat(depth) → specify how many levels should be flattened
+console.log('Deep flattened (3 levels):', deepNestedArray.flat(3));
+// Output: [1, 2, 3, 4, 5, 6, 7, 8]
+
+//=============================================================================
+// USING flatMap()
+//=============================================================================
+console.log('----------------USING FLATMAP-----------------');
+
+/*
+flatMap() = map() + flat(1) combined in one call
+- Runs a mapping function on each element
+- Flattens the result by ONE LEVEL (depth is fixed to 1)
+- More performant than doing map().flat()
+*/
+
+const bankDeposits = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000];
+console.log('Bank deposits:', bankDeposits);
+
+// Example: compute 10% interest for each deposit, then flatten (though here it's already flat)
+console.log(
+  'Interest amounts (flatMap):',
+  bankDeposits.flatMap(mov => mov * 0.1),
+);
+// Output: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+
+//=============================================================================
+// REAL-WORLD EXAMPLE 1: Nested transaction arrays
+//=============================================================================
+console.log('----------------REAL-WORLD EXAMPLE 1-----------------');
+
+const accountJonas = { owner: 'Jonas', movements: [200, -100, 340] };
+const accountJessica = { owner: 'Jessica', movements: [5000, -500, -1500, 300] };
+const accountSteven = { owner: 'Steven', movements: [430, 1000, -50] };
+
+// Array of accounts
+const allAccounts = [accountJonas, accountJessica, accountSteven];
+
+// Get all movements from all accounts into a single flat array
+const allMovements = allAccounts.map(acc => acc.movements).flat();
+console.log('All movements (map + flat):', allMovements);
+
+// Same using flatMap (shorter & slightly faster)
+const allMovementsFM = allAccounts.flatMap(acc => acc.movements);
+console.log('All movements (flatMap):', allMovementsFM);
+
+// Calculate total balance from all accounts
+const overallBalance = allAccounts
+  .flatMap(acc => acc.movements)
+  .reduce((sum, mov) => sum + mov, 0);
+
+console.log('Overall balance from all accounts:', overallBalance);
+
+//=============================================================================
+// REAL-WORLD EXAMPLE 2: Breaking paragraphs into words
+//=============================================================================
+console.log('----------------REAL-WORLD EXAMPLE 2-----------------');
+
+const paragraphs = [
+  'JavaScript is awesome',
+  'Flat and FlatMap make life easier',
+  'Coding is fun',
+];
+
+// flatMap to split by spaces → array of all words
+const words = paragraphs.flatMap(sentence => sentence.split(' '));
+console.log('All words from paragraphs:', words);
+
+//=============================================================================
+// LEARNING POINTS:
+//=============================================================================
+/*
+1. flat():
+   - Flattens nested arrays.
+   - Accepts depth argument (default = 1).
+   - Useful for merging 2D/3D data into a single list.
+
+2. flatMap():
+   - Combines map() + flat(1) in one step.
+   - Faster than map().flat() because it avoids creating an intermediate array.
+   - Always flattens by exactly ONE level.
+   - Perfect for extracting & transforming data in one pass.
+
+3. When to use:
+   - flat(): when you ONLY need flattening (choose depth as needed).
+   - flatMap(): when you need to transform AND flatten right after.
+
+4. Real-world banking example:
+   - Extract all movements from multiple accounts using flatMap.
+   - Process and sum all transactions for reporting.
+*/
