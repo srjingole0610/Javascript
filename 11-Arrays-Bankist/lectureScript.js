@@ -767,3 +767,92 @@ LEARNING POINTS:
 - Works well with complex conditions and arrays of objects.
 */
 
+//=============================================================================
+// FINDLAST and FINDLASTINDEX
+//=============================================================================
+
+/*
+ findLast()      → Returns the VALUE of the last element that matches a condition.
+ findLastIndex() → Returns the INDEX of the last element that matches a condition.
+
+ These methods work similarly to find() / findIndex(), but start searching from the END
+ of the array moving backwards.
+*/
+
+// ------------------- findLast -------------------
+console.log('----------------FINDLAST-----------------')
+const lastWithdrawal = movementsArrayNew.findLast(mov => mov < 0);
+console.log('Last withdrawal (value):', lastWithdrawal); 
+// -130 in this case
+
+// ------------------- findLastIndex -------------------
+console.log('----------------FINDLASTINDEX-----------------')
+const lastWithdrawalIndex = movementsArrayNew.findLastIndex(mov => mov < 0);
+console.log('Last withdrawal index:', lastWithdrawalIndex);
+// 5 in this case (because -130 is at index 5)
+
+// Example output message for user
+console.log(`Your last withdrawal of ${lastWithdrawal}€ happened at index ${lastWithdrawalIndex} in your transaction history.`);
+
+//=============================================================================
+// FINDLAST vs FINDLASTINDEX vs FILTER DEMO
+//=============================================================================
+console.log('----------------FINDLAST vs FINDLASTINDEX vs FILTER-----------------');
+
+// filter() → returns ALL matching values
+const allWithdrawalsNew = movementsArrayNew.filter(mov => mov < 0);
+console.log('All withdrawals (filter):', allWithdrawalsNew);
+
+// findLast() → returns ONLY the last matching value
+console.log('Last withdrawal (findLast):', lastWithdrawal);
+
+// findLastIndex() → returns ONLY the index of the last matching value
+console.log('Index of last withdrawal (findLastIndex):', lastWithdrawalIndex);
+
+//=============================================================================
+// REAL-WORLD EXAMPLE: Finding the last failed login attempt
+//=============================================================================
+const loginAttempts = [
+  { time: '2025-08-09T10:15:00', success: true },
+  { time: '2025-08-10T14:30:00', success: false },
+  { time: '2025-08-10T15:00:00', success: true },
+  { time: '2025-08-11T09:45:00', success: false }, // Last failed attempt
+];
+
+// findLast: Get the OBJECT of the last failed attempt
+const lastFailedAttempt = loginAttempts.findLast(attempt => attempt.success === false);
+console.log('Last failed attempt:', lastFailedAttempt);
+
+// findLastIndex: Get the position of the last failed attempt
+const lastFailedAttemptIndex = loginAttempts.findLastIndex(attempt => attempt.success === false);
+console.log('Last failed attempt index:', lastFailedAttemptIndex);
+
+// Nice UI message
+if (lastFailedAttempt) {
+  console.log(`Your last failed login was on ${new Date(lastFailedAttempt.time).toLocaleString()}`);
+}
+
+/*
+LEARNING POINTS:
+----------------
+1. .findLast() starts from the END of the array and returns the last matching VALUE.
+2. .findLastIndex() starts from the END and returns the last matching INDEX.
+3. Use findLast when you care about the data itself, findLastIndex when you care where it is.
+4. Both stop searching once they find the last match — more efficient than reversing the array + find().
+5. These are NEWER methods (ES2023), so may need polyfills in older environments.
+*/
+
+//=============================================================================
+// Polyfill example for older browsers:
+//=============================================================================
+if (!Array.prototype.findLast) {
+  Array.prototype.findLast = function (callback, thisArg) {
+    for (let i = this.length - 1; i >= 0; i--) {
+      if (callback.call(thisArg, this[i], i, this)) {
+        return this[i];
+      }
+    }
+    return undefined;
+  };
+}
+
