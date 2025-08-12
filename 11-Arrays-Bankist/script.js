@@ -104,9 +104,6 @@ const displayMovements = function (movements) {
   });
 };
 
-// Call the displayMovements function so the UI shows Jonas' transactions as a demo
-displayMovements(account1.movements);
-
 /////////////////////////////////////////////////
 // 4. APPLICATION LOGIC - COMPUTE USERNAME
 /////////////////////////////////////////////////
@@ -145,30 +142,47 @@ console.log(accounts);
 // 5. APPLICATION LOGIC - COMPUTE BALANCE
 /////////////////////////////////////////////////
 
-// This function computes and displays the account balance for the given movements array.
-// "movements" is an array of numbers (positive for deposits, negative for withdrawals).
-const calcDisplayBalance = function (movements) {
-  // 1. Use .reduce() to sum up all amounts in the movements array.
-  //    - acc: accumulator for the sum (starts at 0)
-  //    - cur: the current transaction (movement) value as we loop through
-  const balance = movements.reduce((acc, cur) => acc + cur, 0);
+/*
+ This function:
+ --------------
+ - Calculates the current account balance from all its movements (transactions).
+ - Stores this balance inside the account object for later use.
+ - Updates the UI so the user can see their latest balance in euros.
+*/
 
-  // 2. Update the UI: set the text content of the balance label to show the balance and €
-  //    - labelBalance is a reference to the HTML element where the balance appears
+const calcDisplayBalance = function (account) {
+  // 1️⃣ Calculate total balance using .reduce()
+  //    - account.movements is an array with positive (deposits) and negative (withdrawals) numbers.
+  //    - acc (accumulator) starts at 0.
+  //    - cur is the current movement value in the loop.
+  //    - On completion, "balance" will be the sum of all deposits and withdrawals.
+  const balance = account.movements.reduce((acc, cur) => acc + cur, 0);
+
+  // 2️⃣ Store the calculated balance back into the account object
+  //    This makes it possible to reuse the same balance value later
+  //    without recalculating (e.g., for transfers, loan checks).
+  account.balance = balance;
+
+  // 3️⃣ Update the UI so the balance is visible to the logged-in user
+  //    - labelBalance is the HTML element where the balance is displayed.
+  //    - Template literal adds the "€" euro symbol immediately after the amount.
   labelBalance.textContent = `${balance}€`;
 
-  // 3. Return the balance (optional, in case you want to use it elsewhere)
+  // 4️⃣ Return the balance if needed for other parts of the program
   return balance;
 };
 
-// Example usage: Compute and display the balance for account1
-calcDisplayBalance(account1.movements);
-
 /*
-LEARNING POINTS:
-- .reduce() efficiently calculates the sum of all movements (deposits & withdrawals).
-- The balance is then updated in the DOM so the user sees their total account funds.
-- This pattern (calculate ➔ display) is common in UI web applications.
+ LEARNING POINTS:
+ ----------------
+ - The .reduce() method is perfect for converting an array full of numbers
+   into a single summary value (like sum, average, max, etc.).
+ - Here we sum all deposits (positive) and withdrawals (negative) to get the net balance.
+ - Storing the result inside "account.balance" allows other functions to access it
+   without recalculating.
+ - Updating the DOM (`labelBalance.textContent = ...`) links the logic to the UI 
+   so the customer instantly sees the updated value after any transaction.
+ - This "calculate ➜ store ➜ display" pattern is VERY common in web apps with dynamic data.
 */
 
 /////////////////////////////////////////////////
@@ -176,46 +190,302 @@ LEARNING POINTS:
 /////////////////////////////////////////////////
 
 /*
-This function computes and displays three account statistics:
-1. Total income (sum of deposits)
-2. Total outgoings (sum of withdrawals)
-3. Total interest earned on deposits (only if interest per deposit is at least €1)
-It updates the UI in the respective .summary__value--* elements.
+This function computes and displays three key bank account statistics:
+  1. Total deposits (income)
+  2. Total withdrawals (outgoings)
+  3. Total interest earned on deposits (with realistic rule: ≥ €1 per deposit)
+
+It takes one account object (with `movements` and `interestRate`) 
+and updates the summary section of the UI.
 */
-const calcDisplaySummary = function (movements) {
-  // 1. Calculate total INCOMINGS (sum of all positive values = deposits)
-  const incomes = movements
-    .filter(mov => mov > 0)        // Filter to keep only deposits
-    .reduce((acc, mov) => acc + mov, 0); // Sum all deposits
+const calcDisplaySummary = function (account) {
+  // ===================================================
+  // 1. Calculate TOTAL INCOME
+  // ===================================================
+  const incomes = account.movements
+    .filter(mov => mov > 0) // Keep only positive values → deposits
+    .reduce((acc, mov) => acc + mov, 0); // Sum all deposits into a single number
 
-  // 2. Calculate total OUTGOINGS (sum of all negative values = withdrawals)
-  const outgoings = movements
-    .filter(mov => mov < 0)        // Keep only withdrawals
-    .reduce((acc, mov) => acc + mov, 0); // Sum all withdrawals (will be negative)
+  // ===================================================
+  // 2. Calculate TOTAL OUTGOINGS
+  // ===================================================
+  const outgoings = account.movements
+    .filter(mov => mov < 0) // Keep only negative values → withdrawals
+    .reduce((acc, mov) => acc + mov, 0); // Sum all withdrawals (result will be negative)
 
-  // 3. Calculate total INTEREST (bank pays 1.2% on every deposit; only count if >= €1)
-  const interest = movements
-    .filter(mov => mov > 0)                // Work with only deposits
-    .map(deposit => deposit * 0.012)       // Compute interest for each deposit (e.g., 1.2%)
-    .filter(int => int >= 1)               // Only keep if computed interest is at least €1
-    .reduce((acc, mov) => acc + mov, 0);   // Sum all qualifying interests
+  // ===================================================
+  // 3. Calculate TOTAL INTEREST
+  // ===================================================
+  const interest = account.movements
+    .filter(mov => mov > 0) // Work with deposits only
+    .map(deposit => (deposit * account.interestRate) / 100) // Interest per deposit
+    .filter(int => int >= 1) // Bank only credits ≥ €1
+    .reduce((acc, int) => acc + int, 0); // Sum all qualifying interests
 
-  // 4. Update the UI labels for summary
-  labelSumIn.textContent = `${incomes}€`;               // Show total deposits
-  labelSumOut.textContent = `${Math.abs(outgoings)}€`;  // Show withdrawals as positive value
-  labelSumInterest.textContent = `${interest}€`;        // Show interest
+  // ===================================================
+  // 4. Update the UI labels
+  // ===================================================
+  // Use `toFixed(2)` for cleaner currency display (2 decimal places)
+  labelSumIn.textContent = `${incomes.toFixed(2)}€`;
+  labelSumOut.textContent = `${Math.abs(outgoings).toFixed(2)}€`;
+  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
 };
-
-// Run the summary calculation for account1 to see results in the UI
-calcDisplaySummary(account1.movements);
 
 /*
 LEARNING POINTS:
-- You can chain .filter(), .map(), and .reduce() for concise, powerful data calculations.
-- .filter() extracts the relevant transactions (deposits or withdrawals).
-- .map() transforms data (calculating interest per deposit).
-- Only interests ≥ €1 are counted for realism.
-- Results are written directly to the DOM (document) for live user feedback.
-- Structure like this keeps your logic organized and readable.
+- `filter()` → selects only the transactions matching the condition (deposits or withdrawals).
+- `map()` → transforms each item (here: calculate interest per deposit).
+- `reduce()` → accumulates all values to a single result (sum of deposits/withdrawals/interest).
+- Chaining these methods allows clean "data → transformation → result" flow without extra variables.
+- `Math.abs()` ensures withdrawals show as positive numbers when displayed.
+- Rounding with `toFixed(2)` makes it display nicely as currency values.
 */
+
+//////////////////////////////////////////////////////
+// 7. APPLICATION LOGIC - UI UPDATES
+//////////////////////////////////////////////////////
+
+/*
+ The purpose of this function:
+ --------------------------------
+ - To centralize all the logic needed to refresh the "dashboard" 
+   for the currently logged-in account.
+ - This prevents repetitive code — instead of calling 
+   displayMovements(), calcDisplayBalance(), and calcDisplaySummary() 
+   separately every time something changes, we just call updateUI(account).
+*/
+
+const updateUI = function (account) {
+  // 1️⃣ Display account movements (transactions)
+  //    Shows each deposit or withdrawal in the transaction history list.
+  //    We pass the account.movements array to the function that renders them in the UI.
+  displayMovements(account.movements);
+
+  // 2️⃣ Display account balance
+  //    Calculates the total balance from the movements
+  //    and updates the balance label in the UI.
+  //    Passing the whole account allows calcDisplayBalance to also store balance if needed.
+  calcDisplayBalance(account);
+
+  // 3️⃣ Display account summary (total deposits, withdrawals, and interest)
+  //    Summarizes account activity and shows stats in the UI.
+  calcDisplaySummary(account);
+};
+
+/*
+LEARNING POINTS:
+----------------
+- "UI update" patterns like this are common in interactive web apps.
+- This function acts as a SINGLE place to update all parts of the user interface related to the account.
+- Benefits:
+    ✅ Avoids repeated code and makes the app DRY (Don't Repeat Yourself).
+    ✅ Makes it easier to maintain — if we change how the UI is updated, we only do it here.
+    ✅ Improves code readability.
+- It's called whenever the account's data changes:
+    → After login
+    → After money transfer
+    → After loan approval
+    → After closing an account
+*/
+
+//////////////////////////////////////////////////////
+// 8. APPLICATION LOGIC - Implementing User Login (with error handling)
+//////////////////////////////////////////////////////
+
+let currentAccount;
+
+// Add a click event listener to the login button
+btnLogin.addEventListener('click', function (e) {
+  console.log('Login button clicked');
+  e.preventDefault(); // Prevent form reload
+
+  // 1️⃣ Find matching account by entered username
+  currentAccount = accounts.find(
+    acc => acc.username === inputLoginUsername.value,
+  );
+  console.log('Matched account:', currentAccount);
+
+  // 2️⃣ Check both account existence and PIN match
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    // ✅ SUCCESSFUL LOGIN
+
+    // Show welcome message
+    labelWelcome.textContent = `Welcome back, ${
+      currentAccount.owner.split(' ')[0]
+    }!`;
+
+    // Show the app screen
+    containerApp.style.opacity = 1;
+
+    updateUI(currentAccount);
+  } else {
+    // ❌ LOGIN FAILED — username not found or PIN incorrect
+
+    // Show error in console
+    console.error('Login failed: Invalid username or PIN');
+
+    // Option 1: Simple alert (works everywhere)
+    alert('Incorrect username or PIN. Please try again.');
+
+    // Option 2 (Better UX): Show inline error in welcome label
+    labelWelcome.textContent = 'Login failed! Please check credentials.';
+    containerApp.style.opacity = 0; // Keep app hidden
+  }
+
+  // 3️⃣ Clear input fields in both cases for security
+  inputLoginUsername.value = inputLoginPin.value = '';
+  inputLoginUsername.blur();
+  inputLoginPin.blur();
+});
+
+///////////////////////////////////////////////////////////////
+// 9. APPLICATION LOGIC - Implementing Transfer Functionality
+///////////////////////////////////////////////////////////////
+
+/*
+   This event listener handles transferring money from the currently logged‑in account
+   (currentAccount) to another user account.
+
+   STEPS:
+   1. Get the transfer details (amount & recipient username) from the form inputs.
+   2. Find the receiver account in the accounts array.
+   3. Validate:
+        - Amount is positive.
+        - Recipient exists.
+        - Sender has enough balance.
+        - Sender is not transferring to themselves.
+   4. If valid:
+        - Deduct amount from sender's movements (negative value).
+        - Add amount to receiver's movements (positive value).
+        - Update the UI so both sender's history and balance are refreshed.
+*/
+
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault(); //  Prevent form submission & page reload
+  console.log('Transfer button clicked');
+
+  // 1️⃣ Get amount & recipient username from inputs
+  const amount = Number(inputTransferAmount.value);
+  const receiverAcc = accounts.find(
+    acc => acc.username === inputTransferTo.value,
+  );
+  console.log(amount, receiverAcc);
+
+  // 2️⃣ Clear the form fields after reading the values
+  inputTransferAmount.value = inputTransferTo.value = '';
+
+  // 3️⃣ Validate transfer conditions
+  if (
+    amount > 0 && // Amount must be positive
+    receiverAcc && // Receiver must exist
+    currentAccount.balance >= amount && // Sender must have enough money
+    receiverAcc?.username !== currentAccount.username // Can't transfer to yourself
+  ) {
+    // ✅ Successful transfer:
+
+    // Record the outgoing transfer in sender's movements as a negative value
+    currentAccount.movements.push(-amount);
+
+    // Record the incoming transfer in receiver's movements as a positive value
+    receiverAcc.movements.push(amount);
+
+    // Update the sender's UI: movements list, balance, and summary
+    updateUI(currentAccount);
+
+    console.log(`Transfer of ${amount}€ to ${receiverAcc.username} completed.`);
+  } else {
+    // ❌ Transfer failed — could be due to invalid amount, no recipient, low balance, or self-transfer
+    console.warn('Transfer failed: Check amount, balance, or receiver.');
+    // You could show a UI error message here in a real app
+  }
+});
+
+///////////////////////////////////////////////////////////////
+// 10. APPLICATION LOGIC - Close Account + Log Closure Event
+///////////////////////////////////////////////////////////////
+
+// We'll keep a separate log of account closures
+const closureLog = []; // Each entry will have { username, date }
+
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+  console.log('Close button clicked');
+
+  if (
+    inputCloseUsername.value === currentAccount.username &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    // ✅ Credentials match — proceed with account closure
+
+    // Find the index of the current account
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username,
+    );
+
+    // 1️⃣ Create a closure event log entry
+    const closureEntry = {
+      username: currentAccount.username,
+      owner: currentAccount.owner,
+      date: new Date().toISOString(), // store in ISO standard format
+    };
+    closureLog.push(closureEntry);
+
+    // 2️⃣ Remove the account from the accounts array
+    accounts.splice(index, 1);
+
+    // 3️⃣ Hide the UI (logout effect)
+    containerApp.style.opacity = 0;
+
+    // 4️⃣ Clear the input fields
+    inputCloseUsername.value = inputClosePin.value = '';
+
+    console.log('Account closed successfully.');
+    console.log('Closure log updated:', closureLog);
+
+    // 5️⃣ Confirm to user
+    alert(
+      `Account closed successfully on ${new Date(
+        closureEntry.date,
+      ).toLocaleString()}`,
+    );
+  } else {
+    // ❌ Closure failed
+    console.warn('Close account failed: Invalid username or PIN.');
+    alert('Close account failed: Invalid username or PIN.');
+  }
+});
+
+///////////////////////////////////////////////////////////////
+// 11. APPLICATION LOGIC - Implement Loan Functionality (with delay & date)
+///////////////////////////////////////////////////////////////
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault(); // Prevent form submit/reload
+  console.log('Loan button clicked');
+
+  const loanAmount = Math.floor(Number(inputLoanAmount.value)); // floor to simulate whole € loans
+
+  // Check eligibility (amount > 0 and at least one deposit >= 10% of the loan)
+  if (
+    loanAmount > 0 &&
+    currentAccount.movements.some(mov => mov >= loanAmount * 0.1)
+  ) {
+    // Simulate loan processing delay (3 seconds)
+    console.log('Processing loan request...');
+    setTimeout(function () {
+      // 1️⃣ Add loan amount as a deposit
+      currentAccount.movements.push(loanAmount);
+
+      // 3️⃣ Update the UI
+      updateUI(currentAccount);
+
+      console.log(`Loan of €${loanAmount} granted on ${new Date().toLocaleString()}`);
+    }, 3000); // 3 seconds delay
+  } else {
+    console.warn('Loan request failed: Check amount or movements.');
+    alert('Loan request failed: Check amount or movements.');
+  }
+
+  // Clear the loan input immediately after request
+  inputLoanAmount.value = '';
+});
 
