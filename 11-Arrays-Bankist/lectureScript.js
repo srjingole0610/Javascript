@@ -1167,3 +1167,97 @@ console.log('Products sorted by price (High → Low):', productsDesc);
    - Sort product lists by price
    - Sort customers alphabetically
 */
+
+
+//=============================================================================
+// ARRAY GROUPING with Object.groupBy (ES2023 feature)
+//=============================================================================
+
+console.log('----------------ARRAY GROUPING-----------------');
+
+/*
+ Object.groupBy(iterable, callbackFn):
+ -------------------------------------
+ - Takes an array (iterable) and a grouping function (callback).
+ - Returns an object where:
+     → Keys = group names (as returned by callback function).
+     → Values = arrays of elements that belong to those groups.
+*/
+
+// Example: Bank movements
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+// Group movements into 'deposit' (positive) and 'withdrawal' (negative)
+const groupedMovements = Object.groupBy(movements, mov => mov > 0 ? 'deposit' : 'withdrawal');
+
+console.log('Grouped movements:', groupedMovements);
+
+// Output:
+// {
+//   deposit: [200, 450, 3000, 70, 1300],
+//   withdrawal: [-400, -650, -130]
+// }
+
+//=============================================================================
+// REAL-WORLD EXAMPLE: Group products by category
+//=============================================================================
+console.log('----------------REAL-WORLD EXAMPLE-----------------');
+
+const shopItems = [
+  { name: 'Apple', category: 'fruits', price: 1.5 },
+  { name: 'Carrot', category: 'vegetables', price: 0.9 },
+  { name: 'Banana', category: 'fruits', price: 1.2 },
+  { name: 'Broccoli', category: 'vegetables', price: 2.1 },
+  { name: 'Steak', category: 'meat', price: 12 },
+  { name: 'Chicken', category: 'meat', price: 7.5 }
+];
+
+// Group items by category
+const groupedByCategory = Object.groupBy(shopItems, item => item.category);
+
+console.log('Grouped shop items:', groupedByCategory);
+
+// Output looks like:
+// {
+//   fruits: [
+//     { name: 'Apple', category: 'fruits', price: 1.5 },
+//     { name: 'Banana', category: 'fruits', price: 1.2 }
+//   ],
+//   vegetables: [
+//     { name: 'Carrot', category: 'vegetables', price: 0.9 },
+//     { name: 'Broccoli', category: 'vegetables', price: 2.1 }
+//   ],
+//   meat: [
+//     { name: 'Steak', category: 'meat', price: 12 },
+//     { name: 'Chicken', category: 'meat', price: 7.5 }
+//   ]
+// }
+
+//=============================================================================
+// REAL-WORLD EXAMPLE 2: Group transactions by type (large vs small)
+//=============================================================================
+const groupedBySize = Object.groupBy(movements, mov => Math.abs(mov) > 1000 ? 'large' : 'small');
+console.log('Grouped by size:', groupedBySize);
+
+// Example output:
+// {
+//   small: [200, 450, -400, -650, -130, 70],
+//   large: [3000, 1300]
+// }
+
+//=============================================================================
+// LEARNING POINTS
+//=============================================================================
+/*
+1. Object.groupBy() replaces common "manual grouping" loops with a concise API.
+2. Groups are created based on a callback function condition.
+   - Return 'deposit' → goes into deposit group
+   - Return 'withdrawal' → goes into withdrawal group
+3. Groups are stored in plain objects with properties as group keys.
+4. Very useful in real-world projects for:
+   - Banking apps → group deposits vs withdrawals, or large vs small transactions
+   - E-commerce → group products by categories
+   - Analytics → group users by subscription level or region
+*/
+
+
