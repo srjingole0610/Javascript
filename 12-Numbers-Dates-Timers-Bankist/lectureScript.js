@@ -270,3 +270,73 @@ LEARNING POINTS:
 - Used to evenly distribute entities across fixed "buckets" or groups.
 - Common in scheduling, load balancing, game turns, or rotating features.
 */
+
+///////////////////////////////////////////////////////////////////////
+// NUMERIC SEPARATORS (_)
+///////////////////////////////////////////////////////////////////////
+
+/*
+- Numeric separators underscore (_) were introduced to make large or complex numbers easier to read.
+- You can place underscores inside numeric literals to group digits visually.
+- These separators do NOT affect the numeric value itself.
+- Examples include grouping thousands, currency amounts, or parts of floating-point numbers.
+*/
+
+// Large number representing diameter of the solar system in kilometers
+const diameterSolarSystem = 245_800_000_000;
+console.log(diameterSolarSystem); // 245800000000
+
+// Price without decimal, using separator for readability
+const price = 345_99; // This is actually 34599 (pay attention!)
+console.log(price); // 34599
+
+// Price in cents (multiply by 100)
+const priceInCents = 345_99 * 100;
+console.log(priceInCents); // 3459900
+
+// Two ways to write 1500 using numeric separators
+const transferFee1 = 15_00;
+const transferFee2 = 1_500;
+
+console.log(transferFee1, transferFee2); // 1500 1500
+
+// Numeric separator can also be used in floating point numbers
+const PI = 3.14_159;
+console.log(PI); // 3.14159
+
+// Parsing strings with underscores does NOT work - underscore is not valid in string numbers
+console.log(Number.parseFloat('3.14_159')); // 3.14 (stops parsing at underscore)
+console.log(Number('23000'));                // 23000
+console.log(Number('23_000'));               // NaN - invalid number format in string
+
+///////////////////////////////////////////////////////////////////////
+// REAL-WORLD EXAMPLE: Bank Account Balance Constants
+///////////////////////////////////////////////////////////////////////
+
+/*
+Imagine you are defining constants for min/max allowed balances and transfer limits.
+Using numeric separators makes these large numbers readable and understandable at a glance.
+*/
+
+const MIN_BALANCE = 500_00;        // minimum balance (cents)
+const MAX_BALANCE = 1_000_000_00;  // maximum balance (in cents)
+const MAX_TRANSFER = 25_000_00;    // max transfer amount (in cents)
+
+console.log(`Min balance is €${MIN_BALANCE / 100}`);
+console.log(`Max balance is €${MAX_BALANCE / 100}`);
+console.log(`Max transfer is €${MAX_TRANSFER / 100}`);
+
+/*
+LEARNING POINTS:
+- Numeric separators are visual aids only; they don't change values.
+- You cannot use numeric separators inside strings representing numbers.
+- Useful when working with large numbers (money, distances, counts) for better readability.
+- Supported in modern browsers and Node.js versions.
+
+💡 Extra tip:
+Avoid placing underscores:
+
+At the start or end of a number literal.
+Next to decimal points.
+In strings representing numbers.
+*/
