@@ -1014,7 +1014,10 @@ console.log(
 console.log('----------------REAL-WORLD EXAMPLE 1-----------------');
 
 const accountJonas = { owner: 'Jonas', movements: [200, -100, 340] };
-const accountJessica = { owner: 'Jessica', movements: [5000, -500, -1500, 300] };
+const accountJessica = {
+  owner: 'Jessica',
+  movements: [5000, -500, -1500, 300],
+};
 const accountSteven = { owner: 'Steven', movements: [430, 1000, -50] };
 
 // Array of accounts
@@ -1097,17 +1100,20 @@ console.log('Sorted array (default):', owners1.sort());
 console.log('Original movements:', movementsArrayNew);
 
 // Default .sort() treats numbers as strings → not reliable for numeric sorting
-console.log('Default sort (wrong for numbers):', movementsArrayNew.slice().sort());
+console.log(
+  'Default sort (wrong for numbers):',
+  movementsArrayNew.slice().sort(),
+);
 // Fix: Provide a compare function (a, b)
 // ASCENDING (Lowest → Highest)
 console.log(
   'Sorted ascending:',
-  movementsArrayNew.slice().sort((a, b) => a - b)
+  movementsArrayNew.slice().sort((a, b) => a - b),
 );
 // DESCENDING (Highest → Lowest)
 console.log(
   'Sorted descending:',
-  movementsArrayNew.slice().sort((a, b) => b - a)
+  movementsArrayNew.slice().sort((a, b) => b - a),
 );
 
 /*
@@ -1123,7 +1129,9 @@ Compare Function Explained:
 //=============================================================================
 // REAL-WORLD EXAMPLE 1: Sorting transactions
 //=============================================================================
-console.log('----------------REAL-WORLD EXAMPLE 1: Transactions-----------------');
+console.log(
+  '----------------REAL-WORLD EXAMPLE 1: Transactions-----------------',
+);
 
 const accountMovements = [200, -100, 500, 1200, -50, 3000];
 
@@ -1168,7 +1176,6 @@ console.log('Products sorted by price (High → Low):', productsDesc);
    - Sort customers alphabetically
 */
 
-
 //=============================================================================
 // ARRAY GROUPING with Object.groupBy (ES2023 feature)
 //=============================================================================
@@ -1188,7 +1195,9 @@ console.log('----------------ARRAY GROUPING-----------------');
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 // Group movements into 'deposit' (positive) and 'withdrawal' (negative)
-const groupedMovements = Object.groupBy(movements, mov => mov > 0 ? 'deposit' : 'withdrawal');
+const groupedMovements = Object.groupBy(movements, mov =>
+  mov > 0 ? 'deposit' : 'withdrawal',
+);
 
 console.log('Grouped movements:', groupedMovements);
 
@@ -1209,7 +1218,7 @@ const shopItems = [
   { name: 'Banana', category: 'fruits', price: 1.2 },
   { name: 'Broccoli', category: 'vegetables', price: 2.1 },
   { name: 'Steak', category: 'meat', price: 12 },
-  { name: 'Chicken', category: 'meat', price: 7.5 }
+  { name: 'Chicken', category: 'meat', price: 7.5 },
 ];
 
 // Group items by category
@@ -1236,7 +1245,9 @@ console.log('Grouped shop items:', groupedByCategory);
 //=============================================================================
 // REAL-WORLD EXAMPLE 2: Group transactions by type (large vs small)
 //=============================================================================
-const groupedBySize = Object.groupBy(movements, mov => Math.abs(mov) > 1000 ? 'large' : 'small');
+const groupedBySize = Object.groupBy(movements, mov =>
+  Math.abs(mov) > 1000 ? 'large' : 'small',
+);
 console.log('Grouped by size:', groupedBySize);
 
 // Example output:
@@ -1260,7 +1271,6 @@ console.log('Grouped by size:', groupedBySize);
    - Analytics → group users by subscription level or region
 */
 
-
 //=============================================================================
 // NEW WAYS TO CREATE AND FILL ARRAYS
 //=============================================================================
@@ -1279,7 +1289,7 @@ console.log('New array:', newArray); // Outputs: [ <7 empty items> ]
    - 'start' is inclusive index, defaults to 0.
    - 'end' is exclusive index, defaults to array length.
 */
-newArray.fill(1, 3);    // Fills with '1' from index 3 to end
+newArray.fill(1, 3); // Fills with '1' from index 3 to end
 console.log('Filled array:', newArray); // Outputs: [ <3 empty items>, 1, 1, 1, 1 ]
 newArray.fill(2, 4, 6); // Fills with '2' from index 4 up to (but not including) 6
 console.log('Filled array:', newArray); // Outputs: [ <3 empty items>, 1, 2, 2, 1 ]
@@ -1338,3 +1348,80 @@ console.log('Page numbers for pagination:', pages);
      * Generate arrays with computed elements via the second argument (mapFn).
 - Using Array.from() with mapFn is great to generate number ranges, repeated strings, or structured data in one line.
 */
+
+//=============================================================================
+// NON-DESTRUCTIVE ARRAY METHODS
+//-----------------------------------------------------------------------------
+
+/*
+JavaScript traditionally had many array methods that mutate (modify) the original array,
+such as sort(), reverse(), and splice(). These new ES2023 methods provide immutable
+(non-destructive) alternatives that return a new array without changing the original.
+*/
+
+// Sample array with movements (deposits and withdrawals)
+const movementsArrayNew1 = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+//------------------------------------------------
+// 1. toReversed()
+// Returns a new array with elements in reversed order, original array stays intact.
+const reversedMovements = movementsArrayNew1.toReversed();
+console.log('Reversed array:', reversedMovements);
+console.log('Original array (unchanged):', movementsArrayNew1);
+
+//------------------------------------------------
+// 2. toSorted()
+// Returns a new sorted array in ascending order, original array remains unchanged.
+const sortedMovements = movementsArrayNew1.toSorted();
+console.log('Sorted array:', sortedMovements);
+console.log('Original array (unchanged):', movementsArrayNew1);
+
+//------------------------------------------------
+// 3. toSpliced(start, deleteCount)
+// Returns a new array with elements removed (splice operation), original stays unchanged.
+const splicedMovements = movementsArrayNew1.toSpliced(2, 4); // removes 4 elems from index 2
+console.log('Spliced array:', splicedMovements);
+console.log('Original array (unchanged):', movementsArrayNew1);
+
+//------------------------------------------------
+// 4. with(index, value)
+// Returns a new array with the element at the specified index replaced by value.
+const newMovements = movementsArrayNew1.with(1, 1200); // replace element at index 1 with 1200
+console.log('Modified array with .with():', newMovements);
+console.log('Original array (unchanged):', movementsArrayNew1);
+
+//=============================================================================
+// REAL-TIME EXAMPLE: Handling Bank Transaction History without Mutation
+//-----------------------------------------------------------------------------
+
+/*
+Imagine you are implementing "undo" functionality in a banking app. When a user reverses 
+a transaction you want to create a new transaction list reflecting that change but keep 
+the old list intact in case of multiple undos/redos. Non-destructive methods make this elegant.
+*/
+
+// Original transaction history
+let transactionHistory = [100, 200, -50, 400];
+
+// User wants to reverse the last transaction
+let newTransactionHistory = transactionHistory.toSpliced(transactionHistory.length - 1, 1);
+
+console.log('Original transaction history:', transactionHistory);
+console.log('After undo last transaction:', newTransactionHistory);
+
+// User wants to update a past transaction (e.g., correct amount)
+newTransactionHistory = newTransactionHistory.with(1, 250); // change second transaction from 200 to 250
+
+console.log('After correcting second transaction:', newTransactionHistory);
+
+// User views transaction history in normal and reversed order
+console.log('Transaction history (reversed for display):', newTransactionHistory.toReversed());
+
+/*
+LEARNING POINTS:
+- These new methods help keep your data immutable, which is great for debugging and functional programming.
+- .toReversed(), .toSorted(), .toSpliced(), and .with() return a new array leaving originals untouched.
+- Use them whenever you want to avoid side-effects and accidental data corruption.
+- Useful for features like undo/redo, history tracking, or working with snapshots of data.
+*/
+
