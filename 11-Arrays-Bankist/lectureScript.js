@@ -1073,3 +1073,99 @@ console.log('All words from paragraphs:', words);
    - Extract all movements from multiple accounts using flatMap.
    - Process and sum all transactions for reporting.
 */
+
+//=============================================================================
+// USING SORTING
+//=============================================================================
+
+console.log('----------------USING SORTING-----------------');
+
+// Sorting with Strings
+const owners1 = ['Jonas', 'Zach', 'Adam', 'Martha'];
+console.log('Original array:', owners1);
+
+// Default .sort() → sorts elements lexicographically (as strings, by Unicode code points)
+console.log('Sorted array (default):', owners1.sort());
+// ✅ Output: [ "Adam", "Jonas", "Martha", "Zach" ]
+
+// ⚠️ Warning: .sort() MUTATES the original array!
+// owners1 is now permanently reordered
+
+// -----------------------------------------------------------------------------
+// Sorting Numbers
+// -----------------------------------------------------------------------------
+console.log('Original movements:', movementsArrayNew);
+
+// Default .sort() treats numbers as strings → not reliable for numeric sorting
+console.log('Default sort (wrong for numbers):', movementsArrayNew.sort());
+
+// Fix: Provide a compare function (a, b)
+// ASCENDING (Lowest → Highest)
+console.log(
+  'Sorted ascending:',
+  movementsArrayNew.sort((a, b) => a - b)
+);
+
+// DESCENDING (Highest → Lowest)
+console.log(
+  'Sorted descending:',
+  movementsArrayNew.sort((a, b) => b - a)
+);
+
+/*
+Compare Function Explained:
+- (a, b) => a - b
+   -> If result < 0, a comes before b
+   -> If result > 0, b comes before a
+   -> If result === 0, order unchanged
+
+- (a, b) => b - a (reverses the order for descending sort)
+*/
+
+//=============================================================================
+// REAL-WORLD EXAMPLE 1: Sorting transactions
+//=============================================================================
+console.log('----------------REAL-WORLD EXAMPLE 1: Transactions-----------------');
+
+const accountMovements = [200, -100, 500, 1200, -50, 3000];
+
+// Sort from highest to lowest (to show top transactions first)
+const sortedTransactions = accountMovements.slice().sort((a, b) => b - a);
+console.log('Transactions sorted high → low:', sortedTransactions);
+
+// Slice() used to copy first → so original array is not mutated
+
+//=============================================================================
+// REAL-WORLD EXAMPLE 2: Sorting products by price
+//=============================================================================
+console.log('----------------REAL-WORLD EXAMPLE 2: Products-----------------');
+
+const products = [
+  { name: 'Laptop', price: 1200 },
+  { name: 'Headphones', price: 200 },
+  { name: 'Phone', price: 800 },
+  { name: 'Monitor', price: 300 },
+];
+
+// Sort ascending by price
+const productsAsc = products.slice().sort((a, b) => a.price - b.price);
+console.log('Products sorted by price (Low → High):', productsAsc);
+
+// Sort descending by price
+const productsDesc = products.slice().sort((a, b) => b.price - a.price);
+console.log('Products sorted by price (High → Low):', productsDesc);
+
+//=============================================================================
+// KEY LEARNING POINTS
+//=============================================================================
+/*
+1. .sort() by default sorts values as strings (lexicographically).
+   → "200" comes before "50" because "2" < "5" (string comparison).
+2. For numbers, always use a compare callback:  (a, b) => a - b
+3. Remember: .sort() MUTATES the original array. 
+   → Use .slice().sort() if you want a sorted copy while keeping the original intact.
+4. Real-world use:
+   - Sort transactions (highest deposits or withdrawals first)
+   - Sort product lists by price
+   - Sort customers alphabetically
+*/

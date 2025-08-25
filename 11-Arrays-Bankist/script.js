@@ -79,30 +79,51 @@ const inputClosePin = document.querySelector('.form__input--pin');
 // 3. APPLICATION LOGIC - DISPLAY MOVEMENTS
 /////////////////////////////////////////////////
 
-// This function takes an array of "movements" (transactions) and
-// displays each one as a row in the .movements container.
-// "movements" is an array of amounts: positive for deposits, negative for withdrawals.
-const displayMovements = function (movements) {
-  // 1. Clear any previous movement rows in the container
+/*
+ This function updates the "transactions list" in the Bankist app UI.
+
+ PARAMETERS:
+ - movements: array of numbers (each number = deposit or withdrawal)
+ - sort (default = false): 
+      → If true → transactions are sorted in ascending order
+      → If false → transactions are shown in their original order
+
+ HOW IT WORKS:
+ 1. Clear old transactions from the UI.
+ 2. Optionally sort the movements array.
+ 3. Loop through the list and build an HTML "row" for each.
+ 4. Insert each row into the DOM inside the `.movements` container.
+*/
+
+const displayMovements = function (movements, sort = false) {
+  // 1️⃣ Clear the container first (this ensures transactions don’t duplicate)
   containerMovements.innerHTML = '';
 
-  // 2. Loop through each movement (transaction)
-  movements.forEach(function (mov, i) {
-    // Determine if movement is a 'deposit' or 'withdrawal'
+  // 2️⃣ If "sort" is true, create a SORTED COPY of the movements
+  //     - .slice() → creates a shallow copy so we don’t mutate original array
+  //     - .sort((a, b) => a - b) → sorts numerically in ascending order
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  // 3️⃣ Loop through each movement and generate a row of HTML for it
+  movs.forEach(function (mov, i) {
+    // Decide the type of movement (deposit if > 0, withdrawal if < 0)
     const movementType = mov > 0 ? 'deposit' : 'withdrawal';
 
-    // 3. Build the HTML for one row using a template string
-    const htmlTemplate = `<div class="movements__row">
+    // Build one row of HTML (template literal makes it dynamic & expressive)
+    const htmlTemplate = `
+      <div class="movements__row">
         <div class="movements__type movements__type--${movementType}">
           ${i + 1} ${movementType}
         </div>
-        <div class="movements__value">${mov}</div>
+        <div class="movements__value">${mov}€</div>
       </div>`;
 
-    // 4. Insert this transaction row at the top of the container (afterbegin)
+    // 4️⃣ Insert the new row into the container (at the top)
+    //     - 'afterbegin' → newest transaction appears at the top
     containerMovements.insertAdjacentHTML('afterbegin', htmlTemplate);
   });
 };
+
 
 /////////////////////////////////////////////////
 // 4. APPLICATION LOGIC - COMPUTE USERNAME
@@ -489,3 +510,33 @@ btnLoan.addEventListener('click', function (e) {
   inputLoanAmount.value = '';
 });
 
+///////////////////////////////////////////////////////////////
+// 12. APPLICATION LOGIC - Implement Sorting Functionality
+///////////////////////////////////////////////////////////////
+
+/*
+ This feature allows the user to toggle sorting of their transactions 
+ (movements) between the default order (as stored) and ascending order.
+
+ Implementation detail:
+ ----------------------
+ - A boolean flag `sorted` is used to remember the current state.
+ - Each time the user clicks the Sort button:
+     → Reverse the flag (`!sorted`).
+     → Call displayMovements() with that state.
+ - displayMovements() must handle sorting logic when the second argument is true.
+*/
+
+let sorted = false; // flag to track sorting state (false = unsorted by default)
+
+btnSort.addEventListener('click', function (e) {
+  // Prevent the default form action
+  e.preventDefault();
+  // Call displayMovements with the opposite of current sorted state
+  // - If sorted was false → pass true to sort ascending
+  // - If sorted was true → pass false to restore original order
+  displayMovements(currentAccount.movements, !sorted);
+
+  // Flip the state for next click
+  sorted = !sorted;
+});
