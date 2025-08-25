@@ -98,3 +98,112 @@ validateTransactionAmount('250.5');  // Invalid amount: Must be a whole number
 validateTransactionAmount('abc');    // Invalid amount: Not a finite number
 validateTransactionAmount('-100');   // Invalid amount: Must be positive
 
+///////////////////////////////////////////////////////////////////////
+// MATH AND ROUNDING
+///////////////////////////////////////////////////////////////////////
+
+/*
+1. Square root and powers:
+- Math.sqrt(x) returns the square root of x.
+- x ** (1/2) is another way to calculate square root.
+- x ** (1/3) calculates cube root.
+*/
+console.log(Math.sqrt(25));       // 5
+console.log(25 ** (1 / 2));       // 5
+console.log(8 ** (1 / 3));        // 2
+
+/*
+2. Math.max() and Math.min():
+- Returns the maximum or minimum value from a list of numbers.
+- Converts string numbers like '23' to 23 automatically.
+- Returns NaN if any argument is invalid (e.g., '23px').
+*/
+console.log(Math.max(5, 18, 23, 11, 2));       // 23
+console.log(Math.max(5, 18, '23', 11, 2));     // 23 (string converted to number)
+console.log(Math.max(5, 18, '23px', 11, 2));   // NaN (invalid string)
+
+console.log(Math.min(5, 18, 23, 11, 2));       // 2
+console.log(Math.min(5, 18, '23', 11, 2));     // 2
+console.log(Math.min(5, 18, '23px', 11, 2));   // NaN
+
+/*
+3. Calculating area of a circle:
+- Parse the radius from a string with units.
+- Use Math.PI and power for calculation.
+*/
+console.log(Math.PI * Number.parseFloat('10px') ** 2); // 314.159...
+
+/*
+4. Random numbers:
+- Math.random() generates float in [0, 1).
+- To get integer in a range, multiply and floor.
+- Custom function to get random int between min and max inclusive.
+*/
+console.log(Math.trunc(Math.random() * 6) + 1);
+
+const randomInt = (min, max) => 
+  Math.floor(Math.random() * (max - min + 1)) + min;
+
+console.log(randomInt(10, 20));
+
+/*
+5. Rounding functions:
+- Math.trunc() removes decimal part (truncates).
+- Math.round() rounds to nearest integer.
+- Math.floor() rounds down to integer.
+- Math.ceil() rounds up to integer.
+- trunc and floor differ for negative numbers (floor rounds down more).
+*/
+console.log(Math.trunc(23.3));      // 23
+console.log(Math.round(23.3));      // 23
+console.log(Math.round(23.6));      // 24
+
+console.log(Math.floor(23.3));      // 23
+console.log(Math.ceil(23.3));       // 24
+
+console.log(Math.trunc(-23.3));     // -23
+console.log(Math.floor(-23.3));     // -24
+
+/*
+6. toFixed():
+- Formats number to fixed decimal places, returns string.
+- You can convert back to number with unary plus (+).
+*/
+console.log((2.7).toFixed(0));      // '3'
+console.log((2.7).toFixed(3));      // '2.700'
+console.log((2.345).toFixed(2));    // '2.35'
+console.log(+(2.345).toFixed(2));   // 2.35 (number)
+
+/*
+REAL-WORLD BANKING EXAMPLE: Transaction Amount Processing
+=========================================================
+
+- You receive transaction amounts as strings with units or extra spaces.
+- Use parseFloat to extract numeric parts.
+- Calculate transaction fees (5% here) using Math methods.
+- Rounding the fee properly using Math.ceil or toFixed ensures no loss of cents.
+*/
+
+function calculateTransactionFee(amountString) {
+  // Parse numeric amount
+  const amount = Number.parseFloat(amountString);
+  if (Number.isNaN(amount) || amount <= 0) {
+    console.log('Invalid amount!');
+    return 0;
+  }
+
+  // Calculate 5% fee
+  const fee = amount * 0.05;
+
+  // Round fee up to nearest cent
+  const roundedFee = Math.ceil(fee * 100) / 100;
+
+  console.log(`Transaction amount: €${amount.toFixed(2)}`);
+  console.log(`Transaction fee (5%): €${roundedFee.toFixed(2)}`);
+
+  return roundedFee;
+}
+
+calculateTransactionFee('123.45 USD');
+calculateTransactionFee('100abc');
+calculateTransactionFee('-50');
