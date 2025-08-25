@@ -1014,7 +1014,10 @@ console.log(
 console.log('----------------REAL-WORLD EXAMPLE 1-----------------');
 
 const accountJonas = { owner: 'Jonas', movements: [200, -100, 340] };
-const accountJessica = { owner: 'Jessica', movements: [5000, -500, -1500, 300] };
+const accountJessica = {
+  owner: 'Jessica',
+  movements: [5000, -500, -1500, 300],
+};
 const accountSteven = { owner: 'Steven', movements: [430, 1000, -50] };
 
 // Array of accounts
@@ -1073,3 +1076,352 @@ console.log('All words from paragraphs:', words);
    - Extract all movements from multiple accounts using flatMap.
    - Process and sum all transactions for reporting.
 */
+
+//=============================================================================
+// USING SORTING
+//=============================================================================
+
+console.log('----------------USING SORTING-----------------');
+
+// Sorting with Strings
+const owners1 = ['Jonas', 'Zach', 'Adam', 'Martha'];
+console.log('Original array:', owners1);
+
+// Default .sort() → sorts elements lexicographically (as strings, by Unicode code points)
+console.log('Sorted array (default):', owners1.sort());
+// ✅ Output: [ "Adam", "Jonas", "Martha", "Zach" ]
+
+// ⚠️ Warning: .sort() MUTATES the original array!
+// owners1 is now permanently reordered
+
+// -----------------------------------------------------------------------------
+// Sorting Numbers
+// -----------------------------------------------------------------------------
+console.log('Original movements:', movementsArrayNew);
+
+// Default .sort() treats numbers as strings → not reliable for numeric sorting
+console.log(
+  'Default sort (wrong for numbers):',
+  movementsArrayNew.slice().sort(),
+);
+// Fix: Provide a compare function (a, b)
+// ASCENDING (Lowest → Highest)
+console.log(
+  'Sorted ascending:',
+  movementsArrayNew.slice().sort((a, b) => a - b),
+);
+// DESCENDING (Highest → Lowest)
+console.log(
+  'Sorted descending:',
+  movementsArrayNew.slice().sort((a, b) => b - a),
+);
+
+/*
+Compare Function Explained:
+- (a, b) => a - b
+   -> If result < 0, a comes before b
+   -> If result > 0, b comes before a
+   -> If result === 0, order unchanged
+
+- (a, b) => b - a (reverses the order for descending sort)
+*/
+
+//=============================================================================
+// REAL-WORLD EXAMPLE 1: Sorting transactions
+//=============================================================================
+console.log(
+  '----------------REAL-WORLD EXAMPLE 1: Transactions-----------------',
+);
+
+const accountMovements = [200, -100, 500, 1200, -50, 3000];
+
+// Sort from highest to lowest (to show top transactions first)
+const sortedTransactions = accountMovements.slice().sort((a, b) => b - a);
+console.log('Transactions sorted high → low:', sortedTransactions);
+
+// Slice() used to copy first → so original array is not mutated
+
+//=============================================================================
+// REAL-WORLD EXAMPLE 2: Sorting products by price
+//=============================================================================
+console.log('----------------REAL-WORLD EXAMPLE 2: Products-----------------');
+
+const products = [
+  { name: 'Laptop', price: 1200 },
+  { name: 'Headphones', price: 200 },
+  { name: 'Phone', price: 800 },
+  { name: 'Monitor', price: 300 },
+];
+
+// Sort ascending by price
+const productsAsc = products.slice().sort((a, b) => a.price - b.price);
+console.log('Products sorted by price (Low → High):', productsAsc);
+
+// Sort descending by price
+const productsDesc = products.slice().sort((a, b) => b.price - a.price);
+console.log('Products sorted by price (High → Low):', productsDesc);
+
+//=============================================================================
+// KEY LEARNING POINTS
+//=============================================================================
+/*
+1. .sort() by default sorts values as strings (lexicographically).
+   → "200" comes before "50" because "2" < "5" (string comparison).
+2. For numbers, always use a compare callback:  (a, b) => a - b
+3. Remember: .sort() MUTATES the original array. 
+   → Use .slice().sort() if you want a sorted copy while keeping the original intact.
+4. Real-world use:
+   - Sort transactions (highest deposits or withdrawals first)
+   - Sort product lists by price
+   - Sort customers alphabetically
+*/
+
+//=============================================================================
+// ARRAY GROUPING with Object.groupBy (ES2023 feature)
+//=============================================================================
+
+console.log('----------------ARRAY GROUPING-----------------');
+
+/*
+ Object.groupBy(iterable, callbackFn):
+ -------------------------------------
+ - Takes an array (iterable) and a grouping function (callback).
+ - Returns an object where:
+     → Keys = group names (as returned by callback function).
+     → Values = arrays of elements that belong to those groups.
+*/
+
+// Example: Bank movements
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+// Group movements into 'deposit' (positive) and 'withdrawal' (negative)
+const groupedMovements = Object.groupBy(movements, mov =>
+  mov > 0 ? 'deposit' : 'withdrawal',
+);
+
+console.log('Grouped movements:', groupedMovements);
+
+// Output:
+// {
+//   deposit: [200, 450, 3000, 70, 1300],
+//   withdrawal: [-400, -650, -130]
+// }
+
+//=============================================================================
+// REAL-WORLD EXAMPLE: Group products by category
+//=============================================================================
+console.log('----------------REAL-WORLD EXAMPLE-----------------');
+
+const shopItems = [
+  { name: 'Apple', category: 'fruits', price: 1.5 },
+  { name: 'Carrot', category: 'vegetables', price: 0.9 },
+  { name: 'Banana', category: 'fruits', price: 1.2 },
+  { name: 'Broccoli', category: 'vegetables', price: 2.1 },
+  { name: 'Steak', category: 'meat', price: 12 },
+  { name: 'Chicken', category: 'meat', price: 7.5 },
+];
+
+// Group items by category
+const groupedByCategory = Object.groupBy(shopItems, item => item.category);
+
+console.log('Grouped shop items:', groupedByCategory);
+
+// Output looks like:
+// {
+//   fruits: [
+//     { name: 'Apple', category: 'fruits', price: 1.5 },
+//     { name: 'Banana', category: 'fruits', price: 1.2 }
+//   ],
+//   vegetables: [
+//     { name: 'Carrot', category: 'vegetables', price: 0.9 },
+//     { name: 'Broccoli', category: 'vegetables', price: 2.1 }
+//   ],
+//   meat: [
+//     { name: 'Steak', category: 'meat', price: 12 },
+//     { name: 'Chicken', category: 'meat', price: 7.5 }
+//   ]
+// }
+
+//=============================================================================
+// REAL-WORLD EXAMPLE 2: Group transactions by type (large vs small)
+//=============================================================================
+const groupedBySize = Object.groupBy(movements, mov =>
+  Math.abs(mov) > 1000 ? 'large' : 'small',
+);
+console.log('Grouped by size:', groupedBySize);
+
+// Example output:
+// {
+//   small: [200, 450, -400, -650, -130, 70],
+//   large: [3000, 1300]
+// }
+
+//=============================================================================
+// LEARNING POINTS
+//=============================================================================
+/*
+1. Object.groupBy() replaces common "manual grouping" loops with a concise API.
+2. Groups are created based on a callback function condition.
+   - Return 'deposit' → goes into deposit group
+   - Return 'withdrawal' → goes into withdrawal group
+3. Groups are stored in plain objects with properties as group keys.
+4. Very useful in real-world projects for:
+   - Banking apps → group deposits vs withdrawals, or large vs small transactions
+   - E-commerce → group products by categories
+   - Analytics → group users by subscription level or region
+*/
+
+//=============================================================================
+// NEW WAYS TO CREATE AND FILL ARRAYS
+//=============================================================================
+
+/*
+1. new Array(length)
+   - Creates an array with the given length but elements are empty (uninitialized).
+   - Useful for allocating space before filling.
+*/
+const newArray = new Array(7);
+console.log('New array:', newArray); // Outputs: [ <7 empty items> ]
+
+/*
+2. fill(value, start?, end?)
+   - Fills (overwrites) elements of an array with a static value.
+   - 'start' is inclusive index, defaults to 0.
+   - 'end' is exclusive index, defaults to array length.
+*/
+newArray.fill(1, 3); // Fills with '1' from index 3 to end
+console.log('Filled array:', newArray); // Outputs: [ <3 empty items>, 1, 1, 1, 1 ]
+newArray.fill(2, 4, 6); // Fills with '2' from index 4 up to (but not including) 6
+console.log('Filled array:', newArray); // Outputs: [ <3 empty items>, 1, 2, 2, 1 ]
+// After above fills, outputs: [ <3 empty items>, 1, 2, 2, <1 empty item> ]
+
+/*
+3. Array.from({ length: n })
+   - Creates a new array of length n with undefined elements.
+   - Often used with a mapping function to generate values.
+*/
+const newArray2 = Array.from({ length: 7 });
+console.log('New array 2:', newArray2); // [ undefined, undefined, ..., undefined ]
+
+/*
+4. Array.from({ length: n }, mapFn)
+   - Creates array of length n and fills it with values returned by mapFn.
+   - Here, (_, i) => i + 1 fills array with numbers 1 to 7.
+*/
+const newArray3 = Array.from({ length: 7 }, (_, i) => i + 1);
+console.log('New array 3:', newArray3); // [1, 2, 3, 4, 5, 6, 7]
+
+/*
+5. You can create arrays with custom strings or objects as well:
+*/
+const newArray4 = Array.from({ length: 7 }, (_, i) => `Item ${i + 1}`);
+console.log('New array 4:', newArray4); // ['Item 1', 'Item 2', ..., 'Item 7']
+
+//=============================================================================
+// REAL-TIME EXAMPLE: Generating Account Statement Pages
+//=============================================================================
+
+// Suppose you want to paginate a large list of transactions,
+// showing 10 transactions per page:
+
+const totalTransactions = 77;
+const transactionsPerPage = 10;
+
+// Calculate total pages needed
+const totalPages = Math.ceil(totalTransactions / transactionsPerPage);
+
+// Create an array of page numbers [1, 2, ..., totalPages]
+const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+console.log('Page numbers for pagination:', pages);
+// Output: [1, 2, 3, 4, 5, 6, 7, 8]
+
+// This makes it easy to build pagination UI dynamically based on data size.
+
+//=============================================================================
+// LEARNING POINTS:
+//=============================================================================
+/*
+- new Array(length) creates an empty array (with empty slots, not undefined).
+- .fill() can overwrite parts or whole array with fixed values.
+- Array.from() is a versatile way to:
+     * Create arrays from array-like or iterable objects.
+     * Generate arrays with computed elements via the second argument (mapFn).
+- Using Array.from() with mapFn is great to generate number ranges, repeated strings, or structured data in one line.
+*/
+
+//=============================================================================
+// NON-DESTRUCTIVE ARRAY METHODS
+//-----------------------------------------------------------------------------
+
+/*
+JavaScript traditionally had many array methods that mutate (modify) the original array,
+such as sort(), reverse(), and splice(). These new ES2023 methods provide immutable
+(non-destructive) alternatives that return a new array without changing the original.
+*/
+
+// Sample array with movements (deposits and withdrawals)
+const movementsArrayNew1 = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+//------------------------------------------------
+// 1. toReversed()
+// Returns a new array with elements in reversed order, original array stays intact.
+const reversedMovements = movementsArrayNew1.toReversed();
+console.log('Reversed array:', reversedMovements);
+console.log('Original array (unchanged):', movementsArrayNew1);
+
+//------------------------------------------------
+// 2. toSorted()
+// Returns a new sorted array in ascending order, original array remains unchanged.
+const sortedMovements = movementsArrayNew1.toSorted();
+console.log('Sorted array:', sortedMovements);
+console.log('Original array (unchanged):', movementsArrayNew1);
+
+//------------------------------------------------
+// 3. toSpliced(start, deleteCount)
+// Returns a new array with elements removed (splice operation), original stays unchanged.
+const splicedMovements = movementsArrayNew1.toSpliced(2, 4); // removes 4 elems from index 2
+console.log('Spliced array:', splicedMovements);
+console.log('Original array (unchanged):', movementsArrayNew1);
+
+//------------------------------------------------
+// 4. with(index, value)
+// Returns a new array with the element at the specified index replaced by value.
+const newMovements = movementsArrayNew1.with(1, 1200); // replace element at index 1 with 1200
+console.log('Modified array with .with():', newMovements);
+console.log('Original array (unchanged):', movementsArrayNew1);
+
+//=============================================================================
+// REAL-TIME EXAMPLE: Handling Bank Transaction History without Mutation
+//-----------------------------------------------------------------------------
+
+/*
+Imagine you are implementing "undo" functionality in a banking app. When a user reverses 
+a transaction you want to create a new transaction list reflecting that change but keep 
+the old list intact in case of multiple undos/redos. Non-destructive methods make this elegant.
+*/
+
+// Original transaction history
+let transactionHistory = [100, 200, -50, 400];
+
+// User wants to reverse the last transaction
+let newTransactionHistory = transactionHistory.toSpliced(transactionHistory.length - 1, 1);
+
+console.log('Original transaction history:', transactionHistory);
+console.log('After undo last transaction:', newTransactionHistory);
+
+// User wants to update a past transaction (e.g., correct amount)
+newTransactionHistory = newTransactionHistory.with(1, 250); // change second transaction from 200 to 250
+
+console.log('After correcting second transaction:', newTransactionHistory);
+
+// User views transaction history in normal and reversed order
+console.log('Transaction history (reversed for display):', newTransactionHistory.toReversed());
+
+/*
+LEARNING POINTS:
+- These new methods help keep your data immutable, which is great for debugging and functional programming.
+- .toReversed(), .toSorted(), .toSpliced(), and .with() return a new array leaving originals untouched.
+- Use them whenever you want to avoid side-effects and accidental data corruption.
+- Useful for features like undo/redo, history tracking, or working with snapshots of data.
+*/
+
