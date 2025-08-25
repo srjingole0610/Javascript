@@ -338,3 +338,89 @@ Avoid placing underscores:
 - Next to decimal points.
 - In strings representing numbers.
 */
+
+///////////////////////////////////////////////////////////////////////
+// WORKING WITH BigInt (for handling very large integers)
+///////////////////////////////////////////////////////////////////////
+
+/*
+1. JavaScript Numbers are accurate and safe up to Number.MAX_SAFE_INTEGER (2^53 - 1)
+   Beyond this limit, precision is lost because numbers are stored in 64-bit float.
+*/
+
+console.log(2 ** 53 - 1);           // 9007199254740991 (max safe integer)
+console.log(Number.MAX_SAFE_INTEGER);  // 9007199254740991
+console.log(Number.MIN_SAFE_INTEGER);  // -9007199254740991
+
+// Adding beyond max safe integer causes precision errors:
+console.log(Number.MAX_SAFE_INTEGER + 1); // 9007199254740992 (correct)
+console.log(Number.MAX_SAFE_INTEGER + 2); // 9007199254740992 (incorrect, repeated)
+console.log(Number.MAX_SAFE_INTEGER + 3); // 9007199254740994 (skipped 9007199254740993)
+
+//=============================================================================
+// BigInt: Represents integers beyond the safe integer range with arbitrary precision
+//=============================================================================
+
+// Create a BigInt by appending 'n' to the end of an integer literal
+console.log(454546246426426575246447425243626n);  // very large number as BigInt
+
+// Or create BigInt from number or string using BigInt()
+console.log(BigInt(45));  // converts 45 to BigInt 45n
+
+// Arithmetic with BigInt:
+console.log(10000n + 20000n);          // 30000n
+console.log(335353n * 3531513n);       // big number result
+
+// Note: Mixing Number and BigInt directly causes an error
+// console.log(2 * 3453535n); // Throws TypeError
+
+// Use both as BigInt explicitly:
+console.log(2n * 3453535n);  // 6907070n
+
+//=============================================================================
+// Comparison with BigInt:
+console.log(20n > 15);        // true (BigInt compares with Number correctly)
+console.log(20n === 20);      // false (different types, strict equality fails)
+
+//=============================================================================
+// BigInt and string concatenation implicitly converts BigInt to string:
+console.log(5353535325354n + ' is REALLY big!!!!'); // "5353535325354 is REALLY big!!!!"
+
+//=============================================================================
+// Some Math operations (like Math.sqrt) don't support BigInt and will throw errors:
+// console.log(Math.sqrt(2n)); // Uncaught TypeError
+
+//=============================================================================
+// Division with BigInt rounds down (truncates fractional part):
+console.log(11n / 3n);  // 3n
+console.log(11 / 3);    // 3.6666666666666665 (normal floating point division)
+
+//=============================================================================
+// REAL-WORLD BANKING EXAMPLE:
+///////////////////////////////////////////////////////////////////
+
+/*
+A banking app for very wealthy clients needs to handle extraordinarily large account balances without losing precision.
+BigInt ensures exact calculations for operations like transfers or interest computation.
+
+Example: Adding large balances safely
+*/
+
+const richClientBalance1 = 9007199254740995n;  // safely beyond Number.MAX_SAFE_INTEGER
+const richClientBalance2 = BigInt("123456789012345678901234567890");
+
+const totalRichBalance = richClientBalance1 + richClientBalance2;
+console.log('Total BigInt balance:', totalRichBalance);
+
+// Trying normal number arithmetic would lose precision here!
+
+/*
+LEARNING POINTS:
+- BigInt is for integers larger than Number.MAX_SAFE_INTEGER
+- Use 'n' postfix or BigInt() constructor to create BigInts
+- BigInts can’t be mixed with Numbers directly; convert explicitly if needed.
+- Division with BigInt truncates decimals.
+- Some Math methods don’t support BigInt.
+- Useful in financial apps requiring arbitrary large values precision.
+*/
+
