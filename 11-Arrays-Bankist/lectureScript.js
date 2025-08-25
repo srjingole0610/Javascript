@@ -1261,3 +1261,80 @@ console.log('Grouped by size:', groupedBySize);
 */
 
 
+//=============================================================================
+// NEW WAYS TO CREATE AND FILL ARRAYS
+//=============================================================================
+
+/*
+1. new Array(length)
+   - Creates an array with the given length but elements are empty (uninitialized).
+   - Useful for allocating space before filling.
+*/
+const newArray = new Array(7);
+console.log('New array:', newArray); // Outputs: [ <7 empty items> ]
+
+/*
+2. fill(value, start?, end?)
+   - Fills (overwrites) elements of an array with a static value.
+   - 'start' is inclusive index, defaults to 0.
+   - 'end' is exclusive index, defaults to array length.
+*/
+newArray.fill(1, 3);    // Fills with '1' from index 3 to end
+console.log('Filled array:', newArray); 
+newArray.fill(2, 4, 6); // Fills with '2' from index 4 up to (but not including) 6
+console.log('Filled array:', newArray); 
+// After above fills, outputs: [ <3 empty items>, 1, 2, 2, <1 empty item> ]
+
+/*
+3. Array.from({ length: n })
+   - Creates a new array of length n with undefined elements.
+   - Often used with a mapping function to generate values.
+*/
+const newArray2 = Array.from({ length: 7 });
+console.log('New array 2:', newArray2); // [ undefined, undefined, ..., undefined ]
+
+/*
+4. Array.from({ length: n }, mapFn)
+   - Creates array of length n and fills it with values returned by mapFn.
+   - Here, (_, i) => i + 1 fills array with numbers 1 to 7.
+*/
+const newArray3 = Array.from({ length: 7 }, (_, i) => i + 1);
+console.log('New array 3:', newArray3); // [1, 2, 3, 4, 5, 6, 7]
+
+/*
+5. You can create arrays with custom strings or objects as well:
+*/
+const newArray4 = Array.from({ length: 7 }, (_, i) => `Item ${i + 1}`);
+console.log('New array 4:', newArray4); // ['Item 1', 'Item 2', ..., 'Item 7']
+
+//=============================================================================
+// REAL-TIME EXAMPLE: Generating Account Statement Pages
+//=============================================================================
+
+// Suppose you want to paginate a large list of transactions,
+// showing 10 transactions per page:
+
+const totalTransactions = 77;
+const transactionsPerPage = 10;
+
+// Calculate total pages needed
+const totalPages = Math.ceil(totalTransactions / transactionsPerPage);
+
+// Create an array of page numbers [1, 2, ..., totalPages]
+const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+console.log('Page numbers for pagination:', pages);
+// Output: [1, 2, 3, 4, 5, 6, 7, 8]
+
+// This makes it easy to build pagination UI dynamically based on data size.
+
+//=============================================================================
+// LEARNING POINTS:
+//=============================================================================
+/*
+- new Array(length) creates an empty array (with empty slots, not undefined).
+- .fill() can overwrite parts or whole array with fixed values.
+- Array.from() is a versatile way to:
+     * Create arrays from array-like or iterable objects.
+     * Generate arrays with computed elements via the second argument (mapFn).
+- Using Array.from() with mapFn is great to generate number ranges, repeated strings, or structured data in one line.
+*/
