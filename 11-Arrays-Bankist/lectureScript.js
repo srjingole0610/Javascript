@@ -1097,19 +1097,17 @@ console.log('Sorted array (default):', owners1.sort());
 console.log('Original movements:', movementsArrayNew);
 
 // Default .sort() treats numbers as strings → not reliable for numeric sorting
-console.log('Default sort (wrong for numbers):', movementsArrayNew.sort());
-
+console.log('Default sort (wrong for numbers):', movementsArrayNew.slice().sort());
 // Fix: Provide a compare function (a, b)
 // ASCENDING (Lowest → Highest)
 console.log(
   'Sorted ascending:',
-  movementsArrayNew.sort((a, b) => a - b)
+  movementsArrayNew.slice().sort((a, b) => a - b)
 );
-
 // DESCENDING (Highest → Lowest)
 console.log(
   'Sorted descending:',
-  movementsArrayNew.sort((a, b) => b - a)
+  movementsArrayNew.slice().sort((a, b) => b - a)
 );
 
 /*
