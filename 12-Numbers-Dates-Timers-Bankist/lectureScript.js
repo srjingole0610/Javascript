@@ -207,3 +207,66 @@ function calculateTransactionFee(amountString) {
 calculateTransactionFee('123.45 USD');
 calculateTransactionFee('100abc');
 calculateTransactionFee('-50');
+
+
+///////////////////////////////////////////////////////////////////////
+// REMAINDER OPERATOR (%)
+///////////////////////////////////////////////////////////////////////
+
+/*
+- The remainder operator `%` returns the remainder after dividing one number by another.
+- Useful for checking if a number is divisible by another (no remainder),
+  for even/odd number checks, and for cyclic behaviors in applications.
+*/
+
+// Basic remainder and division examples
+console.log(5 % 2); // 1 (5 divided by 2 leaves remainder 1)
+console.log(5 / 2); // 2.5 (ordinary division)
+
+console.log(8 % 3); // 2 (8 divided by 3 leaves remainder 2)
+console.log(8 / 3); // 2.666...
+
+// Check if a number is divisible by another (remainder zero means divisible)
+console.log(5 % 2 === 0); // false (5 is odd)
+console.log(8 % 3 === 0); // false (8 isn't divisible by 3)
+console.log(6 % 2 === 0); // true (6 is even)
+
+// Function to check if a number is even (remainder 0 when divided by 2)
+const isEven = n => n % 2 === 0;
+console.log(isEven(23)); // false
+console.log(isEven(24)); // true
+
+///////////////////////////////////////////////////////////////////////
+// REAL-TIME EXAMPLE: Using remainder to assign cyclic categories
+///////////////////////////////////////////////////////////////////////
+
+/*
+Imagine a banking app where we assign customers to different support groups in a cycle
+(e.g., Group 0, Group 1, Group 2). This helps distribute workload evenly.
+Using remainder operator %, we can cycle through groups based on user ID or position.
+*/
+
+const customerIDs = [101, 102, 103, 104, 105, 106];
+
+// Assign each customer to one of 3 groups based on ID modulo 3
+const totalGroups = 3;
+
+customerIDs.forEach(id => {
+  const groupNumber = id % totalGroups;
+  console.log(`Customer ID ${id} is assigned to group ${groupNumber}`);
+});
+
+// Output:
+// Customer ID 101 is assigned to group 2
+// Customer ID 102 is assigned to group 0
+// Customer ID 103 is assigned to group 1
+// Customer ID 104 is assigned to group 2
+// Customer ID 105 is assigned to group 0
+// Customer ID 106 is assigned to group 1
+
+/*
+LEARNING POINTS:
+- `%` finds remainder, enabling cyclic or repeating patterns.
+- Used to evenly distribute entities across fixed "buckets" or groups.
+- Common in scheduling, load balancing, game turns, or rotating features.
+*/
