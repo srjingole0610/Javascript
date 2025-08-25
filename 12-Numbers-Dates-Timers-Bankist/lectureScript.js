@@ -286,13 +286,12 @@ LEARNING POINTS:
 const diameterSolarSystem = 245_800_000_000;
 console.log(diameterSolarSystem); // 245800000000
 
-// Price without decimal, using separator for readability
-const price = 345_99; // This is actually 34599 (pay attention!)
-console.log(price); // 34599
-
-// Price in cents (multiply by 100)
-const priceInCents = 345_99 * 100;
-console.log(priceInCents); // 3459900
+// Using separators for prices can be tricky. The underscore is NOT a decimal point.
+const priceAsInteger = 345_99; // This is the integer 34599, not 345.99
+console.log(priceAsInteger);
+// A common pattern for currency is to store the value in cents.
+const priceInCents = 345_99; // Represents $345.99 by storing 34599 cents
+console.log(`The price in dollars is $${priceInCents / 100}.`);
 
 // Two ways to write 1500 using numeric separators
 const transferFee1 = 15_00;
@@ -335,8 +334,7 @@ LEARNING POINTS:
 
 💡 Extra tip:
 Avoid placing underscores:
-
-At the start or end of a number literal.
-Next to decimal points.
-In strings representing numbers.
+- At the start or end of a number literal.
+- Next to decimal points.
+- In strings representing numbers.
 */
