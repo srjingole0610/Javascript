@@ -34,24 +34,29 @@ Focuses on practical developer skills.
 -**Topics**: Using a Debugger, Solving problems.
 -**Project**: Temperature amplitude calculator.
 
-### 04-Guess-My-Number (Game)
+### 04-HTML-CSS
+
+Basic HTML and CSS fundamentals.
+-**Topics**: HTML structure, CSS styling, and layout basics.
+
+### 05-Guess-My-Number (Game)
 
 A DOM manipulation project.
 -**Features**:
   -Guess a number between 1 and 20.
   -Score tracking and highscore.
   -Game reset functionality.
-  -Dark mode toggle.
+  -Interactive UI with styling.
 
-### 05-Modal-Window (Project)
+### 06-Modal (Project)
 
-Another DOM manipulation project.
+DOM manipulation project with modal windows.
 -**Features**:
   -Show and hide a modal window.
   -Close modal with a button, by clicking the overlay, or pressing the 'Escape' key.
-  -Dark mode support.
+  -Responsive design.
 
-### 06-Pig-Game (Game)
+### 07-Pig-Game (Game)
 
 A two-player dice game built with DOM manipulation.
 -**Features**:
@@ -59,13 +64,40 @@ A two-player dice game built with DOM manipulation.
   -'Hold' functionality to save the score.
   -The first player to reach 100 points wins.
   -Game reset functionality.
-  -Dark mode toggle.
+  -Visual dice images.
 
-### 07-Behind-the-Scenes
+### 08-Behind-the-Scenes
 
 Explores how JavaScript works under the hood.
-
 -**Topics**: The JavaScript Engine and Runtime, Execution Contexts, The Scope Chain, Hoisting and the TDZ, The `this` Keyword, Regular vs. Arrow Functions, and Object References.
+
+### 09-Data-Structures-Operators
+
+Modern JavaScript data structures and operators.
+-**Topics**: Destructuring Arrays and Objects, Spread Operator, Rest Pattern, Short Circuiting, Nullish Coalescing, Logical Assignment Operators, for-of Loop, Enhanced Object Literals, Optional Chaining, Sets and Maps.
+
+### 10-Functions
+
+Advanced function concepts and techniques.
+-**Topics**: Default Parameters, Passing Arguments, First-Class and Higher-Order Functions, Functions Returning Functions, Call and Apply Methods, Bind Method, Immediately Invoked Function Expressions (IIFE), Closures.
+
+### 11-Arrays-Bankist
+
+Array methods and the Bankist application.
+-**Topics**: Array Methods (map, filter, reduce, find, some, every, flat, sort), Creating and Filling Arrays, Array Methods Practice.
+-**Project**: Bankist App - A simple banking interface demonstrating array methods.
+
+### 12-Numbers-Dates-Timers-Bankist
+
+Working with numbers, dates, and timers.
+-**Topics**: Converting and Checking Numbers, Math and Rounding, Remainder Operator, Numeric Separators, BigInt, Creating Dates, Operations with Dates, Internationalizing Dates and Numbers, Timers.
+-**Project**: Enhanced Bankist App with dates, number formatting, and timers.
+
+### Coding Challenges
+
+A collection of 11 coding challenges covering various JavaScript concepts:
+
+- Challenge 1-11: Progressive difficulty challenges testing different aspects of JavaScript programming including functions, arrays, objects, and DOM manipulation.
 
 ## Prerequisites
 
