@@ -1280,9 +1280,9 @@ console.log('New array:', newArray); // Outputs: [ <7 empty items> ]
    - 'end' is exclusive index, defaults to array length.
 */
 newArray.fill(1, 3);    // Fills with '1' from index 3 to end
-console.log('Filled array:', newArray); 
+console.log('Filled array:', newArray); // Outputs: [ <3 empty items>, 1, 1, 1, 1 ]
 newArray.fill(2, 4, 6); // Fills with '2' from index 4 up to (but not including) 6
-console.log('Filled array:', newArray); 
+console.log('Filled array:', newArray); // Outputs: [ <3 empty items>, 1, 2, 2, 1 ]
 // After above fills, outputs: [ <3 empty items>, 1, 2, 2, <1 empty item> ]
 
 /*
