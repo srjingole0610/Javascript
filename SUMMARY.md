@@ -81,14 +81,12 @@ In JavaScript, every value can be treated as either "truthy" or "falsy" in a boo
 All other values are considered **truthy**. This is a common source of bugs if not understood.
 
 ```javascript
-  let height; // undefined, which is a falsy value  
-  if (height) 
-  {      console.log("Yay! Height is defined");  
-
-  }
-   else {
-          console.log("Height is UNDEFINED");  
-        }  // This will log "Height is UNDEFINED"  
+let height; // undefined, which is a falsy value
+if (height) {
+  console.log("Yay! Height is defined");
+} else {
+  console.log("Height is UNDEFINED");
+} // This will log "Height is UNDEFINED"
 ```
 
 ## Control Flow Statements
