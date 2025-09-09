@@ -631,3 +631,72 @@ displayProductPrice(14999.5, 'hi-IN', 'INR'); // India
 
 
 ///////////////////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////////////////
+// Timers : setTimeout and setInterval
+///////////////////////////////////////////////////////////////////////
+
+// setTimeout schedules a function to run once after a specified delay (milliseconds)
+setTimeout(() => {
+  console.log('Hello World!'); // Prints after 1 second (1000 ms)
+}, 1000);
+
+console.log('Where is my pizza?'); // Logged immediately (no delay)
+
+// setTimeout can also pass parameters to callback function after delay
+setTimeout((ing1, ing2) => {
+  console.log('Here is your pizza! with ' + ing1 + ' and ' + ing2);
+}, 3000, 'olives', 'peperoni'); // Prints after 3 seconds
+
+// Using spread operator to pass array items as individual arguments to setTimeout callback
+const ingredients = ['olives', 'spinach'];
+const pizzaTimer = setTimeout((ing1, ing2) => {
+  console.log('Here is your pizza! with ' + ing1 + ' and ' + ing2);
+}, 5000, ...ingredients);
+
+// Cancel the scheduled setTimeout callback before it runs if condition met (e.g., contains 'spinach')
+if(ingredients.includes('spinach')){
+  clearTimeout(pizzaTimer); // Pizza will NOT be served because timer is cleared
+}
+
+// Another example: check time after 2 seconds and log open/closed status
+setTimeout(function(){
+  const hour = new Date().getHours();
+  if(hour >= 8 && hour < 18){
+    console.log('Open');
+  } else {
+    console.log('Closed');
+  }
+}, 2000);
+
+// setInterval schedules a function to run repeatedly at fixed intervals (milliseconds)
+// Here, logs current time every second (1000 ms)
+setInterval(function(){
+  const now = new Date();
+  console.log(now);
+}, 1000);
+
+///////////////////////////////////////////////////////////////////////
+// Real-Time Example: Reminder or Clock Update
+///////////////////////////////////////////////////////////////////////
+
+// Show current time every second for a live clock display (e.g., in webpage header)
+const clockInterval = setInterval(() => {
+  const now = new Date();
+  const timeString = now.toLocaleTimeString();
+  console.log('Current time:', timeString);
+  // In real app, update clock UI element instead of console.log
+}, 1000);
+
+// To stop the clock update after some event or timeout, use clearInterval(clockInterval)
+
+///////////////////////////////////////////////////////////////////////
+// Key Learning Highlights
+///////////////////////////////////////////////////////////////////////
+// setTimeout(function, delay, args...): executes function once after delay milliseconds.
+// clearTimeout(timeoutId): cancels a scheduled setTimeout.
+// setInterval(function, interval, args...): executes function repeatedly every interval milliseconds.
+// clearInterval(intervalId): stops the repeated executions.
+// You can pass arguments directly to the callback via extra parameters of setTimeout/setInterval.
+// Useful for delays, scheduled tasks, repeat timers, UI clocks, message reminders, etc.
