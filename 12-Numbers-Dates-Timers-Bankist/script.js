@@ -194,16 +194,76 @@ const updateUI = function (acc) {
   calcDisplaySummary(acc); // Total in/out/interest
 };
 
+/**
+ * Starts a logout timer that automatically logs out the user after 5 minutes of inactivity
+ * @returns {number} The interval ID that can be used to cancel the timer
+ * @description
+ * - Initializes a 5 minute (300 second) countdown timer
+ * - Updates the UI every second to show remaining minutes and seconds
+ * - When timer reaches 0, logs out the user by:
+ *   - Clearing the timer interval
+ *   - Resetting the welcome message
+ *   - Hiding the app container
+ * - Returns the timer ID so it can be cancelled if needed
+ */
+const startLogOutTimer = function () {
+  // Set time to 5 minutes (300 seconds)
+  let time = 300;
+  let timer;
+  // Function to display the remaining time in minutes and seconds
+  const tick = function () {
+    const min = String(Math.trunc(time / 60)).padStart(2, 0);
+    const sec = String(time % 60).padStart(2, 0);
+    labelTimer.textContent = `${min}:${sec}`;
+
+    // When 0 seconds, stop timer and log out user
+    if (time === 0) {
+      clearInterval(timer);
+      labelWelcome.textContent = 'Log in to get started';
+      containerApp.style.opacity = 0;
+    }
+
+    // Decrease by 1 second
+    time--;
+  };
+
+  // Call tick every second
+  tick();
+  timer = setInterval(tick, 1000);
+
+  // Return the timer interval ID for potential cancellation
+  return timer;
+};
+
 ///////////////////////////////////////
 // EVENT HANDLERS (connect JS to user interface buttons/inputs)
-let currentAccount;
-
-// For demo: pre-fill the UI with Jonas's data as 'always logged in'
-currentAccount = account1;
-updateUI(currentAccount);
-containerApp.style.opacity = 100; // Show app
+let currentAccount, timer;
 
 // Login functionality
+/**
+ * Event handler for the login button click.
+ * Authenticates user credentials and initializes the banking interface.
+ *
+ * @param {Event} e - The click event object
+ *
+ * @description
+ * - Prevents default form submission
+ * - Finds account matching entered username
+ * - Validates PIN against account
+ * - If valid:
+ *   - Displays welcome message
+ *   - Shows app interface
+ *   - Updates date/time display with locale formatting
+ *   - Clears login form
+ *   - Resets/starts logout timer
+ *   - Updates UI with account data
+ *
+ * @example
+ * // Login with username 'js' and PIN 1111
+ * inputLoginUsername.value = 'js';
+ * inputLoginPin.value = '1111';
+ * btnLogin.click();
+ */
 btnLogin.addEventListener('click', function (e) {
   e.preventDefault(); // Prevent form submission/reload
   currentAccount = accounts.find(
@@ -226,6 +286,8 @@ btnLogin.addEventListener('click', function (e) {
     // Clear login fields
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
+    if (timer) clearInterval(timer);
+    timer = startLogOutTimer();
     // Update UI with account data
     updateUI(currentAccount);
   }
@@ -253,6 +315,10 @@ btnTransfer.addEventListener('click', function (e) {
     receiverAcc.movementsDates.push(new Date().toISOString());
     updateUI(currentAccount);
   }
+
+  //Reset the timer
+  clearInterval(timer);
+  timer = startLogOutTimer();
 });
 
 // Request Loan
@@ -278,6 +344,10 @@ btnLoan.addEventListener('click', function (e) {
     }, 2500);
   }
   inputLoanAmount.value = '';
+
+  //Reset the timer
+  clearInterval(timer);
+  timer = startLogOutTimer();
 });
 
 // Close Account
