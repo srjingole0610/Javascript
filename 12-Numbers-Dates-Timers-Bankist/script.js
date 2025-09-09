@@ -256,14 +256,26 @@ btnTransfer.addEventListener('click', function (e) {
 });
 
 // Request Loan
+// Handle loan request button click:
+// 1. Prevent form submission
+// 2. Get and round down loan amount from input
+// 3. Validate loan request:
+//    - Amount must be positive
+//    - User must have at least one deposit >= 10% of requested amount
+// 4. If valid, add loan amount to movements after 2.5s delay
+// 5. Add current date to movements dates
+// 6. Update UI to reflect new balance
+// 7. Clear loan input field
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
   const amount = Math.floor(inputLoanAmount.value);
   // Grant only if user had deposit >=10% of requested amount
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
-    currentAccount.movements.push(amount);
-    currentAccount.movementsDates.push(new Date().toISOString());
-    updateUI(currentAccount);
+    setTimeout(() => {
+      currentAccount.movements.push(amount);
+      currentAccount.movementsDates.push(new Date().toISOString());
+      updateUI(currentAccount);
+    }, 2500);
   }
   inputLoanAmount.value = '';
 });
