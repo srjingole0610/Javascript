@@ -1,6 +1,5 @@
 'use strict';
 
-
 /////////////////////////////////////////////////
 // BANKIST APP DEMO WITH EDUCATIONAL COMMENTS
 /////////////////////////////////////////////////
@@ -48,7 +47,6 @@ const account2 = {
 
 const accounts = [account1, account2]; // Array of all bank accounts in the app
 
-
 /////////////////////////////////////////////////
 // ELEMENT SELECTORS (cache DOM elements for fast access and updates)
 const labelWelcome = document.querySelector('.welcome');
@@ -72,7 +70,6 @@ const inputTransferAmount = document.querySelector('.form__input--amount');
 const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
-
 
 /////////////////////////////////////////////////
 // DATE & CURRENCY HELPERS
@@ -121,12 +118,18 @@ const displayMovements = function (acc, sort = false) {
     const { movement, movementDate } = obj;
     const type = movement > 0 ? 'deposit' : 'withdrawal';
     const displayDate = formatMovementDate(movementDate, acc.locale); // Date as user-friendly string
-    const formatterMovement = formatCurrency(movement, acc.locale, acc.currency); // Local currency format
+    const formatterMovement = formatCurrency(
+      movement,
+      acc.locale,
+      acc.currency,
+    ); // Local currency format
 
     // Build the movements HTML row
     const html = `
       <div class="movements__row">
-        <div class="movements__type movements__type--${type}">${i + 1} ${type}</div>
+        <div class="movements__type movements__type--${type}">${
+      i + 1
+    } ${type}</div>
         <div class="movements__date">${displayDate}</div>
         <div class="movements__value">${formatterMovement}</div>
       </div>
@@ -139,16 +142,24 @@ const displayMovements = function (acc, sort = false) {
 // Calculate and render current account balance in user's currency
 const calcDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
-  const formatterMovement = formatCurrency(acc.balance, acc.locale, acc.currency);
+  const formatterMovement = formatCurrency(
+    acc.balance,
+    acc.locale,
+    acc.currency,
+  );
   labelBalance.textContent = `${formatterMovement}`;
 };
 
 // Calculate and render total incoming, outgoing, and earned interest in summary
 const calcDisplaySummary = function (acc) {
-  const incomes = acc.movements.filter(mov => mov > 0).reduce((acc, mov) => acc + mov, 0);
+  const incomes = acc.movements
+    .filter(mov => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0);
   labelSumIn.textContent = formatCurrency(incomes, acc.locale, acc.currency);
 
-  const out = acc.movements.filter(mov => mov < 0).reduce((acc, mov) => acc + mov, 0);
+  const out = acc.movements
+    .filter(mov => mov < 0)
+    .reduce((acc, mov) => acc + mov, 0);
   labelSumOut.textContent = formatCurrency(out, acc.locale, acc.currency);
 
   // Calculate and display interest only if >=1 (example rule)
@@ -157,7 +168,11 @@ const calcDisplaySummary = function (acc) {
     .map(deposit => (deposit * acc.interestRate) / 100)
     .filter(int => int >= 1)
     .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = formatCurrency(interest, acc.locale, acc.currency);
+  labelSumInterest.textContent = formatCurrency(
+    interest,
+    acc.locale,
+    acc.currency,
+  );
 };
 
 // Create usernames by taking initials of account owner (e.g. "Jonas Schmedtmann" -> "js")
@@ -166,7 +181,7 @@ const createUsernames = function (accs) {
     acc.username = acc.owner
       .toLowerCase()
       .split(' ')
-      .map(name => name)
+      .map(name => name[0])
       .join('');
   });
 };
@@ -174,9 +189,9 @@ createUsernames(accounts); // Initialize usernames for all demo accounts
 
 // Update/re-render all account information
 const updateUI = function (acc) {
-  displayMovements(acc);        // List of all operations/movements
-  calcDisplayBalance(acc);      // Account balance (total)
-  calcDisplaySummary(acc);      // Total in/out/interest
+  displayMovements(acc); // List of all operations/movements
+  calcDisplayBalance(acc); // Account balance (total)
+  calcDisplaySummary(acc); // Total in/out/interest
 };
 
 ///////////////////////////////////////
@@ -196,7 +211,9 @@ btnLogin.addEventListener('click', function (e) {
   );
   if (currentAccount?.pin === +inputLoginPin.value) {
     // Display welcome & show app
-    labelWelcome.textContent = `Welcome back, ${currentAccount.owner.split(' ')}`;
+    labelWelcome.textContent = `Welcome back, ${
+      currentAccount.owner.split(' ')[0]
+    }`;
     containerApp.style.opacity = 100;
     // Show locale-formatted date/time
     labelDate.textContent = new Intl.DateTimeFormat(currentAccount.locale, {
@@ -262,8 +279,8 @@ btnClose.addEventListener('click', function (e) {
     const index = accounts.findIndex(
       acc => acc.username === currentAccount.username,
     );
-    accounts.splice(index, 1);          // Remove user from accounts array
-    containerApp.style.opacity = 0;     // Hide UI after close
+    accounts.splice(index, 1); // Remove user from accounts array
+    containerApp.style.opacity = 0; // Hide UI after close
   }
   inputCloseUsername.value = inputClosePin.value = '';
 });
@@ -285,6 +302,6 @@ btnSort.addEventListener('click', function (e) {
 // - Data-driven UI updates
 // - Reusability through helper functions and modular code
 
-// This project demonstrates how modern web apps structure real data workflows and a practical application 
+// This project demonstrates how modern web apps structure real data workflows and a practical application
 // of core JavaScript methods and browser APIs for user-facing features[5][7].
 // It also highlights the importance of clean, modular code and the need for clear, concise documentation.

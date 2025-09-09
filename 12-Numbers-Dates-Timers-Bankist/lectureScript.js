@@ -542,7 +542,7 @@ function daysUntilBirthday(birthMonth, birthDay) {
   return daysLeft;
 }
 
-// Example usage for birthday on october 06 (month=11):
+// Example usage for birthday on October 6 (month=10):
 const results = daysUntilBirthday(10, 6);
 console.log(`Days until next birthday: ${results}`);
 
