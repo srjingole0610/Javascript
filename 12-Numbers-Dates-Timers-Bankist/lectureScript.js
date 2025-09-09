@@ -524,7 +524,7 @@ const calcDaysPassed = (date1, date2) =>
 
 // Example: Find days between March 14, 2037 and Feb 22, 2037
 const days1 = calcDaysPassed(new Date(2037, 3, 14), new Date(2037, 2, 22));
-console.log(days1); // Prints difference in days (e.g. 20)
+console.log(days1); // Prints difference in days (e.g. 23)
 
 ///////////////////////////////////////////////////////////////////////
 // Real-Time Example: Days Until a Birthday

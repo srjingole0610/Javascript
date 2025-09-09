@@ -209,7 +209,7 @@ const updateUI = function (acc) {
 const startLogOutTimer = function () {
   // Set time to 5 minutes (300 seconds)
   let time = 300;
-  let timer;
+  let intervalId;
   // Function to display the remaining time in minutes and seconds
   const tick = function () {
     const min = String(Math.trunc(time / 60)).padStart(2, 0);
@@ -218,7 +218,7 @@ const startLogOutTimer = function () {
 
     // When 0 seconds, stop timer and log out user
     if (time === 0) {
-      clearInterval(timer);
+      clearInterval(intervalId);
       labelWelcome.textContent = 'Log in to get started';
       containerApp.style.opacity = 0;
     }
@@ -229,10 +229,10 @@ const startLogOutTimer = function () {
 
   // Call tick every second
   tick();
-  timer = setInterval(tick, 1000);
+  intervalId = setInterval(tick, 1000);
 
   // Return the timer interval ID for potential cancellation
-  return timer;
+  return intervalId;
 };
 
 ///////////////////////////////////////
@@ -373,6 +373,8 @@ btnSort.addEventListener('click', function (e) {
   e.preventDefault();
   displayMovements(currentAccount, !sorted);
   sorted = !sorted;
+  clearInterval(timer);
+  timer = startLogOutTimer();
 });
 
 /////////////////////////////////////////////////
