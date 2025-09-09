@@ -567,7 +567,7 @@ const num = 3884764.23;
 // 'currency' must be specified per locale—for demo, it will be added in spread/rest pattern below.
 const options = {
   style: 'currency',
-  currency: 'USD' // Set default currency
+  currency: 'USD', // Set default currency
   // Extra: You could use 'unit' and 'unitDisplay' for unit formatting (e.g. 'celsius'), see below.
   // useGrouping: false, // (Optional) disables thousands separator/grouping if set to false
 };
@@ -577,28 +577,28 @@ const options = {
 // then formats the number as a proper localized currency string.
 console.log(
   'US:      ',
-  new Intl.NumberFormat('en-US', { ...options, currency: 'USD' }).format(num)
+  new Intl.NumberFormat('en-US', { ...options, currency: 'USD' }).format(num),
 );
 console.log(
   'Germany: ',
-  new Intl.NumberFormat('de-DE', { ...options, currency: 'EUR' }).format(num)
+  new Intl.NumberFormat('de-DE', { ...options, currency: 'EUR' }).format(num),
 );
 console.log(
   'Syria:   ',
-  new Intl.NumberFormat('ar-SY', { ...options, currency: 'SYP' }).format(num)
+  new Intl.NumberFormat('ar-SY', { ...options, currency: 'SYP' }).format(num),
 );
 console.log(
   'China:   ',
-  new Intl.NumberFormat('zh-CN', { ...options, currency: 'CNY' }).format(num)
+  new Intl.NumberFormat('zh-CN', { ...options, currency: 'CNY' }).format(num),
 );
 console.log(
   'India:   ',
-  new Intl.NumberFormat('hi-IN', { ...options, currency: 'INR' }).format(num)
+  new Intl.NumberFormat('hi-IN', { ...options, currency: 'INR' }).format(num),
 );
 // Use the user's browser language for formatting as a fallback
 console.log(
   navigator.language,
-  new Intl.NumberFormat(navigator.language, { ...options }).format(num)
+  new Intl.NumberFormat(navigator.language, { ...options }).format(num),
 );
 
 ///////////////////////////////////////////////////////////////////////
@@ -629,9 +629,7 @@ displayProductPrice(14999.5, 'hi-IN', 'INR'); // India
 // - Works for any currency code and locale supported by JavaScript[1]
 // - Real-world application: pricing in e-commerce, international invoices, UI display localization[6]
 
-
 ///////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////
 // Timers : setTimeout and setInterval
@@ -645,25 +643,34 @@ setTimeout(() => {
 console.log('Where is my pizza?'); // Logged immediately (no delay)
 
 // setTimeout can also pass parameters to callback function after delay
-setTimeout((ing1, ing2) => {
-  console.log('Here is your pizza! with ' + ing1 + ' and ' + ing2);
-}, 3000, 'olives', 'peperoni'); // Prints after 3 seconds
+setTimeout(
+  (ing1, ing2) => {
+    console.log(`Here is your pizza! with ${ing1} and ${ing2}`);
+  },
+  3000,
+  'olives',
+  'peperoni',
+); // Prints after 3 seconds
 
 // Using spread operator to pass array items as individual arguments to setTimeout callback
 const ingredients = ['olives', 'spinach'];
-const pizzaTimer = setTimeout((ing1, ing2) => {
-  console.log('Here is your pizza! with ' + ing1 + ' and ' + ing2);
-}, 5000, ...ingredients);
+const pizzaTimer = setTimeout(
+  (ing1, ing2) => {
+    console.log(`Here is your pizza! with ${ing1} and ${ing2}`);
+  },
+  5000,
+  ...ingredients,
+);
 
 // Cancel the scheduled setTimeout callback before it runs if condition met (e.g., contains 'spinach')
-if(ingredients.includes('spinach')){
+if (ingredients.includes('spinach')) {
   clearTimeout(pizzaTimer); // Pizza will NOT be served because timer is cleared
 }
 
 // Another example: check time after 2 seconds and log open/closed status
-setTimeout(function(){
+setTimeout(function () {
   const hour = new Date().getHours();
-  if(hour >= 8 && hour < 18){
+  if (hour >= 8 && hour < 18) {
     console.log('Open');
   } else {
     console.log('Closed');
@@ -672,7 +679,7 @@ setTimeout(function(){
 
 // setInterval schedules a function to run repeatedly at fixed intervals (milliseconds)
 // Here, logs current time every second (1000 ms)
-setInterval(function(){
+setInterval(function () {
   const now = new Date();
   console.log(now);
 }, 1000);
