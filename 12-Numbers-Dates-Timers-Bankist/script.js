@@ -209,7 +209,7 @@ const updateUI = function (acc) {
 const startLogOutTimer = function () {
   // Set time to 5 minutes (300 seconds)
   let time = 300;
-
+  let timer;
   // Function to display the remaining time in minutes and seconds
   const tick = function () {
     const min = String(Math.trunc(time / 60)).padStart(2, 0);
@@ -229,7 +229,7 @@ const startLogOutTimer = function () {
 
   // Call tick every second
   tick();
-  const timer = setInterval(tick, 1000);
+  timer = setInterval(tick, 1000);
 
   // Return the timer interval ID for potential cancellation
   return timer;
@@ -243,9 +243,9 @@ let currentAccount, timer;
 /**
  * Event handler for the login button click.
  * Authenticates user credentials and initializes the banking interface.
- * 
+ *
  * @param {Event} e - The click event object
- * 
+ *
  * @description
  * - Prevents default form submission
  * - Finds account matching entered username
@@ -257,7 +257,7 @@ let currentAccount, timer;
  *   - Clears login form
  *   - Resets/starts logout timer
  *   - Updates UI with account data
- * 
+ *
  * @example
  * // Login with username 'js' and PIN 1111
  * inputLoginUsername.value = 'js';
@@ -314,11 +314,11 @@ btnTransfer.addEventListener('click', function (e) {
     currentAccount.movementsDates.push(new Date().toISOString());
     receiverAcc.movementsDates.push(new Date().toISOString());
     updateUI(currentAccount);
-
-    //Reset the timer
-    clearInterval(timer);
-    timer = startLogOutTimer();
   }
+
+  //Reset the timer
+  clearInterval(timer);
+  timer = startLogOutTimer();
 });
 
 // Request Loan
