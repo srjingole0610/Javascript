@@ -91,7 +91,7 @@ message.style.height =
 console.log(getComputedStyle(message).height);
 
 // Set a CSS variable (custom property) globally
-document.documentElement.style.setProperty('--color-primary', 'orangered'); // Changes site theme color
+// document.documentElement.style.setProperty('--color-primary', 'orangered'); // Changes site theme color
 
 // ===========================
 // ATTRIBUTE Manipulation
@@ -171,6 +171,129 @@ logo.classList.contains('c');
 // - Use .classList for class management: add, remove, toggle, contains, replace
 // - Real-world use: Building dynamic interfaces, live themes, notifications, A/B tests, user feedback.
 
+
+// ===========================
+// Types of Event and Event Handlers
+// ===========================
+
+// Select the <h1> element to apply event listeners
+const h1 = document.querySelector('h1');
+
+// --- Method 1: Using addEventListener ---
+// Allows multiple event listeners for the same event and element; supports removal.
+// Triggers every time mouse enters the heading.
+// Best practice for modern JavaScript development.
+// Function receives a MouseEvent object as its argument.
+h1.addEventListener('mouseenter', function (e) { 
+    alert('addEventListener: Great! You are reading the heading for first Time :D');
+});
+
+// --- Method 2: Using the on-event property ---
+// Direct property assignment replaces any previous handler for this event type.
+// Here, it will show alert only when mouse enters the heading ("mouseenter" event).
+// If this property is assigned multiple times, only the last one runs.
+h1.onmouseenter = function (e) { 
+    alert('onmouseenter: Great! You are reading the heading for second Time :D');
+};
+
+// --- Named Function with Removal ---
+// Demonstrates removing an event listener after first use (single-use callback mechanic).
+// Useful for onboarding, one-time tips, etc.
+const alertH1 = function (e) { 
+    alert('addEventListener: Great! You are reading the heading for third Time  :D');
+    h1.removeEventListener('mouseenter', alertH1); // After this runs once, it's removed!
+};
+
+// Attach the named listener (removable, efficient)
+h1.addEventListener('mouseenter', alertH1);
+
+///////////////////////////////////////////////////////////////////////
+// Real-Time Example: Tooltips and Context Guidance
+///////////////////////////////////////////////////////////////////////
+// A common real-world use is showing a tooltip, instruction, or tip to guide user:
+// - Use `addEventListener` with a named function that removes itself for one-time assistance.
+// - Use multiple listeners to provide both persistent and context-driven help.
+// - Use on-event property only for simple pages or legacy compatibility needs.
+///////////////////////////////////////////////////////////////////////
+
+/*
+KEY LEARNING HIGHLIGHTS:
+
+- addEventListener allows multiple simultaneous handlers, dynamic add/remove, and is the recommended approach for modern apps[6][8][9].
+- onmouseenter (or other "on"-event properties) assigns exactly one handler per event type, replacing previous assignments.
+- Removing listeners enables single-use or context-specific interactivity. Named functions are required to remove listeners (anonymous functions cannot be removed!).
+- Event objects (like MouseEvent) contain useful info about the interaction/context.
+- Real situations: onboarding, tooltips, instant feedback, forms, step-by-step guides.
+*/
+
+
+///////////////////////////////////////////////////////////////////////
+// EVENT PROPAGATION : BUBBLING AND CAPTURING
+///////////////////////////////////////////////////////////////////////
+/*
+Event propagation determines how events travel through the DOM tree:
+- Bubbling: event starts at the innermost (clicked) element and bubbles up to ancestors.
+- Capturing: event travels from the outermost ancestor down to the target element.
+- Both phases run before the event gets handled at the target (event.target).
+- Most event listeners use BUBBLING by default[8].
+- You can specify the CAPTURING phase using addEventListener's third parameter (true)[2].
+- Propagation can be stopped with e.stopPropagation(), useful for controlling event flow.
+*/
+
+// ===== Utility function to generate a random RGB color string =====
+const randomColor = function () {
+  return `rgb(${Math.floor(Math.random() * 255)},${Math.floor(
+    Math.random() * 255
+  )},${Math.floor(Math.random() * 255)})`;
+};
+console.log(randomColor());
+
+// ===== BUBBLING: Event listeners default to bubbling phase =====
+// Nav Link: Most specific/inner element
+document.querySelector('.nav__link').addEventListener('click', function (e) {
+  this.style.backgroundColor = randomColor(); // Change background to random color
+  console.log('LINK', e.target, e.currentTarget); // e.target: clicked element; e.currentTarget: handler's element
+
+  // Prevent further propagation upward (stops bubbling here)
+  e.stopPropagation();
+});
+
+// Nav Links Container: Parent of nav__link
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+  this.style.backgroundColor = randomColor();
+  console.log('CONTAINER', e.target, e.currentTarget);
+  // No stopPropagation() here, so event continues bubbling up after running
+});
+
+// ===== CAPTURING: Add listener on parent with capturing enabled (true as third param) =====
+// Nav: Outermost parent
+document.querySelector('.nav').addEventListener(
+  'click',
+  function (e) {
+    this.style.backgroundColor = randomColor();
+    console.log('NAV', e.target, e.currentTarget);
+  },
+  true // Enables capturing phase for this handler
+);
+
+///////////////////////////////////////////////////////////////////////
+// Real-Time Example: Layered Navigation Coloring
+///////////////////////////////////////////////////////////////////////
+/*
+Scenario: Clicking on a navigation link can trigger multiple effects on parent/ancestor containers.
+- Demonstrate that event listeners fire on parent containers as well in a specific order.
+- Bubbling lets child click events trigger parent handlers unless stopped.
+- Capturing (with third param true) gives priority to ancestor handler before target's.
+- Use stopPropagation to ensure only the innermost handler runs (e.g. click on popup, no background click).
+*/
+
+///////////////////////////////////////////////////////////////////////
+// Key Learning Highlights
+///////////////////////////////////////////////////////////////////////
+// - Bubbling (default): goes from event target up to root; parent handlers run after child handlers[2][8][4].
+// - Capturing: use third param true; handlers run from root down to target before the target's own handler[2].
+// - e.stopPropagation prevents parent listeners from executing, useful for specific UI control[6][5].
+// - Use cases: modal dialogs, navigation bars, complex forms with parent-child event logic.
 
 
 
