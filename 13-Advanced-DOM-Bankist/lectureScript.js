@@ -165,10 +165,10 @@ logo.classList.contains('c');
 ///////////////////////////////////////////////////////////////////////
 // Key Learning Highlights
 ///////////////////////////////////////////////////////////////////////
-// - Use .style for inline CSS changes; CSS variables for custom/theming[1][14]
-// - Use .setAttribute and .getAttribute for any attribute, standard or custom[5][6][10]
-// - Use .dataset for direct access to data-* attributes[12][20]
-// - Use .classList for class management: add, remove, toggle, contains, replace[7][5]
+// - Use .style for inline CSS changes; CSS variables for custom/theming
+// - Use .setAttribute and .getAttribute for any attribute, standard or custom
+// - Use .dataset for direct access to data-* attributes
+// - Use .classList for class management: add, remove, toggle, contains, replace
 // - Real-world use: Building dynamic interfaces, live themes, notifications, A/B tests, user feedback.
 
 
