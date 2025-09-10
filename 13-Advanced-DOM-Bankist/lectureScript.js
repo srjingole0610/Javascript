@@ -41,7 +41,7 @@ header.append(message);
 // header.append(message.cloneNode(true));
 
 // Insert before or after the header (as siblings)
-header.before(message); // Inserts message just before header
+// header.before(message); // Inserts message just before header
 // header.after(message); // Would add just after header
 
 // ==== REMOVING ELEMENTS ====
@@ -58,23 +58,6 @@ setTimeout(function () {
 }, 5000); // 5 seconds (5000 milliseconds)
 
 ///////////////////////////////////////////////////////////////////////
-// Real-Time Example: Notification Banner
-///////////////////////////////////////////////////////////////////////
-/*
-This code creates, displays, and removes a notification banner (like for cookies or sales) at the top
-of the page. User can close it immediately, or it will disappear automatically after a few seconds.
-This is a common pattern for onboarding, informational updates, or alerts on websites.
-*/
-const notification = document.querySelector('.notification');
-const notificationClose = document.querySelector('.btn--close-notification');
-notificationClose.addEventListener('click', () => {
-  notification.classList.add('hidden');
-});
-setTimeout(() => {
-  notification.classList.add('hidden');
-}, 5000);
-
-///////////////////////////////////////////////////////////////////////
 //Key Learning Highlights
 ///////////////////////////////////////////////////////////////////////
 
@@ -83,4 +66,111 @@ setTimeout(() => {
 // Remove Element: Call .remove() on an element, or parent’s .removeChild() for backwards compatibility.
 // Modify Content: Use .textContent, .innerHTML to set or read text/HTML inside elements.
 // Event Handling: Add interactive behavior, e.g., close/shutdown notifications with one button click or automatically after set time.
+
+
+// ===========================
+// STYLE Manipulation
+// ===========================
+
+// Directly set inline CSS styles via .style
+message.style.backgroundColor = '#37383d'; // Sets message background to dark gray
+message.style.width = '120%';              // Overwrites CSS width with a new value
+
+// Reading styles:
+// .style only reads inline styles set via JS or 'style' attributes
+console.log(message.style.height);          // Shows only inline style, undefined if set via CSS
+console.log(message.style.backgroundColor); // Shows set inline style
+
+// getComputedStyle returns the final computed style (from CSS, stylesheets, etc.)
+console.log(getComputedStyle(message).color);  // Reads actual color as computed
+console.log(getComputedStyle(message).height); // Reads actual height as computed
+
+// Dynamically change style properties using computed value
+message.style.height =
+  Number.parseFloat(getComputedStyle(message).height, 10) + 30 + 'px'; // Adds 30px to current height
+console.log(getComputedStyle(message).height);
+
+// Set a CSS variable (custom property) globally
+document.documentElement.style.setProperty('--color-primary', 'orangered'); // Changes site theme color
+
+// ===========================
+// ATTRIBUTE Manipulation
+// ===========================
+
+// Select an image/logo element
+const logo = document.querySelector('.nav__logo');
+
+// Read standard built-in attributes
+console.log(logo.alt);  // Gets the alt attribute (should be a text description)
+console.log(logo.src);  // Gets the full URL of the image source
+
+// Modify standard attribute
+logo.alt = 'Beautiful minimalist logo';  // Changes alt text for accessibility
+console.log(logo.alt);
+
+// Custom attributes: properties only exist if defined in markup or setAttribute
+console.log(logo.designer); // Undefined unless defined in markup
+console.log(logo.getAttribute('designer')); // Use .getAttribute for any attribute
+
+// Read all class names as a string
+console.log(logo.className);
+
+// Add a custom attribute (visible in DOM, usable for logic/styling)
+logo.setAttribute('company', 'Bankist');
+
+// Difference between src property (absolute URL) and getAttribute('src') (raw or relative value)
+console.log(logo.getAttribute('src')); // Returns value as written in HTML
+console.log(logo.src);                 // Returns resolved absolute URL
+
+// Read and compare link attributes for demonstration
+const link = document.querySelector('.nav__link--btn');
+console.log(link.href);                // Absolute URL
+console.log(link.getAttribute('href')); // Relative or raw HTML value
+
+// ===========================
+// DATA Attribute Manipulation
+// ===========================
+
+// Attributes like data-version-number show up in .dataset
+console.log(logo.dataset.versionNumber); // CamelCase property for 'data-version-number'
+
+// ===========================
+// CLASS Manipulation
+// ===========================
+
+// Add CSS classes for multiple style changes
+logo.classList.add('c', 'j');        // Adds classes 'c' and 'j'
+// Remove one or more classes
+logo.classList.remove('c', 'j');
+// Toggle class: adds if missing, removes if present
+logo.classList.toggle('c');
+// Check if class exists
+logo.classList.contains('c');
+
+///////////////////////////////////////////////////////////////////////
+// Real-Time Example: Dynamic Theming and Style Toggles
+///////////////////////////////////////////////////////////////////////
+
+// User can click a button to switch the logo color theme
+// document.querySelector('.theme-toggle').addEventListener('click', function () {
+//   logo.classList.toggle('dark-theme'); // CSS can give .dark-theme new colors
+//   // Optionally update a data attribute for tracking
+//   logo.dataset.themeOn = logo.classList.contains('dark-theme');
+//   // Change alt text to reflect state
+//   logo.alt = logo.classList.contains('dark-theme')
+//     ? 'Minimalist dark theme logo'
+//     : 'Beautiful minimalist logo';
+// });
+
+///////////////////////////////////////////////////////////////////////
+// Key Learning Highlights
+///////////////////////////////////////////////////////////////////////
+// - Use .style for inline CSS changes; CSS variables for custom/theming
+// - Use .setAttribute and .getAttribute for any attribute, standard or custom
+// - Use .dataset for direct access to data-* attributes
+// - Use .classList for class management: add, remove, toggle, contains, replace
+// - Real-world use: Building dynamic interfaces, live themes, notifications, A/B tests, user feedback.
+
+
+
 
