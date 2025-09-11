@@ -296,4 +296,74 @@ Scenario: Clicking on a navigation link can trigger multiple effects on parent/a
 // - Use cases: modal dialogs, navigation bars, complex forms with parent-child event logic.
 
 
+///////////////////////////////////////////////////////////////////////
+// DOM TRAVERSING BASICS AND EXAMPLES
+///////////////////////////////////////////////////////////////////////
+const h1New = document.querySelector('h1');
+
+// ==== GOING DOWN THE DOM: CHILDREN ====
+
+// Selects all descendants of <h1> with class 'highlight' (nodeList, NOT just direct children)
+console.log(h1New.querySelectorAll('.highlight')); // Descendant highlights
+
+// NodeList of all child nodes INCLUDING elements, text, and comments
+console.log(h1New.childNodes);
+
+// HTMLCollection of ONLY element children (excludes text nodes)
+console.log(h1New.children);
+
+// Style the first and last element children of h1
+h1New.firstElementChild.style.color = 'white';         // First child
+h1New.lastElementChild.style.color = 'orangered';      // Last child
+
+// ==== GOING UP THE DOM: PARENTS ====
+
+// parentNode and parentElement often return the same value (the parent node, or parent element)
+console.log(h1New.parentNode);      // May return non-element nodes (rare for h1)
+console.log(h1New.parentElement);   // Always returns parent element (null if root)
+
+// closest(selector) finds nearest ancestor (parent or self) that matches selector
+// Useful for progressive enhancement and looking for context
+h1New.closest('.header').style.background = 'var(--gradient-secondary)'; // Sets ancestor header bg
+h1New.closest('h1').style.background = 'var(--gradient-primary)'; // Sets h1 bg if matches selector
+
+// ==== GOING SIDEWAYS: SIBLINGS ====
+
+// Returns element siblings before/after (null if none)
+console.log(h1New.previousElementSibling);
+console.log(h1New.nextElementSibling);
+
+// Returns ANY sibling node (including text or comment nodes)
+console.log(h1New.previousSibling);
+console.log(h1New.nextSibling);
+
+// HTMLCollection of all element children of h1's parent (includes h1 itself and its siblings)
+console.log(h1New.parentElement.children);
+
+// Loop over all h1's siblings and scale them down (skip h1 itself!)
+[...h1New.parentElement.children].forEach(function (el) {
+  if (el !== h1New) el.style.transform = 'scale(0.7)';
+});
+
+///////////////////////////////////////////////////////////////////////
+// Real-Time Example: Fading Siblings and Highlighting Section Titles
+///////////////////////////////////////////////////////////////////////
+/*
+- When a user focuses on an element (e.g., section title), you can visually de-emphasize sibling elements to draw attention.
+- Traversing up: Use .closest() to find the section or header that contains it and apply special CSS.
+- Traversing sideways: Dim or shrink sibling sections/headings for focus/animation effects.
+- Traversing down: Find all highlights (e.g., inline <mark> or <span class="highlight">) and animate or style them to guide the user’s attention.
+- DOM traversal allows for dynamic, intuitive, and interactive UIs.
+*/
+
+///////////////////////////////////////////////////////////////////////
+// Key Learning Highlights
+///////////////////////////////////////////////////////////////////////
+// - childNodes vs. children: childNodes includes all node types; children only element nodes[1][3].
+// - firstElementChild/lastElementChild: strictly go to first/last element, skipping whitespace/comments[1].
+// - parentNode/parentElement: navigate upwards, .closest() finds ancestors by selector match[7][1].
+// - previousElementSibling/nextElementSibling: traverse adjacent elements, not just nodes[6][1].
+// - Techniques combine for tree traversal, animation, interactivity, and context-aware UI[1][3][7][6].
+
+
 
