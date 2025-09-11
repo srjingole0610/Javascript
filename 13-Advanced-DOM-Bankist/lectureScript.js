@@ -242,18 +242,18 @@ Event propagation determines how events travel through the DOM tree:
 
 // ===== Utility function to generate a random RGB color string =====
 const randomColor = function () {
-  return `rgb(${Math.floor(Math.random() * 255)},${Math.floor(
-    Math.random() * 255
-  )},${Math.floor(Math.random() * 255)})`;
+  return `rgb(${Math.floor(Math.random() * 256)},${Math.floor(
+    Math.random() * 256
+  )},${Math.floor(Math.random() * 256)})`;
 };
 console.log(randomColor());
 
 // ===== BUBBLING: Event listeners default to bubbling phase =====
 // Nav Link: Most specific/inner element
 document.querySelector('.nav__link').addEventListener('click', function (e) {
+  // This listener is only attached to the first '.nav__link' element.
   this.style.backgroundColor = randomColor(); // Change background to random color
   console.log('LINK', e.target, e.currentTarget); // e.target: clicked element; e.currentTarget: handler's element
-
   // Prevent further propagation upward (stops bubbling here)
   e.stopPropagation();
 });
