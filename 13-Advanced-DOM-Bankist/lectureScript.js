@@ -3,16 +3,16 @@
 // ==== EXPLORING THE DOM TREE ====
 // Log out the complete root <html>, <head>, and <body> elements
 console.log(document.documentElement); // Root HTML element node
-console.log(document.head);            // Head section
-console.log(document.body);            // Body section
+console.log(document.head); // Head section
+console.log(document.body); // Body section
 
 // ==== SELECTING ELEMENTS ====
 // Select first element with class 'header' (like a site navigation/header)
-const header = document.querySelector('.header');
-console.log(header);
+const header1 = document.querySelector('.header');
+console.log(header1);
 // Select ALL elements with class 'section' (returns NodeList)
-const allSections = document.querySelectorAll('.section');
-console.log(allSections);
+const allSections1 = document.querySelectorAll('.section');
+console.log(allSections1);
 
 // Select element by ID (returns the first match)
 document.getElementById('section--1');
@@ -25,9 +25,10 @@ console.log(document.getElementsByClassName('btn'));
 
 // ==== CREATING AND INSERTING ELEMENTS ====
 // Create a <div> element for a cookie message
-const message = document.createElement('div');           // Not yet in the DOM!
-message.classList.add('cookie-message');                 // Add a class to style or select it
-message.textContent = 'We use cookies for improved functionality and analytics.';
+const message = document.createElement('div'); // Not yet in the DOM!
+message.classList.add('cookie-message'); // Add a class to style or select it
+message.textContent =
+  'We use cookies for improved functionality and analytics.';
 // Add inner HTML for message and a dismiss button
 message.innerHTML =
   'We use cookies for improved functionality and analytics. <button class="btn btn--close-cookie">Got it!</button>';
@@ -67,22 +68,21 @@ setTimeout(function () {
 // Modify Content: Use .textContent, .innerHTML to set or read text/HTML inside elements.
 // Event Handling: Add interactive behavior, e.g., close/shutdown notifications with one button click or automatically after set time.
 
-
 // ===========================
 // STYLE Manipulation
 // ===========================
 
 // Directly set inline CSS styles via .style
 message.style.backgroundColor = '#37383d'; // Sets message background to dark gray
-message.style.width = '120%';              // Overwrites CSS width with a new value
+message.style.width = '120%'; // Overwrites CSS width with a new value
 
 // Reading styles:
 // .style only reads inline styles set via JS or 'style' attributes
-console.log(message.style.height);          // Shows only inline style, undefined if set via CSS
+console.log(message.style.height); // Shows only inline style, undefined if set via CSS
 console.log(message.style.backgroundColor); // Shows set inline style
 
 // getComputedStyle returns the final computed style (from CSS, stylesheets, etc.)
-console.log(getComputedStyle(message).color);  // Reads actual color as computed
+console.log(getComputedStyle(message).color); // Reads actual color as computed
 console.log(getComputedStyle(message).height); // Reads actual height as computed
 
 // Dynamically change style properties using computed value
@@ -101,11 +101,11 @@ console.log(getComputedStyle(message).height);
 const logo = document.querySelector('.nav__logo');
 
 // Read standard built-in attributes
-console.log(logo.alt);  // Gets the alt attribute (should be a text description)
-console.log(logo.src);  // Gets the full URL of the image source
+console.log(logo.alt); // Gets the alt attribute (should be a text description)
+console.log(logo.src); // Gets the full URL of the image source
 
 // Modify standard attribute
-logo.alt = 'Beautiful minimalist logo';  // Changes alt text for accessibility
+logo.alt = 'Beautiful minimalist logo'; // Changes alt text for accessibility
 console.log(logo.alt);
 
 // Custom attributes: properties only exist if defined in markup or setAttribute
@@ -120,11 +120,11 @@ logo.setAttribute('company', 'Bankist');
 
 // Difference between src property (absolute URL) and getAttribute('src') (raw or relative value)
 console.log(logo.getAttribute('src')); // Returns value as written in HTML
-console.log(logo.src);                 // Returns resolved absolute URL
+console.log(logo.src); // Returns resolved absolute URL
 
 // Read and compare link attributes for demonstration
 const link = document.querySelector('.nav__link--btn');
-console.log(link.href);                // Absolute URL
+console.log(link.href); // Absolute URL
 console.log(link.getAttribute('href')); // Relative or raw HTML value
 
 // ===========================
@@ -139,7 +139,7 @@ console.log(logo.dataset.versionNumber); // CamelCase property for 'data-version
 // ===========================
 
 // Add CSS classes for multiple style changes
-logo.classList.add('c', 'j');        // Adds classes 'c' and 'j'
+logo.classList.add('c', 'j'); // Adds classes 'c' and 'j'
 // Remove one or more classes
 logo.classList.remove('c', 'j');
 // Toggle class: adds if missing, removes if present
@@ -171,7 +171,6 @@ logo.classList.contains('c');
 // - Use .classList for class management: add, remove, toggle, contains, replace
 // - Real-world use: Building dynamic interfaces, live themes, notifications, A/B tests, user feedback.
 
-
 // ===========================
 // Types of Event and Event Handlers
 // ===========================
@@ -184,24 +183,28 @@ const h1 = document.querySelector('h1');
 // Triggers every time mouse enters the heading.
 // Best practice for modern JavaScript development.
 // Function receives a MouseEvent object as its argument.
-h1.addEventListener('mouseenter', function (e) { 
-    alert('addEventListener: Great! You are reading the heading for first Time :D');
+h1.addEventListener('mouseenter', function (e) {
+  alert(
+    'addEventListener: Great! You are reading the heading for first Time :D',
+  );
 });
 
 // --- Method 2: Using the on-event property ---
 // Direct property assignment replaces any previous handler for this event type.
 // Here, it will show alert only when mouse enters the heading ("mouseenter" event).
 // If this property is assigned multiple times, only the last one runs.
-h1.onmouseenter = function (e) { 
-    alert('onmouseenter: Great! You are reading the heading for second Time :D');
+h1.onmouseenter = function (e) {
+  alert('onmouseenter: Great! You are reading the heading for second Time :D');
 };
 
 // --- Named Function with Removal ---
 // Demonstrates removing an event listener after first use (single-use callback mechanic).
 // Useful for onboarding, one-time tips, etc.
-const alertH1 = function (e) { 
-    alert('addEventListener: Great! You are reading the heading for third Time  :D');
-    h1.removeEventListener('mouseenter', alertH1); // After this runs once, it's removed!
+const alertH1 = function (e) {
+  alert(
+    'addEventListener: Great! You are reading the heading for third Time  :D',
+  );
+  h1.removeEventListener('mouseenter', alertH1); // After this runs once, it's removed!
 };
 
 // Attach the named listener (removable, efficient)
@@ -226,7 +229,6 @@ KEY LEARNING HIGHLIGHTS:
 - Real situations: onboarding, tooltips, instant feedback, forms, step-by-step guides.
 */
 
-
 ///////////////////////////////////////////////////////////////////////
 // EVENT PROPAGATION : BUBBLING AND CAPTURING
 ///////////////////////////////////////////////////////////////////////
@@ -243,7 +245,7 @@ Event propagation determines how events travel through the DOM tree:
 // ===== Utility function to generate a random RGB color string =====
 const randomColor = function () {
   return `rgb(${Math.floor(Math.random() * 256)},${Math.floor(
-    Math.random() * 256
+    Math.random() * 256,
   )},${Math.floor(Math.random() * 256)})`;
 };
 console.log(randomColor());
@@ -273,7 +275,7 @@ document.querySelector('.nav').addEventListener(
     this.style.backgroundColor = randomColor();
     console.log('NAV', e.target, e.currentTarget);
   },
-  true // Enables capturing phase for this handler
+  true, // Enables capturing phase for this handler
 );
 
 ///////////////////////////////////////////////////////////////////////
@@ -295,5 +297,71 @@ Scenario: Clicking on a navigation link can trigger multiple effects on parent/a
 // - e.stopPropagation prevents parent listeners from executing, useful for specific UI control[6][5].
 // - Use cases: modal dialogs, navigation bars, complex forms with parent-child event logic.
 
+///////////////////////////////////////////////////////////////////////
+// DOM TRAVERSING BASICS AND EXAMPLES
+///////////////////////////////////////////////////////////////////////
+const h1New = document.querySelector('h1');
 
+// ==== GOING DOWN THE DOM: CHILDREN ====
 
+// Selects all descendants of <h1> with class 'highlight' (nodeList, NOT just direct children)
+console.log(h1New.querySelectorAll('.highlight')); // Descendant highlights
+
+// NodeList of all child nodes INCLUDING elements, text, and comments
+console.log(h1New.childNodes);
+
+// HTMLCollection of ONLY element children (excludes text nodes)
+console.log(h1New.children);
+
+// Style the first and last element children of h1
+h1New.firstElementChild.style.color = 'white'; // First child
+h1New.lastElementChild.style.color = 'orangered'; // Last child
+
+// ==== GOING UP THE DOM: PARENTS ====
+
+// parentNode and parentElement often return the same value (the parent node, or parent element)
+console.log(h1New.parentNode); // May return non-element nodes (rare for h1)
+console.log(h1New.parentElement); // Always returns parent element (null if root)
+
+// closest(selector) finds nearest ancestor (parent or self) that matches selector
+// Useful for progressive enhancement and looking for context
+h1New.closest('.header').style.background = 'var(--gradient-secondary)'; // Sets ancestor header bg
+h1New.closest('h1').style.background = 'var(--gradient-primary)'; // Sets h1 bg if matches selector
+
+// ==== GOING SIDEWAYS: SIBLINGS ====
+
+// Returns element siblings before/after (null if none)
+console.log(h1New.previousElementSibling);
+console.log(h1New.nextElementSibling);
+
+// Returns ANY sibling node (including text or comment nodes)
+console.log(h1New.previousSibling);
+console.log(h1New.nextSibling);
+
+// HTMLCollection of all element children of h1's parent (includes h1 itself and its siblings)
+console.log(h1New.parentElement.children);
+
+// Loop over all h1's siblings and scale them down (skip h1 itself!)
+[...h1New.parentElement.children].forEach(function (el) {
+  if (el !== h1New) el.style.transform = 'scale(0.7)';
+});
+
+///////////////////////////////////////////////////////////////////////
+// Real-Time Example: Fading Siblings and Highlighting Section Titles
+///////////////////////////////////////////////////////////////////////
+/*
+- When a user focuses on an element (e.g., section title), you can visually de-emphasize sibling elements to draw attention.
+- Traversing up: Use .closest() to find the section or header that contains it and apply special CSS.
+- Traversing sideways: Dim or shrink sibling sections/headings for focus/animation effects.
+- Traversing down: Find all highlights (e.g., inline <mark> or <span class="highlight">) and animate or style them to guide the user’s attention.
+- DOM traversal allows for dynamic, intuitive, and interactive UIs.
+*/
+
+///////////////////////////////////////////////////////////////////////
+// Key Learning Highlights
+///////////////////////////////////////////////////////////////////////
+// - childNodes vs. children: childNodes includes all node types; children only element nodes[1][3].
+// - firstElementChild/lastElementChild: strictly go to first/last element, skipping whitespace/comments[1].
+// - parentNode/parentElement: navigate upwards, .closest() finds ancestors by selector match[7][1].
+// - previousElementSibling/nextElementSibling: traverse adjacent elements, not just nodes[6][1].
+// - Techniques combine for tree traversal, animation, interactivity, and context-aware UI[1][3][7][6].
