@@ -81,10 +81,10 @@ USING EVENT DELEGATION:
 document.querySelector('.nav__links').addEventListener('click', function (e) {
   // Matching strategy: Ensure event originated from a nav link
   if (e.target.classList.contains('nav__link')) {
+    e.preventDefault();
     const id = e.target.getAttribute('href');
     // Only scroll for valid section links, ignore others (e.g., modal button)
-    if (id.startsWith('#') && id.length > 1) {
-      e.preventDefault();
+    if (id && id.startsWith('#') && id.length > 1) {
       document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
     }
   }
@@ -122,8 +122,6 @@ const tabsContent = document.querySelectorAll('.operations__content'); // conten
 tabsContainer.addEventListener('click', function (e) {
   // Find the actual tab button clicked, even if an inner child was clicked (e.g., icon inside button)
   const clicked = e.target.closest('.operations__tab');
-  console.log(clicked); // useful for debugging – logs clicked tab or null
-
   // Guard clause: If the click wasn't on a tab, exit (prevents JS errors on background click)
   if (!clicked) return;
 
@@ -212,7 +210,6 @@ animation speed, disabling/enabling, etc.
 // ======= OLD WAY: Using scroll event and coordinates =======
 // 1. Get the bounding rectangle for the target section (e.g. first content section)
 const initialCoords = section1.getBoundingClientRect();
-console.log(initialCoords);
 
 // 2. On every scroll event, check scroll position
 window.addEventListener('scroll', function (e) {
@@ -233,7 +230,6 @@ window.addEventListener('scroll', function (e) {
 
 const header = document.querySelector('.header'); // The section to watch for intersection
 const navHeight = navbar.getBoundingClientRect().height; // Dynamic calculation of nav's height for correct offset
-console.log(navHeight);
 
 // Callback: receives intersection info (array of entries, here always length 1)
 const stickNav = function (entries) {
@@ -318,28 +314,24 @@ const imgTargets = document.querySelectorAll('img[data-src]');
 
 // Callback function executed when observed images intersect the viewport
 const loadImg = function (entries, observer) {
-  const [entry] = entries; // Only one entry expected due to single observed target
-
-  // If the image is NOT intersecting the viewport, do nothing and return (lazy loading deferral)
-  if (!entry.isIntersecting) return;
-
-  // Replace the placeholder src with the actual data-src to start loading the real image
-  entry.target.src = entry.target.dataset.src;
-
-  // Listen for the real image load event to remove the blur/placeholder effect
-  entry.target.addEventListener('load', function () {
-    entry.target.classList.remove('lazy-img'); // Remove CSS class that applies blur filter or placeholder styling
+  entries.forEach(entry => {
+    // If the image is NOT intersecting the viewport, do nothing and return (lazy loading deferral)
+    if (!entry.isIntersecting) return;
+    // Replace the placeholder src with the actual data-src to start loading the real image
+    entry.target.src = entry.target.dataset.src;
+    // Listen for the real image load event to remove the blur/placeholder effect
+    entry.target.addEventListener('load', function () {
+      entry.target.classList.remove('lazy-img'); // Remove CSS class that applies blur filter or placeholder styling
+    });
+    // Stop observing this image after it has been loaded once for better performance
+    observer.unobserve(entry.target);
   });
-
-  // Stop observing this image after it has been loaded once for better performance
-  observer.unobserve(entry.target);
 };
-
 // Create an Intersection Observer instance to monitor when images enter the viewport
 const imgObserver = new IntersectionObserver(loadImg, {
-  root: null,              // root=null means viewport is root
-  threshold: 0,            // 0 means trigger as soon as even one pixel enters viewport
-  rootMargin: '200px',     // Preload images 200px before they enter the viewport (optional for smoother loading)
+  root: null, // root=null means viewport is root
+  threshold: 0, // 0 means trigger as soon as even one pixel enters viewport
+  rootMargin: '200px', // Preload images 200px before they enter the viewport (optional for smoother loading)
 });
 
 // Observe each target image for intersection (entering viewport)
@@ -359,6 +351,5 @@ imgTargets.forEach(img => imgObserver.observe(img));
 ///////////////////////////////////////////////////////////////////////
 // Real-Time Scenario
 ///////////////////////////////////////////////////////////////////////
-// E-commerce sites or blogs use lazy loading for product photos. 
+// E-commerce sites or blogs use lazy loading for product photos.
 // Users scroll, and the images load just before they appear, ensuring fast page start and bandwidth savings.
-
