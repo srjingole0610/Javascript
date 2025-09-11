@@ -963,6 +963,644 @@ Practice these concepts regularly, and you'll build a solid foundation for advan
 
 ---
 
+# JavaScript Fundamentals - Part 6: Game Development & Advanced Patterns
+
+## Table of Contents (Part 6)
+26. [Game State Management](#game-state-management)
+27. [Event-Driven Programming](#event-driven-programming)
+28. [Array-Based Data Structures](#array-based-data-structures)
+29. [Random Number Generation](#random-number-generation)
+30. [Game Loop Patterns](#game-loop-patterns)
+31. [Player Management Systems](#player-management-systems)
+32. [Win Condition Logic](#win-condition-logic)
+33. [Theme Persistence](#theme-persistence)
+
+---
+
+## Game State Management
+
+### Theory
+Game state management involves tracking and updating various game variables to maintain the current state of the game. This includes player scores, current turn, game status, and any temporary states.
+
+### Key Concepts:
+- **State Variables**: Store current game status
+- **State Transitions**: Moving between different game states
+- **State Validation**: Ensuring game state consistency
+- **State Reset**: Returning to initial conditions
+
+### Code Example:
+```javascript
+// Game state variables
+const scores = [0, 0];  // Player total scores
+let currentScore = 0;   // Current turn score
+let activePlayer = 0;   // Current player (0 or 1)
+let playing = true;     // Game active flag
+const WINNING_SCORE = 100;
+
+// State management functions
+const resetGameState = function() {
+    scores[0] = 0;
+    scores[1] = 0;
+    currentScore = 0;
+    activePlayer = 0;
+    playing = true;
+};
+
+const updatePlayerScore = function(player, score) {
+    scores[player] += score;
+    // Check win condition
+    if (scores[player] >= WINNING_SCORE) {
+        playing = false;
+        return true; // Winner found
+    }
+    return false;
+};
+
+// State transition
+const switchActivePlayer = function() {
+    currentScore = 0;
+    activePlayer = activePlayer === 0 ? 1 : 0;
+};
+```
+
+---
+
+## Event-Driven Programming
+
+### Theory
+Event-driven programming responds to user interactions through event listeners. Games heavily rely on events for user input handling and state changes.
+
+### Event Types:
+- **Click Events**: Button interactions
+- **DOM Events**: Page load, content ready
+- **Custom Events**: Game-specific triggers
+
+### Code Example:
+```javascript
+// DOM element references
+const btnRoll = document.querySelector('.btn--roll');
+const btnHold = document.querySelector('.btn--hold');
+const btnNew = document.querySelector('.btn--new');
+
+// Event handlers
+const handleRollDice = function() {
+    if (!playing) return; // Guard clause
+    
+    const dice = Math.trunc(Math.random() * 6) + 1;
+    updateDiceDisplay(dice);
+    
+    if (dice !== 1) {
+        currentScore += dice;
+        updateCurrentScore();
+    } else {
+        switchPlayer();
+    }
+};
+
+const handleHoldScore = function() {
+    if (!playing) return;
+    
+    const isWinner = updatePlayerScore(activePlayer, currentScore);
+    if (isWinner) {
+        endGame();
+    } else {
+        switchPlayer();
+    }
+};
+
+// Event listener registration
+btnRoll.addEventListener('click', handleRollDice);
+btnHold.addEventListener('click', handleHoldScore);
+btnNew.addEventListener('click', resetGame);
+
+// Keyboard events for better UX
+document.addEventListener('keydown', function(e) {
+    if (e.key === ' ') handleRollDice();      // Spacebar to roll
+    if (e.key === 'Enter') handleHoldScore(); // Enter to hold
+    if (e.key === 'Escape') resetGame();     // Escape for new game
+});
+```
+
+---
+
+## Array-Based Data Structures
+
+### Theory
+Arrays are perfect for storing player data, game history, and managing multiple similar entities in games.
+
+### Common Patterns:
+- **Player Arrays**: Store scores, names, stats
+- **Index-Based Access**: Use player index for data retrieval
+- **Array Methods**: Utilize built-in methods for data manipulation
+
+### Code Example:
+```javascript
+// Player data management
+const players = [
+    { name: 'Player 1', score: 0, isActive: true },
+    { name: 'Player 2', score: 0, isActive: false }
+];
+
+// Using arrays for scores (simpler approach)
+const scores = [0, 0];
+const names = ['Player 1', 'Player 2'];
+
+// Array manipulation methods
+const updateScore = function(playerIndex, points) {
+    scores[playerIndex] += points;
+    return scores[playerIndex];
+};
+
+const getHighestScore = function() {
+    return Math.max(...scores);
+};
+
+const getWinner = function() {
+    const maxScore = Math.max(...scores);
+    return scores.indexOf(maxScore);
+};
+
+// Game history tracking
+const gameHistory = [];
+
+const recordMove = function(player, action, value) {
+    gameHistory.push({
+        player,
+        action, // 'roll', 'hold', 'switch'
+        value,
+        timestamp: Date.now()
+    });
+};
+
+// Analyze game statistics
+const getPlayerStats = function(playerIndex) {
+    const playerMoves = gameHistory.filter(move => move.player === playerIndex);
+    return {
+        totalMoves: playerMoves.length,
+        rollCount: playerMoves.filter(m => m.action === 'roll').length,
+        holdCount: playerMoves.filter(m => m.action === 'hold').length
+    };
+};
+```
+
+---
+
+## Random Number Generation
+
+### Theory
+Random number generation is crucial for games. JavaScript's `Math.random()` provides pseudorandom numbers that need to be scaled and transformed for game use.
+
+### Key Methods:
+- **Math.random()**: Returns 0-1 (exclusive)
+- **Math.floor()** / **Math.trunc()**: Integer conversion
+- **Scaling**: Multiply and add for range
+
+### Code Example:
+```javascript
+// Basic dice roll (1-6)
+const rollDice = function() {
+    return Math.trunc(Math.random() * 6) + 1;
+};
+
+// Generic random range function
+const randomBetween = function(min, max) {
+    return Math.trunc(Math.random() * (max - min + 1)) + min;
+};
+
+// Weighted random selection
+const weightedRoll = function() {
+    const rand = Math.random();
+    if (rand < 0.1) return 1;      // 10% chance
+    if (rand < 0.3) return 2;      // 20% chance
+    if (rand < 0.6) return 3;      // 30% chance
+    if (rand < 0.8) return 4;      // 20% chance
+    if (rand < 0.95) return 5;     // 15% chance
+    return 6;                      // 5% chance
+};
+
+// Multiple dice rolls
+const rollMultipleDice = function(count) {
+    const rolls = [];
+    for (let i = 0; i < count; i++) {
+        rolls.push(rollDice());
+    }
+    return rolls;
+};
+
+// Advanced: Seed-based random (for reproducible games)
+class SeededRandom {
+    constructor(seed = Date.now()) {
+        this.seed = seed;
+    }
+    
+    next() {
+        this.seed = (this.seed * 9301 + 49297) % 233280;
+        return this.seed / 233280;
+    }
+    
+    roll() {
+        return Math.floor(this.next() * 6) + 1;
+    }
+}
+
+const gameRandom = new SeededRandom(12345);
+console.log(gameRandom.roll()); // Reproducible sequence
+```
+
+---
+
+## Game Loop Patterns
+
+### Theory
+Game loops manage the flow of game execution, handling user input, updating game state, and rendering changes.
+
+### Common Patterns:
+- **Turn-Based**: Players take turns (like Pig Game)
+- **Real-Time**: Continuous updates
+- **Event-Driven**: React to user actions
+
+### Code Example:
+```javascript
+// Turn-based game loop structure
+class GameLoop {
+    constructor() {
+        this.currentPlayer = 0;
+        this.gameState = 'waiting'; // 'waiting', 'playing', 'ended'
+        this.turnPhase = 'roll'; // 'roll', 'hold', 'switch'
+    }
+    
+    startTurn() {
+        this.gameState = 'playing';
+        this.turnPhase = 'roll';
+        this.updateUI();
+    }
+    
+    processPlayerAction(action) {
+        if (this.gameState !== 'playing') return;
+        
+        switch (action) {
+            case 'roll':
+                this.handleRoll();
+                break;
+            case 'hold':
+                this.handleHold();
+                break;
+        }
+        
+        this.checkGameEnd();
+        this.updateUI();
+    }
+    
+    handleRoll() {
+        const dice = rollDice();
+        if (dice === 1) {
+            this.switchPlayer();
+        } else {
+            this.addToCurrentScore(dice);
+        }
+    }
+    
+    handleHold() {
+        this.commitScore();
+        this.switchPlayer();
+    }
+    
+    switchPlayer() {
+        this.currentPlayer = this.currentPlayer === 0 ? 1 : 0;
+        this.turnPhase = 'roll';
+    }
+    
+    checkGameEnd() {
+        if (this.hasWinner()) {
+            this.gameState = 'ended';
+        }
+    }
+    
+    updateUI() {
+        // Update visual elements based on current state
+        this.highlightActivePlayer();
+        this.updateScoreDisplays();
+        this.updateButtonStates();
+    }
+}
+
+// Usage
+const game = new GameLoop();
+game.startTurn();
+```
+
+---
+
+## Player Management Systems
+
+### Theory
+Player management involves tracking multiple players, their states, and providing methods to switch between them effectively.
+
+### Code Example:
+```javascript
+// Player management system
+class PlayerManager {
+    constructor(playerCount = 2) {
+        this.players = this.initializePlayers(playerCount);
+        this.activePlayerIndex = 0;
+    }
+    
+    initializePlayers(count) {
+        return Array.from({ length: count }, (_, i) => ({
+            id: i,
+            name: `Player ${i + 1}`,
+            score: 0,
+            currentScore: 0,
+            isActive: i === 0,
+            wins: 0
+        }));
+    }
+    
+    getActivePlayer() {
+        return this.players[this.activePlayerIndex];
+    }
+    
+    switchToNextPlayer() {
+        this.players[this.activePlayerIndex].isActive = false;
+        this.players[this.activePlayerIndex].currentScore = 0;
+        
+        this.activePlayerIndex = (this.activePlayerIndex + 1) % this.players.length;
+        this.players[this.activePlayerIndex].isActive = true;
+    }
+    
+    updatePlayerScore(points) {
+        const player = this.getActivePlayer();
+        player.currentScore += points;
+    }
+    
+    commitCurrentScore() {
+        const player = this.getActivePlayer();
+        player.score += player.currentScore;
+        player.currentScore = 0;
+    }
+    
+    resetScores() {
+        this.players.forEach(player => {
+            player.score = 0;
+            player.currentScore = 0;
+            player.isActive = false;
+        });
+        this.activePlayerIndex = 0;
+        this.players[0].isActive = true;
+    }
+}
+```
+
+---
+
+## Win Condition Logic
+
+### Theory
+Win conditions define how and when a game ends. They should be checked after each significant game action.
+
+### Code Example:
+```javascript
+// Win condition checker
+class WinConditionChecker {
+    constructor(winningScore = 100) {
+        this.winningScore = winningScore;
+        this.gameEnded = false;
+        this.winner = null;
+    }
+    
+    checkWinCondition(players) {
+        // Score-based win condition
+        const winner = players.find(player => player.score >= this.winningScore);
+        
+        if (winner) {
+            this.gameEnded = true;
+            this.winner = winner;
+            winner.wins++;
+            return { hasWinner: true, winner };
+        }
+        
+        return { hasWinner: false, winner: null };
+    }
+    
+    // Alternative win conditions
+    checkTimeBasedWin(players, timeLimit) {
+        if (Date.now() > timeLimit) {
+            const winner = players.reduce((prev, current) => 
+                prev.score > current.score ? prev : current
+            );
+            return { hasWinner: true, winner, reason: 'time' };
+        }
+        return { hasWinner: false };
+    }
+    
+    checkTurnBasedWin(players, maxTurns, currentTurn) {
+        if (currentTurn >= maxTurns) {
+            const winner = players.reduce((prev, current) => 
+                prev.score > current.score ? prev : current
+            );
+            return { hasWinner: true, winner, reason: 'turns' };
+        }
+        return { hasWinner: false };
+    }
+    
+    reset() {
+        this.gameEnded = false;
+        this.winner = null;
+    }
+}
+```
+
+---
+
+## Theme Persistence
+
+### Theory
+Theme persistence saves user preferences across browser sessions using localStorage, providing a consistent user experience.
+
+### Code Example:
+```javascript
+// Theme management system
+class ThemeManager {
+    constructor() {
+        this.currentTheme = this.loadSavedTheme();
+        this.applyTheme(this.currentTheme);
+    }
+    
+    loadSavedTheme() {
+        return localStorage.getItem('pig-game-theme') || 'light';
+    }
+    
+    saveTheme(theme) {
+        localStorage.setItem('pig-game-theme', theme);
+    }
+    
+    toggleTheme() {
+        this.currentTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+        this.applyTheme(this.currentTheme);
+        this.saveTheme(this.currentTheme);
+    }
+    
+    applyTheme(theme) {
+        document.body.setAttribute('data-theme', theme);
+        this.updateThemeIcon(theme);
+    }
+    
+    updateThemeIcon(theme) {
+        const icon = document.getElementById('theme-icon');
+        if (icon) {
+            icon.textContent = theme === 'dark' ? '🌙' : '☀️';
+        }
+    }
+    
+    // Advanced: System preference detection
+    detectSystemTheme() {
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            return 'dark';
+        }
+        return 'light';
+    }
+    
+    // Listen for system theme changes
+    watchSystemTheme() {
+        if (window.matchMedia) {
+            const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            mediaQuery.addListener((e) => {
+                if (!localStorage.getItem('pig-game-theme')) {
+                    const newTheme = e.matches ? 'dark' : 'light';
+                    this.applyTheme(newTheme);
+                }
+            });
+        }
+    }
+}
+
+// Usage
+const themeManager = new ThemeManager();
+themeManager.watchSystemTheme();
+
+// Theme toggle button
+document.querySelector('.theme-toggle').addEventListener('click', () => {
+    themeManager.toggleTheme();
+});
+```
+
+---
+
+## Interview Questions (Part 6)
+
+### Technical Questions
+
+1. **How do you manage game state in JavaScript applications?**
+   - **Answer**: Use state variables to track game status, implement state transition functions, validate state consistency, and provide reset mechanisms. Consider using classes or objects to encapsulate related state.
+
+2. **What's the difference between event-driven and polling-based game loops?**
+   - **Answer**: Event-driven responds to user actions (better for turn-based games), while polling continuously checks for updates (better for real-time games). Event-driven is more efficient for battery life and performance.
+
+3. **How do you generate truly random numbers in JavaScript games?**
+   - **Answer**: JavaScript's `Math.random()` is pseudorandom. For true randomness, use Web Crypto API: `crypto.getRandomValues()`. For games, pseudorandom is usually sufficient and can be seeded for reproducibility.
+
+### Real-time Based Questions
+
+4. **You're building a multiplayer game. How would you synchronize player actions?**
+   - **Answer**: Use WebSockets for real-time communication, implement action queuing, add timestamp validation, and handle network lag with prediction algorithms.
+
+5. **How would you implement an undo feature in a turn-based game?**
+   - **Answer**: Store game state snapshots before each action, maintain a history stack, and restore previous states when undo is triggered.
+
+### Scenario-Based Questions
+
+6. **Players report that dice rolls seem unfair. How would you investigate and fix this?**
+   - **Answer**: Log roll statistics, implement chi-square tests for distribution analysis, add visual feedback for transparency, and consider weighted randomness if needed.
+
+7. **You need to persist high scores across browser sessions. What's your approach?**
+   - **Answer**: Use localStorage for client-side storage, implement data validation, add backup/restore features, and consider server-side storage for global leaderboards.
+
+---
+
+## Coding Exercises (Part 6)
+
+### Exercise 1: Game State Manager
+Create a complete game state management system:
+```javascript
+// TODO: Implement GameState class
+class GameState {
+    constructor() {
+        // Initialize players, scores, current player, etc.
+    }
+    
+    rollDice() {
+        // Handle dice roll logic
+    }
+    
+    holdScore() {
+        // Handle score holding
+    }
+    
+    switchPlayer() {
+        // Switch active player
+    }
+    
+    checkWinner() {
+        // Check win conditions
+    }
+    
+    reset() {
+        // Reset game state
+    }
+}
+```
+
+### Exercise 2: Advanced Random Generator
+```javascript
+// TODO: Create a DiceRoller class with different dice types
+class DiceRoller {
+    rollStandard() { /* 1-6 */ }
+    rollD20() { /* 1-20 */ }
+    rollCustom(sides) { /* 1-sides */ }
+    rollMultiple(count, sides) { /* Multiple dice */ }
+    rollWithAdvantage() { /* Roll twice, take higher */ }
+}
+```
+
+### Exercise 3: Player Statistics Tracker
+```javascript
+// TODO: Track detailed player statistics
+class PlayerStats {
+    constructor(playerName) {
+        this.name = playerName;
+        // Add properties for: games played, wins, average score, etc.
+    }
+    
+    recordGame(score, isWinner) {
+        // Update statistics
+    }
+    
+    getWinRate() {
+        // Calculate win percentage
+    }
+    
+    getAverageScore() {
+        // Calculate average score
+    }
+}
+```
+
+---
+
+## Summary (Part 6)
+
+This section covered advanced game development patterns:
+- ✅ Game state management and transitions
+- ✅ Event-driven programming patterns
+- ✅ Array-based data structures for games
+- ✅ Random number generation techniques
+- ✅ Game loop architecture
+- ✅ Player management systems
+- ✅ Win condition logic
+- ✅ Theme persistence with localStorage
+
+These concepts form the foundation for building interactive games and complex applications with JavaScript!
+
 # JavaScript Fundamentals - Part 2: Advanced Theory Guide
 
 ## Table of Contents (Part 2)
@@ -1658,5 +2296,2670 @@ This Part 2 guide covers advanced JavaScript fundamentals:
 - ✅ Real-world application scenarios
 
 Combined with Part 1, you now have a comprehensive foundation for JavaScript development!
+
+---
+
+# JavaScript Developer Skills & HTML/CSS Fundamentals
+
+## Table of Contents (Part 3)
+24. [Developer Skills and Problem Solving](#developer-skills-and-problem-solving)
+25. [Debugging with Console and Breakpoints](#debugging-with-console-and-breakpoints)
+26. [HTML & CSS Basics](#html--css-basics)
+27. [Form Elements and User Input](#form-elements-and-user-input)
+
+---
+
+## Developer Skills and Problem Solving
+
+### Theory
+Developer skills involve systematic problem-solving approaches, breaking down complex problems into smaller manageable pieces, and using available resources effectively. The key is to understand the problem before jumping to solutions.
+
+### Problem-Solving Framework:
+1. **Understand the problem** - What exactly needs to be solved?
+2. **Break it down** - Divide into smaller sub-problems
+3. **Research** - Use Google, Stack Overflow, MDN documentation
+4. **Plan the solution** - Write pseudocode or outline steps
+5. **Implement** - Write the actual code
+6. **Test and debug** - Verify the solution works correctly
+
+### Code Example:
+```javascript
+'use strict';
+
+// PROBLEM: Calculate temperature amplitude from an array of temperatures
+// (difference between highest and lowest temperature)
+// Handle sensor errors (non-numeric values)
+
+// 1) Understanding the problem:
+// - What is temperature amplitude? Difference between max and min
+// - How to find max and min values?
+// - What to do with sensor errors? Ignore them
+
+// 2) Breaking into sub-problems:
+// - Filter out non-numeric values (errors)
+// - Find maximum temperature
+// - Find minimum temperature  
+// - Calculate amplitude (max - min)
+
+const calculateTempAmplitude = function(temperatures) {
+    let max = temperatures[0];
+    let min = temperatures[0];
+    
+    for (let i = 0; i < temperatures.length; i++) {
+        const currentTemp = temperatures[i];
+        
+        // Skip sensor errors (non-numeric values)
+        if (typeof currentTemp !== 'number') continue;
+        
+        // Update max and min values
+        if (currentTemp > max) max = currentTemp;
+        if (currentTemp < min) min = currentTemp;
+    }
+    
+    return max - min;
+};
+
+// Test with sample data including sensor errors
+const temps = [3, -2, -6, -1, 'error', 9, 13, 17, 15, 14, 9, 5];
+const amplitude = calculateTempAmplitude(temps);
+console.log(`Temperature amplitude: ${amplitude}°C`); // 23°C
+
+// PROBLEM 2: Handle multiple arrays of temperatures
+// Solution: Merge arrays first, then apply same logic
+
+const calculateTempAmplitudeMultiple = function(temps1, temps2) {
+    // Merge two arrays
+    const allTemps = temps1.concat(temps2);
+    
+    let max = allTemps[0];
+    let min = allTemps[0];
+    
+    for (let i = 0; i < allTemps.length; i++) {
+        const currentTemp = allTemps[i];
+        
+        if (typeof currentTemp !== 'number') continue;
+        
+        if (currentTemp > max) max = currentTemp;
+        if (currentTemp < min) min = currentTemp;
+    }
+    
+    return max - min;
+};
+
+const amplitude2 = calculateTempAmplitudeMultiple([3, 5, 1], [9, 6, 5]);
+console.log(`Combined amplitude: ${amplitude2}°C`); // 8°C
+```
+
+---
+
+## Debugging with Console and Breakpoints
+
+### Theory
+Debugging is the process of finding and fixing errors in code. JavaScript provides several debugging tools and techniques to help identify and resolve issues.
+
+### Debugging Techniques:
+1. **Console methods**: `console.log()`, `console.table()`, `console.error()`
+2. **Browser DevTools**: Breakpoints, step through code
+3. **Code analysis**: Reading error messages, understanding stack traces
+4. **Rubber duck debugging**: Explaining code to identify issues
+
+### Common Console Methods:
+- `console.log()` - Basic output
+- `console.table()` - Display objects/arrays in table format
+- `console.error()` - Display errors in red
+- `console.warn()` - Display warnings in yellow
+- `console.group()` - Group related console outputs
+
+### Code Example:
+```javascript
+'use strict';
+
+// Example with debugging techniques
+const measureKelvin = function() {
+    const measurement = {
+        type: 'temperature',
+        unit: 'celsius',
+        // Common bug: prompt() returns string, not number
+        value: Number(prompt('Enter temperature in Celsius:'))
+    };
+    
+    // Debugging with console methods
+    console.log('Measurement object:', measurement);
+    console.table(measurement); // Nice table format
+    console.log('Value type:', typeof measurement.value);
+    
+    // Convert Celsius to Kelvin
+    const kelvin = measurement.value + 273.15;
+    
+    console.log(`${measurement.value}°C = ${kelvin}K`);
+    return kelvin;
+};
+
+// Debugging a function with logical errors
+const findTemperatureAmplitude = function(temps1, temps2) {
+    const allTemps = temps1.concat(temps2);
+    console.log('All temperatures:', allTemps);
+    
+    // BUG: Initialize with first valid temperature, not 0
+    let max = allTemps[0];
+    let min = allTemps[0];
+    
+    for (let i = 0; i < allTemps.length; i++) {
+        const currentTemp = allTemps[i];
+        
+        if (typeof currentTemp !== 'number') continue;
+        
+        // Add debugging logs
+        console.log(`Checking temp: ${currentTemp}, current max: ${max}, current min: ${min}`);
+        
+        if (currentTemp > max) max = currentTemp;
+        if (currentTemp < min) min = currentTemp;
+    }
+    
+    console.log(`Final max: ${max}, min: ${min}`);
+    return max - min;
+};
+
+// Using console.group for organized debugging
+console.group('Temperature Analysis');
+console.log('Input arrays processed');
+console.log('Errors filtered out');
+console.log('Amplitude calculated');
+console.groupEnd();
+
+// Error handling example
+function safeTemperatureConversion(celsius) {
+    try {
+        if (isNaN(celsius)) {
+            throw new Error('Input must be a number');
+        }
+        
+        const kelvin = celsius + 273.15;
+        console.log(`Conversion successful: ${celsius}°C = ${kelvin}K`);
+        return kelvin;
+    } catch (error) {
+        console.error('Conversion failed:', error.message);
+        return null;
+    }
+}
+```
+
+---
+
+## HTML & CSS Basics
+
+### Theory
+HTML provides structure and content, while CSS provides visual styling. Together they create the foundation for web pages that JavaScript can manipulate.
+
+### Essential HTML Elements:
+- **Document structure**: `<!DOCTYPE>`, `<html>`, `<head>`, `<body>`
+- **Text content**: `<h1>-<h6>`, `<p>`, `<a>`, `<strong>`, `<em>`
+- **Layout**: `<div>`, `<main>`, `<section>`, `<header>`, `<footer>`
+- **Forms**: `<form>`, `<input>`, `<button>`, `<select>`
+- **Media**: `<img>`, `<video>`, `<audio>`
+
+### Key CSS Concepts:
+- **Selectors**: Target elements to style
+- **Box Model**: Content, padding, border, margin
+- **Layout**: Flexbox, Grid, positioning
+- **Responsive design**: Media queries, flexible units
+
+### Code Example:
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML & CSS Fundamentals</title>
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <main class="container">
+        <h1>JavaScript is fun, but so is HTML & CSS!</h1>
+        
+        <p class="intro">
+            HTML gives structure, CSS gives style. Together, they bring your ideas to life.
+            <a href="#" target="_blank">Learn more here</a>.
+        </p>
+        
+        <img id="demo-image" src="placeholder.jpg" alt="Demo Image" />
+        
+        <form id="user-form">
+            <h2>Contact Form</h2>
+            <input type="text" name="name" placeholder="Your name" required />
+            <input type="email" name="email" placeholder="Your email" required />
+            <button type="submit">Submit</button>
+        </form>
+    </main>
+</body>
+</html>
+```
+
+### CSS Example:
+```css
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.intro {
+    color: #666;
+    margin-bottom: 30px;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+a:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+#demo-image {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+form {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 8px;
+    margin-top: 30px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+button {
+    background: #28a745;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background: #218838;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 24px;
+    }
+}
+```
+
+---
+
+## Form Elements and User Input
+
+### Theory
+Forms are essential for collecting user input in web applications. They provide various input types and validation mechanisms.
+
+### Form Input Types:
+- **Text inputs**: `text`, `email`, `password`, `tel`
+- **Selections**: `radio`, `checkbox`, `select`
+- **Special**: `file`, `date`, `color`, `range`
+- **Buttons**: `submit`, `reset`, `button`
+
+### Form Attributes:
+- **Validation**: `required`, `pattern`, `min`, `max`
+- **Accessibility**: `aria-label`, `for` attributes
+- **User experience**: `placeholder`, `autocomplete`
+
+### Code Example:
+```html
+<form id="registration-form">
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input 
+            type="text" 
+            id="username"
+            name="username"
+            required
+            minlength="3"
+            placeholder="Enter username"
+        />
+    </div>
+    
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input 
+            type="email" 
+            id="email"
+            name="email"
+            required
+            placeholder="your@email.com"
+        />
+    </div>
+    
+    <div class="form-group">
+        <label for="country">Country</label>
+        <select id="country" name="country">
+            <option value="">Select country</option>
+            <option value="us">United States</option>
+            <option value="uk">United Kingdom</option>
+            <option value="in">India</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label>
+            <input type="checkbox" name="newsletter">
+            Subscribe to newsletter
+        </label>
+    </div>
+    
+    <button type="submit">Register</button>
+</form>
+```
+
+---
+
+## Part 3 Interview Questions
+
+### Technical Questions
+
+1. **What is the importance of problem-solving methodology in programming?**
+   - **Answer**: Problem-solving methodology helps break complex problems into manageable pieces, ensures thorough understanding before coding, reduces bugs, makes code more maintainable, and improves development efficiency.
+
+2. **Explain different console methods available for debugging in JavaScript.**
+   - **Answer**: `console.log()` for basic output, `console.table()` for structured data, `console.error()` for errors, `console.warn()` for warnings, `console.group()` for grouping outputs, and `console.time()` for performance measurement.
+
+3. **What is the difference between HTML elements and attributes?**
+   - **Answer**: Elements are the building blocks of HTML (like `<div>`, `<p>`), while attributes provide additional information about elements (like `class="container"`, `id="header"`). Elements define structure, attributes modify behavior or appearance.
+
+4. **How do CSS selectors work and what is specificity?**
+   - **Answer**: CSS selectors target HTML elements for styling. Specificity determines which styles apply when multiple rules target the same element. Order: inline styles > IDs > classes > elements. More specific selectors override less specific ones.
+
+5. **What makes a form accessible and user-friendly?**
+   - **Answer**: Proper labeling with `<label>` elements, appropriate input types, validation attributes, clear error messages, logical tab order, ARIA attributes, and responsive design for different devices.
+
+### Real-time Based Questions
+
+6. **You need to debug a temperature conversion function that's giving wrong results. How would you approach this?**
+   - **Answer**:
+   ```javascript
+   function debugTemperatureConversion(celsius) {
+       console.log('Input:', celsius, 'Type:', typeof celsius);
+       
+       // Check if input is valid
+       if (isNaN(celsius)) {
+           console.error('Invalid input - not a number');
+           return null;
+       }
+       
+       const kelvin = parseFloat(celsius) + 273.15;
+       console.log('Conversion:', celsius + '°C = ' + kelvin + 'K');
+       
+       return kelvin;
+   }
+   ```
+
+7. **How would you create a responsive registration form that works on all devices?**
+   - **Answer**: Use mobile-first CSS, flexible layouts with CSS Grid/Flexbox, appropriate input types, touch-friendly button sizes, proper validation, and test across different screen sizes.
+
+### Scenario-Based Questions
+
+8. **A user reports that form submission isn't working. What debugging steps would you take?**
+   - **Answer**: Check browser console for errors, verify form element structure, test JavaScript event handlers, validate form attributes, check network requests, and test form validation logic.
+
+9. **You need to optimize a webpage for better performance and accessibility. What would you focus on?**
+   - **Answer**: Semantic HTML structure, proper heading hierarchy, alt text for images, color contrast, keyboard navigation, form labels, responsive design, and optimized images.
+
+10. **How would you implement a multi-step form with validation and error handling?**
+    - **Answer**: Break form into sections, implement step navigation, validate each step before proceeding, show clear error messages, save progress locally, and provide visual feedback for completion status.
+
+---
+
+## Part 3 Coding Exercises
+
+### Exercise 1: Problem Solving Practice
+```javascript
+// TODO: Solve the data analysis problem step by step
+// Given an array of daily sales data, calculate:
+// 1. Total sales for the week
+// 2. Average daily sales
+// 3. Best and worst performing days
+// 4. Handle any invalid data (non-numbers, negative values)
+
+const salesData = [1200, 1500, 'error', 1800, 900, -100, 2000];
+
+function analyzeSalesData(data) {
+    // Step 1: Understand the problem
+    // Step 2: Break into sub-problems
+    // Step 3: Implement solution with debugging
+}
+```
+
+### Exercise 2: Debugging Challenge
+```javascript
+// TODO: Find and fix the bugs in this temperature converter
+function convertTemperature(temp, fromUnit, toUnit) {
+    console.log('Converting:', temp, 'from', fromUnit, 'to', toUnit);
+    
+    let celsius;
+    if (fromUnit === 'fahrenheit') {
+        celsius = (temp - 32) * 5/9;
+    } else if (fromUnit === 'kelvin') {
+        celsius = temp - 273.15;
+    } else {
+        celsius = temp;
+    }
+    
+    let result;
+    if (toUnit === 'fahrenheit') {
+        result = celsius * 9/5 + 32;
+    } else if (toUnit === 'kelvin') {
+        result = celsius + 273.15;
+    } else {
+        result = celsius;
+    }
+    
+    return result;
+}
+
+// Test cases that might reveal bugs
+console.log(convertTemperature('25', 'celsius', 'fahrenheit'));
+console.log(convertTemperature(null, 'celsius', 'kelvin'));
+```
+
+### Exercise 3: HTML Structure Creation
+```html
+<!-- TODO: Create a complete HTML page structure -->
+<!-- Include: semantic elements, proper head section, navigation, main content, form -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Add proper meta tags, title, and CSS link -->
+</head>
+<body>
+    <!-- Create semantic structure with header, nav, main, sections, footer -->
+</body>
+</html>
+```
+
+### Exercise 4: CSS Styling Challenge
+```css
+/* TODO: Create a modern, responsive card layout */
+/* Requirements: */
+/* - Mobile-first approach */
+/* - Flexible grid system */
+/* - Hover effects */
+/* - Proper typography scale */
+/* - Color scheme with CSS variables */
+```
+
+### Exercise 5: Form Validation
+```html
+<!-- TODO: Create a comprehensive registration form -->
+<!-- Include: various input types, validation, accessibility features -->
+<form id="advanced-registration">
+    <!-- Add form fields with proper validation and accessibility -->
+</form>
+```
+
+---
+
+## Part 3 Summary
+
+This Part 3 guide covers essential developer skills:
+- ✅ Systematic problem-solving approaches
+- ✅ Debugging techniques and console methods
+- ✅ HTML structure and semantic elements
+- ✅ CSS styling and responsive design
+- ✅ Form creation and user input handling
+- ✅ Real-world development practices
+
+Combined with Parts 1 and 2, you now have comprehensive JavaScript fundamentals plus essential web development skills!
+
+---
+
+# JavaScript DOM Manipulation & Interactive Games
+
+## Table of Contents (Part 4)
+28. [DOM Manipulation Fundamentals](#dom-manipulation-fundamentals)
+29. [Event Handling and User Interactions](#event-handling-and-user-interactions)
+30. [Game State Management](#game-state-management)
+31. [Local Storage and Data Persistence](#local-storage-and-data-persistence)
+32. [Dynamic Styling and CSS Classes](#dynamic-styling-and-css-classes)
+33. [Input Validation and User Feedback](#input-validation-and-user-feedback)
+34. [Random Number Generation](#random-number-generation)
+35. [Theme Management and UI States](#theme-management-and-ui-states)
+
+---
+
+## DOM Manipulation Fundamentals
+
+### Theory
+DOM (Document Object Model) manipulation is the process of dynamically changing the content, structure, and style of HTML elements using JavaScript. It's essential for creating interactive web applications.
+
+### Key DOM Concepts:
+- **Element Selection**: Finding HTML elements to manipulate
+- **Content Modification**: Changing text, HTML, or attributes
+- **Style Manipulation**: Modifying CSS properties dynamically
+- **Element Creation/Removal**: Adding or removing DOM elements
+- **Event Handling**: Responding to user interactions
+
+### DOM Selection Methods:
+- `document.querySelector()` - Select first matching element
+- `document.querySelectorAll()` - Select all matching elements
+- `document.getElementById()` - Select by ID
+- `document.getElementsByClassName()` - Select by class name
+
+### Code Example:
+```javascript
+'use strict';
+
+// Element selection methods
+const messageEl = document.querySelector('.message'); // By class
+const scoreEl = document.querySelector('.score'); // By class
+const numberEl = document.querySelector('.number'); // By class
+const toggleBtn = document.getElementById('themeToggle'); // By ID
+const guessEl = document.querySelector('.guess'); // Input element
+
+// Content manipulation
+function displayMessage(msg) {
+    messageEl.textContent = msg; // Change text content
+}
+
+function updateScore(newScore) {
+    scoreEl.textContent = newScore; // Update score display
+}
+
+function revealNumber(secretNumber) {
+    numberEl.textContent = secretNumber; // Show the secret number
+    numberEl.style.width = '24rem'; // Change CSS style
+}
+
+// Practical example: Game feedback system
+function provideFeedback(guess, secretNumber, score) {
+    if (guess === secretNumber) {
+        displayMessage('🎉 Correct Number!');
+        revealNumber(secretNumber);
+        // Disable input after win
+        guessEl.disabled = true;
+    } else if (score > 1) {
+        const message = guess > secretNumber ? 'Too High! 📈' : 'Too Low! 📉';
+        displayMessage(message);
+        updateScore(score - 1);
+    } else {
+        displayMessage('💥 You Lost The Game!');
+        updateScore(0);
+    }
+}
+
+// Multiple element manipulation
+function resetGameUI() {
+    displayMessage('Start guessing...');
+    numberEl.textContent = '?';
+    numberEl.style.width = '12rem';
+    guessEl.value = '';
+    guessEl.disabled = false;
+    updateScore(20);
+}
+
+// Dynamic content creation
+function createScoreHistory(scores) {
+    const historyContainer = document.querySelector('.score-history');
+    historyContainer.innerHTML = ''; // Clear existing content
+    
+    scores.forEach((score, index) => {
+        const scoreItem = document.createElement('div');
+        scoreItem.className = 'score-item';
+        scoreItem.textContent = `Game ${index + 1}: ${score} points`;
+        historyContainer.appendChild(scoreItem);
+    });
+}
+```
+
+---
+
+## Event Handling and User Interactions
+
+### Theory
+Event handling allows JavaScript to respond to user actions like clicks, key presses, form submissions, and mouse movements. Events are the foundation of interactive web applications.
+
+### Common Event Types:
+- **Mouse events**: `click`, `mouseover`, `mouseout`, `mousedown`, `mouseup`
+- **Keyboard events**: `keydown`, `keyup`, `keypress`
+- **Form events**: `submit`, `change`, `input`, `focus`, `blur`
+- **Window events**: `load`, `resize`, `scroll`
+
+### Event Handling Methods:
+- `addEventListener()` - Modern, flexible approach
+- `onclick` property - Direct property assignment
+- Inline event handlers - HTML attribute (not recommended)
+
+### Code Example:
+```javascript
+'use strict';
+
+// Element references
+const btnCheck = document.querySelector('.check');
+const btnAgain = document.querySelector('.again');
+const guessInput = document.querySelector('.guess');
+const body = document.body;
+
+// Click event handling
+btnCheck.addEventListener('click', function() {
+    const guess = Number(guessInput.value);
+    
+    // Input validation
+    if (!guess) {
+        displayMessage('⛔ Enter a number!');
+        return;
+    }
+    
+    // Process the guess
+    processGuess(guess);
+});
+
+// Multiple event listeners on same element
+btnAgain.addEventListener('click', resetGame);
+btnAgain.addEventListener('mouseover', function() {
+    this.style.transform = 'scale(1.05)';
+});
+btnAgain.addEventListener('mouseout', function() {
+    this.style.transform = 'scale(1)';
+});
+
+// Keyboard event handling
+guessInput.addEventListener('keydown', function(event) {
+    // Allow Enter key to submit guess
+    if (event.key === 'Enter') {
+        btnCheck.click(); // Trigger check button
+    }
+    
+    // Prevent non-numeric input (except special keys)
+    if (!/[0-9]/.test(event.key) && 
+        !['Backspace', 'Delete', 'Tab', 'Enter'].includes(event.key)) {
+        event.preventDefault();
+    }
+});
+
+// Window/document events
+window.addEventListener('DOMContentLoaded', function() {
+    // Initialize game when DOM is ready
+    initializeGame();
+    loadUserPreferences();
+});
+
+window.addEventListener('beforeunload', function() {
+    // Save game state before page closes
+    saveGameState();
+});
+
+// Event delegation for dynamic elements
+document.addEventListener('click', function(event) {
+    // Handle clicks on dynamically created elements
+    if (event.target.classList.contains('difficulty-btn')) {
+        setDifficulty(event.target.dataset.level);
+    }
+});
+
+// Custom event creation and handling
+function createCustomEvent(eventName, data) {
+    const customEvent = new CustomEvent(eventName, {
+        detail: data
+    });
+    document.dispatchEvent(customEvent);
+}
+
+// Listen for custom events
+document.addEventListener('gameWon', function(event) {
+    console.log('Game won with score:', event.detail.score);
+    updateLeaderboard(event.detail.score);
+});
+
+// Trigger custom event
+function onGameWin(score) {
+    createCustomEvent('gameWon', { score: score });
+}
+```
+
+---
+
+## Game State Management
+
+### Theory
+Game state management involves tracking and updating all the dynamic data that changes during gameplay. Proper state management ensures consistent behavior and enables features like save/load, undo/redo, and multiplayer synchronization.
+
+### Key State Concepts:
+- **Game variables**: Score, level, lives, current state
+- **State transitions**: How the game moves between different states
+- **State persistence**: Saving state to localStorage or server
+- **State validation**: Ensuring state integrity
+
+### Common Game States:
+- **Initial**: Game not started
+- **Playing**: Active gameplay
+- **Paused**: Game temporarily stopped
+- **GameOver**: Game ended (win/lose)
+- **Loading**: Loading saved state or new level
+
+### Code Example:
+```javascript
+'use strict';
+
+// Game state object
+const gameState = {
+    // Core game data
+    secretNumber: 0,
+    currentGuess: 0,
+    score: 20,
+    highScore: 0,
+    gameStatus: 'initial', // 'initial', 'playing', 'won', 'lost'
+    
+    // Game settings
+    maxNumber: 20,
+    initialScore: 20,
+    
+    // Game history
+    guessHistory: [],
+    totalGamesPlayed: 0,
+    totalWins: 0
+};
+
+// State management functions
+function initializeGame() {
+    gameState.secretNumber = generateSecretNumber();
+    gameState.score = gameState.initialScore;
+    gameState.gameStatus = 'playing';
+    gameState.guessHistory = [];
+    gameState.currentGuess = 0;
+    
+    updateUI();
+}
+
+function generateSecretNumber() {
+    return Math.trunc(Math.random() * gameState.maxNumber) + 1;
+}
+
+function processGuess(guess) {
+    // Validate current state
+    if (gameState.gameStatus !== 'playing') {
+        displayMessage('Game is not active!');
+        return;
+    }
+    
+    // Update state
+    gameState.currentGuess = guess;
+    gameState.guessHistory.push(guess);
+    
+    // Game logic
+    if (guess === gameState.secretNumber) {
+        gameState.gameStatus = 'won';
+        gameState.totalWins++;
+        
+        // Update high score
+        if (gameState.score > gameState.highScore) {
+            gameState.highScore = gameState.score;
+        }
+    } else {
+        gameState.score--;
+        
+        if (gameState.score <= 0) {
+            gameState.gameStatus = 'lost';
+        }
+    }
+    
+    gameState.totalGamesPlayed++;
+    updateUI();
+    saveGameState();
+}
+
+// UI update based on state
+function updateUI() {
+    // Update displays
+    document.querySelector('.score').textContent = gameState.score;
+    document.querySelector('.highscore').textContent = gameState.highScore;
+    
+    // Update based on game status
+    switch (gameState.gameStatus) {
+        case 'playing':
+            displayMessage('Make your guess...');
+            break;
+        case 'won':
+            displayMessage('🎉 Correct Number!');
+            document.querySelector('.number').textContent = gameState.secretNumber;
+            disableInput();
+            break;
+        case 'lost':
+            displayMessage('💥 You Lost The Game!');
+            document.querySelector('.number').textContent = gameState.secretNumber;
+            disableInput();
+            break;
+    }
+    
+    updateGuessHistory();
+}
+
+function updateGuessHistory() {
+    const historyEl = document.querySelector('.guess-history');
+    if (!historyEl) return;
+    
+    historyEl.innerHTML = gameState.guessHistory
+        .map((guess, index) => `<span class="guess-item">${guess}</span>`)
+        .join(' ');
+}
+
+// State persistence
+function saveGameState() {
+    const saveData = {
+        highScore: gameState.highScore,
+        totalGamesPlayed: gameState.totalGamesPlayed,
+        totalWins: gameState.totalWins
+    };
+    
+    localStorage.setItem('guessNumberGame', JSON.stringify(saveData));
+}
+
+function loadGameState() {
+    const savedData = localStorage.getItem('guessNumberGame');
+    
+    if (savedData) {
+        const data = JSON.parse(savedData);
+        gameState.highScore = data.highScore || 0;
+        gameState.totalGamesPlayed = data.totalGamesPlayed || 0;
+        gameState.totalWins = data.totalWins || 0;
+    }
+}
+
+// State validation
+function validateGameState() {
+    if (gameState.score < 0) gameState.score = 0;
+    if (gameState.secretNumber < 1 || gameState.secretNumber > gameState.maxNumber) {
+        gameState.secretNumber = generateSecretNumber();
+    }
+    if (!['initial', 'playing', 'won', 'lost'].includes(gameState.gameStatus)) {
+        gameState.gameStatus = 'initial';
+    }
+}
+
+// Game statistics
+function getGameStats() {
+    return {
+        totalGames: gameState.totalGamesPlayed,
+        totalWins: gameState.totalWins,
+        winRate: gameState.totalGamesPlayed > 0 
+            ? (gameState.totalWins / gameState.totalGamesPlayed * 100).toFixed(1) + '%'
+            : '0%',
+        highScore: gameState.highScore,
+        currentStreak: calculateWinStreak()
+    };
+}
+```
+
+---
+
+## Local Storage and Data Persistence
+
+### Theory
+Local Storage allows web applications to store data locally in the user's browser. This data persists across browser sessions, enabling features like user preferences, game progress, and settings.
+
+### Storage Types:
+- **localStorage**: Persistent storage (until manually cleared)
+- **sessionStorage**: Session-based storage (cleared when tab closes)
+- **cookies**: Traditional storage (limited size, sent to server)
+
+### Common Use Cases:
+- User preferences (theme, language, settings)
+- Game progress and high scores
+- Form data (auto-save)
+- Shopping cart contents
+- User authentication tokens
+
+### Code Example:
+```javascript
+'use strict';
+
+// Local Storage utility functions
+const StorageManager = {
+    // Save data to localStorage
+    save(key, data) {
+        try {
+            const jsonData = JSON.stringify(data);
+            localStorage.setItem(key, jsonData);
+            return true;
+        } catch (error) {
+            console.error('Failed to save to localStorage:', error);
+            return false;
+        }
+    },
+    
+    // Load data from localStorage
+    load(key, defaultValue = null) {
+        try {
+            const jsonData = localStorage.getItem(key);
+            return jsonData ? JSON.parse(jsonData) : defaultValue;
+        } catch (error) {
+            console.error('Failed to load from localStorage:', error);
+            return defaultValue;
+        }
+    },
+    
+    // Remove data from localStorage
+    remove(key) {
+        try {
+            localStorage.removeItem(key);
+            return true;
+        } catch (error) {
+            console.error('Failed to remove from localStorage:', error);
+            return false;
+        }
+    },
+    
+    // Clear all localStorage data
+    clear() {
+        try {
+            localStorage.clear();
+            return true;
+        } catch (error) {
+            console.error('Failed to clear localStorage:', error);
+            return false;
+        }
+    },
+    
+    // Check if localStorage is available
+    isAvailable() {
+        try {
+            localStorage.setItem('test', 'test');
+            localStorage.removeItem('test');
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+};
+
+// Game-specific storage functions
+const GameStorage = {
+    KEYS: {
+        GAME_DATA: 'guessNumberGame',
+        USER_PREFERENCES: 'userPreferences',
+        GAME_HISTORY: 'gameHistory'
+    },
+    
+    // Save game progress
+    saveGameData(gameState) {
+        const gameData = {
+            highScore: gameState.highScore,
+            totalGamesPlayed: gameState.totalGamesPlayed,
+            totalWins: gameState.totalWins,
+            lastPlayed: new Date().toISOString(),
+            version: '1.0'
+        };
+        
+        return StorageManager.save(this.KEYS.GAME_DATA, gameData);
+    },
+    
+    // Load game progress
+    loadGameData() {
+        const defaultData = {
+            highScore: 0,
+            totalGamesPlayed: 0,
+            totalWins: 0,
+            lastPlayed: null,
+            version: '1.0'
+        };
+        
+        return StorageManager.load(this.KEYS.GAME_DATA, defaultData);
+    },
+    
+    // Save user preferences
+    saveUserPreferences(preferences) {
+        const userPrefs = {
+            theme: preferences.theme || 'light',
+            difficulty: preferences.difficulty || 'medium',
+            soundEnabled: preferences.soundEnabled !== false,
+            animations: preferences.animations !== false,
+            language: preferences.language || 'en'
+        };
+        
+        return StorageManager.save(this.KEYS.USER_PREFERENCES, userPrefs);
+    },
+    
+    // Load user preferences
+    loadUserPreferences() {
+        const defaultPrefs = {
+            theme: 'light',
+            difficulty: 'medium',
+            soundEnabled: true,
+            animations: true,
+            language: 'en'
+        };
+        
+        return StorageManager.load(this.KEYS.USER_PREFERENCES, defaultPrefs);
+    },
+    
+    // Save game history
+    saveGameHistory(gameResult) {
+        let history = StorageManager.load(this.KEYS.GAME_HISTORY, []);
+        
+        // Add new game result
+        history.unshift({
+            ...gameResult,
+            timestamp: new Date().toISOString()
+        });
+        
+        // Keep only last 50 games
+        history = history.slice(0, 50);
+        
+        return StorageManager.save(this.KEYS.GAME_HISTORY, history);
+    },
+    
+    // Get game statistics
+    getGameStats() {
+        const gameData = this.loadGameData();
+        const history = StorageManager.load(this.KEYS.GAME_HISTORY, []);
+        
+        return {
+            ...gameData,
+            recentGames: history.slice(0, 10),
+            winRate: gameData.totalGamesPlayed > 0 
+                ? (gameData.totalWins / gameData.totalGamesPlayed * 100).toFixed(1)
+                : 0,
+            averageScore: history.length > 0
+                ? (history.reduce((sum, game) => sum + game.score, 0) / history.length).toFixed(1)
+                : 0
+        };
+    }
+};
+
+// Theme management with localStorage
+const ThemeManager = {
+    currentTheme: 'light',
+    
+    init() {
+        const preferences = GameStorage.loadUserPreferences();
+        this.setTheme(preferences.theme);
+    },
+    
+    setTheme(theme) {
+        this.currentTheme = theme;
+        document.body.classList.remove('light-mode', 'dark-mode');
+        document.body.classList.add(`${theme}-mode`);
+        
+        // Update toggle button
+        const toggleBtn = document.getElementById('themeToggle');
+        if (toggleBtn) {
+            toggleBtn.textContent = theme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+        }
+        
+        // Save preference
+        const preferences = GameStorage.loadUserPreferences();
+        preferences.theme = theme;
+        GameStorage.saveUserPreferences(preferences);
+    },
+    
+    toggleTheme() {
+        const newTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+        this.setTheme(newTheme);
+    }
+};
+
+// Usage example
+function initializeApp() {
+    // Check if localStorage is available
+    if (!StorageManager.isAvailable()) {
+        console.warn('localStorage not available. Some features may not work.');
+        return;
+    }
+    
+    // Initialize theme
+    ThemeManager.init();
+    
+    // Load game data
+    const gameData = GameStorage.loadGameData();
+    console.log('Loaded game data:', gameData);
+    
+    // Set up event listeners
+    document.getElementById('themeToggle')?.addEventListener('click', () => {
+        ThemeManager.toggleTheme();
+    });
+}
+
+// Initialize when DOM is ready
+window.addEventListener('DOMContentLoaded', initializeApp);
+```
+
+---
+
+## Dynamic Styling and CSS Classes
+
+### Theory
+Dynamic styling allows JavaScript to modify CSS properties and classes in real-time, creating interactive visual effects.
+
+### Code Example:
+```javascript
+// CSS class manipulation
+function setTheme(theme) {
+    const body = document.body;
+    body.classList.remove('winner', 'loser', 'dark-mode');
+    if (theme) body.classList.add(theme);
+}
+
+// Direct style manipulation
+function animateNumberReveal(element, secretNumber) {
+    element.textContent = secretNumber;
+    element.style.width = '24rem';
+    element.style.transition = 'all 0.3s ease';
+}
+```
+
+---
+
+## Input Validation and User Feedback
+
+### Theory
+Input validation ensures user input meets expected criteria and provides immediate feedback.
+
+### Code Example:
+```javascript
+function validateGuess(value, min = 1, max = 20) {
+    const num = Number(value);
+    
+    if (!value) return { valid: false, message: '⛔ Enter a number!' };
+    if (isNaN(num)) return { valid: false, message: '⛔ Invalid number!' };
+    if (num < min || num > max) {
+        return { valid: false, message: `⛔ Between ${min}-${max} only!` };
+    }
+    
+    return { valid: true, value: num };
+}
+```
+
+---
+
+## Random Number Generation
+
+### Theory
+Random number generation creates unpredictable game experiences using `Math.random()`.
+
+### Code Example:
+```javascript
+// Generate random integer between min and max (inclusive)
+function randomInt(min, max) {
+    return Math.trunc(Math.random() * (max - min + 1)) + min;
+}
+
+// Game-specific implementation
+function generateSecretNumber(min = 1, max = 20) {
+    return randomInt(min, max);
+}
+```
+
+---
+
+## Theme Management and UI States
+
+### Theory
+Theme management allows users to customize visual appearance and maintains preferences across sessions.
+
+### Code Example:
+```javascript
+class ThemeManager {
+    setTheme(theme) {
+        document.body.classList.remove('light-theme', 'dark-theme');
+        document.body.classList.add(`${theme}-theme`);
+        localStorage.setItem('theme', theme);
+    }
+    
+    loadTheme() {
+        const saved = localStorage.getItem('theme') || 'light';
+        this.setTheme(saved);
+    }
+}
+```
+
+---
+
+## Part 4 Interview Questions
+
+### Technical Questions
+
+1. **What is the DOM and how do you manipulate it?**
+   - **Answer**: DOM is the programming interface for HTML documents. Manipulate using `querySelector()`, `textContent`, `classList`, and `style` properties.
+
+2. **Explain event bubbling and capturing.**
+   - **Answer**: Bubbling travels from target to root (default), capturing travels root to target. Control with `addEventListener()`'s third parameter.
+
+3. **Difference between localStorage and sessionStorage?**
+   - **Answer**: localStorage persists until cleared, sessionStorage only for current tab session. Both store strings, ~5-10MB limit.
+
+4. **How to generate random numbers in a specific range?**
+   - **Answer**: `Math.floor(Math.random() * (max - min + 1)) + min` for integers.
+
+5. **What's the difference between textContent and innerHTML?**
+   - **Answer**: textContent sets/gets text only, innerHTML handles HTML markup. textContent is safer and faster.
+
+### Real-time Based Questions
+
+6. **How would you implement persistent theme switching?**
+   - **Answer**: Use localStorage to save preference, CSS classes for themes, system preference detection with matchMedia.
+
+7. **Implement input validation for a number guessing game.**
+   - **Answer**: Check for empty values, validate numeric input, ensure range limits, provide user feedback.
+
+### Scenario-Based Questions
+
+8. **User's high score isn't saving. How to debug?**
+   - **Answer**: Check localStorage availability, JSON parsing, browser settings, add error handling and logging.
+
+9. **Make game accessible for screen readers.**
+   - **Answer**: Use ARIA labels, semantic HTML, keyboard navigation, focus management, high contrast themes.
+
+10. **Implement game state management system.**
+    - **Answer**: Centralized state object, validation, localStorage persistence, state observers, history tracking.
+
+---
+
+## Part 4 Coding Exercises
+
+### Exercise 1: DOM Manipulation
+```javascript
+// TODO: Create dynamic scoreboard with add/remove players, score updates, sorting
+const ScoreBoard = {
+    players: [],
+    addPlayer(name) { /* Add player to DOM */ },
+    updateScore(id, score) { /* Update with animation */ },
+    removePlayer(id) { /* Remove from DOM */ }
+};
+```
+
+### Exercise 2: Event System
+```javascript
+// TODO: Comprehensive event handling with delegation
+class EventManager {
+    on(element, event, handler) { /* Register event */ }
+    off(element, event, handler) { /* Remove event */ }
+    delegate(parent, selector, event, handler) { /* Event delegation */ }
+}
+```
+
+### Exercise 3: Game State Machine
+```javascript
+// TODO: Card matching game with states: idle, flipping, matching, gameOver
+class CardGame {
+    setState(newState) { /* Handle state transitions */ }
+    flipCard(id) { /* Card flip logic */ }
+    checkMatch(card1, card2) { /* Match validation */ }
+}
+```
+
+### Exercise 4: Storage Manager
+```javascript
+// TODO: localStorage wrapper with expiration, validation, error handling
+class StorageManager {
+    set(key, value, expiry) { /* Store with expiration */ }
+    get(key, defaultValue) { /* Retrieve with validation */ }
+    isExpired(timestamp, days) { /* Check expiration */ }
+}
+```
+
+### Exercise 5: Theme System
+```javascript
+// TODO: Advanced theme manager with custom properties, system detection
+class ThemeManager {
+    registerTheme(name, config) { /* Register theme */ }
+    setTheme(name) { /* Apply CSS variables */ }
+    detectSystemPreference() { /* System theme detection */ }
+}
+```
+
+### Exercise 6: Validation Framework
+```javascript
+// TODO: Input validation with custom rules, real-time feedback
+class ValidationSystem {
+    addRule(name, validator, message) { /* Custom rule */ }
+    validateField(value, rules) { /* Field validation */ }
+    setupRealTime(input, rules) { /* Real-time validation */ }
+}
+```
+
+### Exercise 7: Random Game Engine
+```javascript
+// TODO: Configurable number guessing with hints, difficulty adjustment
+class GameEngine {
+    makeGuess(guess) { /* Process guess */ }
+    generateHint(guess, secret) { /* Contextual hints */ }
+    adjustDifficulty(performance) { /* Dynamic difficulty */ }
+}
+```
+
+### Exercise 8: Animation System
+```javascript
+// TODO: CSS animations with chaining, easing, callbacks
+class AnimationEngine {
+    animate(element, properties, options) { /* Animate element */ }
+    chain(animations) { /* Sequential animations */ }
+    parallel(animations) { /* Simultaneous animations */ }
+}
+```
+
+### Exercise 9: Achievement System
+```javascript
+// TODO: Track achievements, unlock conditions, progress display
+class AchievementSystem {
+    trackAction(action, data) { /* Track player actions */ }
+    checkUnlocks(playerId) { /* Check achievement conditions */ }
+    displayProgress(achievementId) { /* Show progress */ }
+}
+```
+
+### Exercise 10: Game Analytics
+```javascript
+// TODO: Track gameplay metrics, session data, performance analysis
+class GameAnalytics {
+    trackEvent(event, properties) { /* Track game events */ }
+    startSession() { /* Begin session tracking */ }
+    getInsights() { /* Generate analytics insights */ }
+}
+```
+
+---
+
+## Part 4 Summary
+
+This Part 4 guide covers essential DOM manipulation and interactive game development:
+- ✅ DOM element selection and manipulation
+- ✅ Event handling and user interactions
+- ✅ Game state management and data persistence
+- ✅ Local storage and theme management
+- ✅ Dynamic styling and CSS class manipulation
+- ✅ Input validation and user feedback systems
+- ✅ Random number generation for games
+- ✅ UI state management and theme switching
+
+Combined with Parts 1-3, you now have comprehensive JavaScript knowledge from fundamentals to interactive web applications!
+
+---
+
+# Advanced DOM Manipulation & Modal Components
+
+## Table of Contents (Part 5)
+36. [Advanced Event Handling](#advanced-event-handling)
+37. [Modal Components and Overlays](#modal-components-and-overlays)
+38. [CSS Class Management](#css-class-management)
+39. [Animation and Transitions](#animation-and-transitions)
+40. [Local Storage and Theme Persistence](#local-storage-and-theme-persistence)
+41. [Responsive Design with JavaScript](#responsive-design-with-javascript)
+42. [Touch and Mobile Interactions](#touch-and-mobile-interactions)
+43. [Keyboard Accessibility](#keyboard-accessibility)
+
+---
+
+## Advanced Event Handling
+
+### Theory
+Advanced event handling involves managing multiple event types, event delegation, custom events, and optimizing performance for better user experience.
+
+### Key Concepts:
+- **Event delegation**: Handle events on parent elements
+- **Event propagation**: Bubbling and capturing phases
+- **preventDefault()**: Stop default browser behavior
+- **Multiple event listeners**: Same element, different events
+- **Custom events**: Create and dispatch custom events
+- **Event cleanup**: Remove listeners to prevent memory leaks
+
+### Code Example:
+```javascript
+'use strict';
+
+// Multiple event listeners on same elements
+const modal = document.querySelector('.modal');
+const overlay = document.querySelector('.overlay');
+const btnsOpenModal = document.querySelectorAll('.show-modal');
+const btnCloseModal = document.querySelector('.close-modal');
+
+// Event delegation for multiple buttons
+btnsOpenModal.forEach(btn => {
+    btn.addEventListener('click', openModal);
+});
+
+// Multiple ways to close modal
+btnCloseModal.addEventListener('click', closeModal);
+overlay.addEventListener('click', closeModal);
+
+// Global keyboard event handling
+document.addEventListener('keydown', function(e) {
+    // Close modal with Escape key
+    if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+        closeModal();
+    }
+    
+    // Prevent certain key combinations
+    if (e.ctrlKey && e.key === 's') {
+        e.preventDefault(); // Prevent browser save dialog
+        console.log('Custom save action');
+    }
+});
+
+// Advanced event handling with options
+const handleScroll = function(e) {
+    // Prevent scroll when modal is open
+    if (!modal.classList.contains('hidden')) {
+        e.preventDefault();
+    }
+};
+
+// Passive event listeners for better performance
+document.addEventListener('touchmove', handleScroll, { passive: false });
+
+// Event delegation for dynamic elements
+document.addEventListener('click', function(e) {
+    // Handle clicks on dynamically created elements
+    if (e.target.matches('.dynamic-button')) {
+        handleDynamicClick(e.target);
+    }
+    
+    // Close dropdowns when clicking outside
+    if (!e.target.closest('.dropdown')) {
+        closeAllDropdowns();
+    }
+});
+
+// Custom event creation and handling
+function createCustomEvent(eventName, data) {
+    const event = new CustomEvent(eventName, {
+        detail: data,
+        bubbles: true,
+        cancelable: true
+    });
+    document.dispatchEvent(event);
+}
+
+// Listen for custom events
+document.addEventListener('modalOpened', function(e) {
+    console.log('Modal opened:', e.detail);
+    // Track analytics, update UI, etc.
+});
+
+// Trigger custom event
+function openModal() {
+    modal.classList.remove('hidden');
+    overlay.classList.remove('hidden');
+    
+    // Dispatch custom event
+    createCustomEvent('modalOpened', {
+        modalId: modal.id,
+        timestamp: Date.now()
+    });
+}
+
+// Event cleanup (important for SPAs)
+function cleanup() {
+    // Remove event listeners when component unmounts
+    btnsOpenModal.forEach(btn => {
+        btn.removeEventListener('click', openModal);
+    });
+    
+    document.removeEventListener('keydown', handleKeydown);
+    document.removeEventListener('touchmove', handleScroll);
+}
+
+// Throttling and debouncing for performance
+function throttle(func, delay) {
+    let timeoutId;
+    let lastExecTime = 0;
+    
+    return function(...args) {
+        const currentTime = Date.now();
+        
+        if (currentTime - lastExecTime > delay) {
+            func.apply(this, args);
+            lastExecTime = currentTime;
+        } else {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                func.apply(this, args);
+                lastExecTime = Date.now();
+            }, delay - (currentTime - lastExecTime));
+        }
+    };
+}
+
+// Throttled resize handler
+const handleResize = throttle(function() {
+    // Close modal on resize to avoid layout issues
+    if (!modal.classList.contains('hidden')) {
+        closeModal();
+    }
+    
+    // Update viewport height for mobile
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+}, 250);
+
+window.addEventListener('resize', handleResize);
+```
+
+---
+
+## Modal Components and Overlays
+
+### Theory
+Modals are dialog boxes that appear on top of the main content. They're essential for user interactions like confirmations, forms, and detailed views without navigating away from the current page.
+
+### Modal Components:
+- **Modal container**: The main dialog box
+- **Overlay/backdrop**: Background that covers main content
+- **Close button**: X button to close modal
+- **Content area**: Where modal content is displayed
+- **Header/footer**: Optional sections for titles and actions
+
+### Best Practices:
+- Focus management for accessibility
+- Prevent body scroll when modal is open
+- Close on Escape key and overlay click
+- Smooth animations for better UX
+- Responsive design for all screen sizes
+
+### Code Example:
+```javascript
+'use strict';
+
+// Modal management class
+class ModalManager {
+    constructor() {
+        this.modals = new Map();
+        this.activeModal = null;
+        this.focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+        this.init();
+    }
+    
+    init() {
+        // Set up global event listeners
+        document.addEventListener('keydown', this.handleKeydown.bind(this));
+        document.addEventListener('click', this.handleClick.bind(this));
+    }
+    
+    // Register a modal
+    register(modalId, options = {}) {
+        const modal = document.querySelector(modalId);
+        const overlay = document.querySelector('.overlay');
+        
+        if (!modal) {
+            console.error(`Modal ${modalId} not found`);
+            return;
+        }
+        
+        this.modals.set(modalId, {
+            element: modal,
+            overlay: overlay,
+            options: {
+                closeOnOverlay: true,
+                closeOnEscape: true,
+                animation: 'fade',
+                ...options
+            },
+            previousFocus: null
+        });
+    }
+    
+    // Open modal
+    open(modalId, data = {}) {
+        const modalData = this.modals.get(modalId);
+        if (!modalData) {
+            console.error(`Modal ${modalId} not registered`);
+            return;
+        }
+        
+        const { element: modal, overlay, options } = modalData;
+        
+        // Store currently focused element
+        modalData.previousFocus = document.activeElement;
+        
+        // Show modal and overlay
+        modal.classList.remove('hidden');
+        overlay.classList.remove('hidden');
+        
+        // Add animation classes after a brief delay
+        setTimeout(() => {
+            modal.classList.add('show');
+            overlay.classList.add('show');
+        }, 10);
+        
+        // Prevent body scroll
+        document.body.style.overflow = 'hidden';
+        
+        // Focus management
+        this.setFocus(modal);
+        
+        // Set active modal
+        this.activeModal = modalId;
+        
+        // Dispatch custom event
+        this.dispatchEvent('modalOpened', { modalId, data });
+    }
+    
+    // Close modal
+    close(modalId = this.activeModal) {
+        if (!modalId) return;
+        
+        const modalData = this.modals.get(modalId);
+        if (!modalData) return;
+        
+        const { element: modal, overlay } = modalData;
+        
+        // Start closing animation
+        modal.classList.remove('show');
+        overlay.classList.remove('show');
+        
+        // Hide after animation completes
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            overlay.classList.add('hidden');
+            
+            // Restore body scroll
+            document.body.style.overflow = '';
+            
+            // Restore focus
+            if (modalData.previousFocus) {
+                modalData.previousFocus.focus();
+                modalData.previousFocus = null;
+            }
+            
+            // Clear active modal
+            this.activeModal = null;
+            
+            // Dispatch custom event
+            this.dispatchEvent('modalClosed', { modalId });
+        }, 300);
+    }
+    
+    // Handle keyboard events
+    handleKeydown(e) {
+        if (!this.activeModal) return;
+        
+        const modalData = this.modals.get(this.activeModal);
+        if (!modalData) return;
+        
+        // Close on Escape
+        if (e.key === 'Escape' && modalData.options.closeOnEscape) {
+            this.close();
+            return;
+        }
+        
+        // Trap focus within modal
+        if (e.key === 'Tab') {
+            this.trapFocus(e, modalData.element);
+        }
+    }
+    
+    // Handle click events
+    handleClick(e) {
+        if (!this.activeModal) return;
+        
+        const modalData = this.modals.get(this.activeModal);
+        if (!modalData) return;
+        
+        // Close on overlay click
+        if (e.target === modalData.overlay && modalData.options.closeOnOverlay) {
+            this.close();
+        }
+        
+        // Close on close button click
+        if (e.target.closest('.close-modal')) {
+            this.close();
+        }
+    }
+    
+    // Focus management
+    setFocus(modal) {
+        const focusableElements = modal.querySelectorAll(this.focusableElements);
+        if (focusableElements.length > 0) {
+            focusableElements[0].focus();
+        } else {
+            modal.focus();
+        }
+    }
+    
+    // Trap focus within modal
+    trapFocus(e, modal) {
+        const focusableElements = modal.querySelectorAll(this.focusableElements);
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+        
+        if (e.shiftKey && document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+        } else if (!e.shiftKey && document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+        }
+    }
+    
+    // Dispatch custom events
+    dispatchEvent(eventName, data) {
+        const event = new CustomEvent(eventName, {
+            detail: data
+        });
+        document.dispatchEvent(event);
+    }
+}
+
+// Usage example
+const modalManager = new ModalManager();
+
+// Register modals
+modalManager.register('.modal', {
+    closeOnOverlay: true,
+    closeOnEscape: true,
+    animation: 'scale'
+});
+
+// Set up open buttons
+document.querySelectorAll('.show-modal').forEach((btn, index) => {
+    btn.addEventListener('click', () => {
+        modalManager.open('.modal', { buttonIndex: index });
+    });
+});
+
+// Listen for modal events
+document.addEventListener('modalOpened', (e) => {
+    console.log('Modal opened:', e.detail);
+});
+
+document.addEventListener('modalClosed', (e) => {
+    console.log('Modal closed:', e.detail);
+});
+```
+
+---
+
+## CSS Class Management
+
+### Theory
+Dynamic CSS class management is crucial for creating interactive UIs. It involves adding, removing, and toggling classes to change element appearance and behavior.
+
+### classList Methods:
+- `add()` - Add one or more classes
+- `remove()` - Remove one or more classes
+- `toggle()` - Toggle class presence
+- `contains()` - Check if class exists
+- `replace()` - Replace one class with another
+
+### Code Example:
+```javascript
+'use strict';
+
+// CSS Class Management Utility
+class CSSClassManager {
+    constructor(element) {
+        this.element = element;
+    }
+    
+    // Add multiple classes with validation
+    addClasses(...classes) {
+        const validClasses = classes.filter(cls => 
+            typeof cls === 'string' && cls.trim() !== ''
+        );
+        
+        if (validClasses.length > 0) {
+            this.element.classList.add(...validClasses);
+        }
+        
+        return this; // Method chaining
+    }
+    
+    // Remove multiple classes
+    removeClasses(...classes) {
+        const validClasses = classes.filter(cls => 
+            typeof cls === 'string' && cls.trim() !== ''
+        );
+        
+        if (validClasses.length > 0) {
+            this.element.classList.remove(...validClasses);
+        }
+        
+        return this;
+    }
+    
+    // Toggle class with condition
+    toggleClass(className, condition) {
+        if (condition !== undefined) {
+            this.element.classList.toggle(className, condition);
+        } else {
+            this.element.classList.toggle(className);
+        }
+        
+        return this;
+    }
+    
+    // Replace class
+    replaceClass(oldClass, newClass) {
+        if (this.element.classList.contains(oldClass)) {
+            this.element.classList.replace(oldClass, newClass);
+        }
+        
+        return this;
+    }
+    
+    // Set classes (remove all, add new)
+    setClasses(...classes) {
+        this.element.className = '';
+        return this.addClasses(...classes);
+    }
+    
+    // Check if has any of the classes
+    hasAnyClass(...classes) {
+        return classes.some(cls => this.element.classList.contains(cls));
+    }
+    
+    // Check if has all classes
+    hasAllClasses(...classes) {
+        return classes.every(cls => this.element.classList.contains(cls));
+    }
+    
+    // Get all classes as array
+    getClasses() {
+        return Array.from(this.element.classList);
+    }
+}
+
+// Modal-specific class management
+class ModalClassManager {
+    constructor(modal, overlay) {
+        this.modal = new CSSClassManager(modal);
+        this.overlay = new CSSClassManager(overlay);
+        this.body = new CSSClassManager(document.body);
+    }
+    
+    // Show modal with animation
+    show(animationType = 'fade') {
+        // Remove hidden class
+        this.modal.removeClasses('hidden');
+        this.overlay.removeClasses('hidden');
+        
+        // Add show class after brief delay for animation
+        setTimeout(() => {
+            this.modal.addClasses('show', `animate-${animationType}`);
+            this.overlay.addClasses('show');
+        }, 10);
+        
+        // Prevent body scroll
+        this.body.addClasses('modal-open');
+        
+        return this;
+    }
+    
+    // Hide modal with animation
+    hide(animationType = 'fade') {
+        // Remove show classes to start closing animation
+        this.modal.removeClasses('show', `animate-${animationType}`);
+        this.overlay.removeClasses('show');
+        
+        // Add hidden class after animation completes
+        setTimeout(() => {
+            this.modal.addClasses('hidden');
+            this.overlay.addClasses('hidden');
+            
+            // Allow body scroll
+            this.body.removeClasses('modal-open');
+        }, 300);
+        
+        return this;
+    }
+    
+    // Check if modal is visible
+    isVisible() {
+        return !this.modal.hasAnyClass('hidden');
+    }
+    
+    // Set modal state classes
+    setState(state) {
+        // Remove all state classes
+        this.modal.removeClasses('loading', 'error', 'success', 'warning');
+        
+        // Add new state class
+        if (state) {
+            this.modal.addClasses(`state-${state}`);
+        }
+        
+        return this;
+    }
+}
+
+// Theme management with classes
+class ThemeManager {
+    constructor() {
+        this.body = new CSSClassManager(document.body);
+        this.currentTheme = this.loadTheme();
+        this.applyTheme(this.currentTheme);
+    }
+    
+    // Apply theme
+    applyTheme(theme) {
+        // Remove all theme classes
+        this.body.removeClasses('light-theme', 'dark-theme', 'auto-theme');
+        
+        // Add current theme class
+        this.body.addClasses(`${theme}-theme`);
+        
+        // Update theme toggle button
+        this.updateThemeToggle(theme);
+        
+        // Save theme preference
+        this.saveTheme(theme);
+        
+        this.currentTheme = theme;
+    }
+    
+    // Toggle between themes
+    toggleTheme() {
+        const nextTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+        this.applyTheme(nextTheme);
+    }
+    
+    // Update theme toggle button
+    updateThemeToggle(theme) {
+        const themeIcon = document.querySelector('.theme-icon');
+        const themeText = document.querySelector('.theme-text');
+        
+        if (themeIcon && themeText) {
+            if (theme === 'dark') {
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light Mode';
+            } else {
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark Mode';
+            }
+        }
+    }
+    
+    // Save theme to localStorage
+    saveTheme(theme) {
+        localStorage.setItem('theme', theme);
+    }
+    
+    // Load theme from localStorage
+    loadTheme() {
+        return localStorage.getItem('theme') || 'light';
+    }
+}
+
+// Usage examples
+const modal = document.querySelector('.modal');
+const overlay = document.querySelector('.overlay');
+const modalClassManager = new ModalClassManager(modal, overlay);
+const themeManager = new ThemeManager();
+
+// Show modal
+function openModal() {
+    modalClassManager.show('scale');
+}
+
+// Hide modal
+function closeModal() {
+    modalClassManager.hide('scale');
+}
+
+// Theme toggle
+function toggleTheme() {
+    themeManager.toggleTheme();
+}
+
+// Advanced class operations
+const element = document.querySelector('.some-element');
+const classManager = new CSSClassManager(element);
+
+// Method chaining
+classManager
+    .removeClasses('old-class', 'another-old-class')
+    .addClasses('new-class', 'active')
+    .toggleClass('visible', someCondition);
+
+// Conditional class management
+if (classManager.hasAnyClass('error', 'warning')) {
+    classManager.addClasses('needs-attention');
+}
+```
+
+---
+
+## Animation and Transitions
+
+### Theory
+CSS animations and transitions create smooth, engaging user experiences. JavaScript controls when animations trigger and can coordinate complex animation sequences.
+
+### Animation Types:
+- **CSS Transitions**: Smooth changes between states
+- **CSS Animations**: Complex keyframe-based animations
+- **JavaScript Animations**: Programmatic control over animations
+- **Web Animations API**: Modern JavaScript animation interface
+
+### Code Example:
+```javascript
+'use strict';
+
+// Animation utilities
+class AnimationManager {
+    constructor() {
+        this.animations = new Map();
+        this.defaultDuration = 300;
+    }
+    
+    // CSS transition-based animation
+    fadeIn(element, duration = this.defaultDuration) {
+        return new Promise((resolve) => {
+            // Set initial state
+            element.style.opacity = '0';
+            element.style.display = 'block';
+            
+            // Force reflow
+            element.offsetHeight;
+            
+            // Set transition
+            element.style.transition = `opacity ${duration}ms ease`;
+            
+            // Start animation
+            element.style.opacity = '1';
+            
+            // Resolve promise when animation completes
+            setTimeout(() => {
+                element.style.transition = '';
+                resolve();
+            }, duration);
+        });
+    }
+    
+    // Fade out animation
+    fadeOut(element, duration = this.defaultDuration) {
+        return new Promise((resolve) => {
+            element.style.transition = `opacity ${duration}ms ease`;
+            element.style.opacity = '0';
+            
+            setTimeout(() => {
+                element.style.display = 'none';
+                element.style.transition = '';
+                resolve();
+            }, duration);
+        });
+    }
+    
+    // Scale animation
+    scaleIn(element, duration = this.defaultDuration) {
+        return new Promise((resolve) => {
+            element.style.transform = 'scale(0.8)';
+            element.style.opacity = '0';
+            element.style.display = 'block';
+            
+            element.offsetHeight; // Force reflow
+            
+            element.style.transition = `transform ${duration}ms ease, opacity ${duration}ms ease`;
+            element.style.transform = 'scale(1)';
+            element.style.opacity = '1';
+            
+            setTimeout(() => {
+                element.style.transition = '';
+                resolve();
+            }, duration);
+        });
+    }
+    
+    // Slide animation
+    slideDown(element, duration = this.defaultDuration) {
+        return new Promise((resolve) => {
+            const height = element.scrollHeight;
+            
+            element.style.height = '0';
+            element.style.overflow = 'hidden';
+            element.style.display = 'block';
+            
+            element.offsetHeight; // Force reflow
+            
+            element.style.transition = `height ${duration}ms ease`;
+            element.style.height = height + 'px';
+            
+            setTimeout(() => {
+                element.style.height = '';
+                element.style.overflow = '';
+                element.style.transition = '';
+                resolve();
+            }, duration);
+        });
+    }
+    
+    // Chain multiple animations
+    async chain(animations) {
+        for (const animation of animations) {
+            await animation();
+        }
+    }
+    
+    // Run animations in parallel
+    async parallel(animations) {
+        await Promise.all(animations.map(animation => animation()));
+    }
+    
+    // Web Animations API example
+    animateWithAPI(element, keyframes, options = {}) {
+        const defaultOptions = {
+            duration: this.defaultDuration,
+            easing: 'ease',
+            fill: 'forwards'
+        };
+        
+        const animation = element.animate(keyframes, {
+            ...defaultOptions,
+            ...options
+        });
+        
+        return animation.finished;
+    }
+}
+
+// Modal-specific animations
+class ModalAnimations {
+    constructor(modal, overlay) {
+        this.modal = modal;
+        this.overlay = overlay;
+        this.animationManager = new AnimationManager();
+    }
+    
+    // Show modal with custom animation
+    async show(animationType = 'fade') {
+        // Show elements
+        this.modal.classList.remove('hidden');
+        this.overlay.classList.remove('hidden');
+        
+        // Run animations based on type
+        switch (animationType) {
+            case 'fade':
+                await this.fadeInAnimation();
+                break;
+            case 'scale':
+                await this.scaleInAnimation();
+                break;
+            case 'slide':
+                await this.slideInAnimation();
+                break;
+            default:
+                await this.fadeInAnimation();
+        }
+        
+        // Add show classes
+        this.modal.classList.add('show');
+        this.overlay.classList.add('show');
+    }
+    
+    // Hide modal with animation
+    async hide(animationType = 'fade') {
+        // Remove show classes
+        this.modal.classList.remove('show');
+        this.overlay.classList.remove('show');
+        
+        // Run exit animation
+        await this.exitAnimation(animationType);
+        
+        // Hide elements
+        this.modal.classList.add('hidden');
+        this.overlay.classList.add('hidden');
+    }
+    
+    // Fade in animation
+    async fadeInAnimation() {
+        await this.animationManager.parallel([
+            () => this.animationManager.fadeIn(this.modal, 300),
+            () => this.animationManager.fadeIn(this.overlay, 200)
+        ]);
+    }
+    
+    // Scale in animation
+    async scaleInAnimation() {
+        // First fade in overlay
+        await this.animationManager.fadeIn(this.overlay, 200);
+        
+        // Then scale in modal
+        await this.animationManager.scaleIn(this.modal, 300);
+    }
+    
+    // Slide in animation
+    async slideInAnimation() {
+        await this.animationManager.parallel([
+            () => this.animationManager.fadeIn(this.overlay, 200),
+            () => this.slideFromTop()
+        ]);
+    }
+    
+    // Custom slide from top
+    slideFromTop() {
+        return this.animationManager.animateWithAPI(
+            this.modal,
+            [
+                { transform: 'translateY(-100px)', opacity: 0 },
+                { transform: 'translateY(0)', opacity: 1 }
+            ],
+            { duration: 400, easing: 'ease-out' }
+        );
+    }
+    
+    // Exit animation
+    async exitAnimation(type) {
+        switch (type) {
+            case 'scale':
+                await this.animationManager.parallel([
+                    () => this.scaleOut(),
+                    () => this.animationManager.fadeOut(this.overlay, 200)
+                ]);
+                break;
+            default:
+                await this.animationManager.parallel([
+                    () => this.animationManager.fadeOut(this.modal, 200),
+                    () => this.animationManager.fadeOut(this.overlay, 200)
+                ]);
+        }
+    }
+    
+    // Scale out animation
+    scaleOut() {
+        return this.animationManager.animateWithAPI(
+            this.modal,
+            [
+                { transform: 'scale(1)', opacity: 1 },
+                { transform: 'scale(0.8)', opacity: 0 }
+            ],
+            { duration: 200, easing: 'ease-in' }
+        );
+    }
+}
+
+// Usage example
+const modal = document.querySelector('.modal');
+const overlay = document.querySelector('.overlay');
+const modalAnimations = new ModalAnimations(modal, overlay);
+
+// Open modal with scale animation
+async function openModal() {
+    await modalAnimations.show('scale');
+    console.log('Modal animation completed');
+}
+
+// Close modal with fade animation
+async function closeModal() {
+    await modalAnimations.hide('fade');
+    console.log('Modal closed');
+}
+
+// Chained animations example
+const animationManager = new AnimationManager();
+
+async function complexAnimation() {
+    const elements = document.querySelectorAll('.animate-item');
+    
+    // Animate elements one by one
+    await animationManager.chain(
+        elements.map(el => () => animationManager.fadeIn(el, 200))
+    );
+    
+    console.log('All animations completed');
+}
+```
+
+---
+
+## Local Storage and Theme Persistence
+
+### Theory
+Persisting user preferences like theme settings enhances user experience by maintaining choices across sessions.
+
+### Code Example:
+```javascript
+// Theme persistence manager
+class ThemePersistence {
+    constructor() {
+        this.storageKey = 'userTheme';
+        this.currentTheme = this.loadTheme();
+    }
+    
+    saveTheme(theme) {
+        localStorage.setItem(this.storageKey, theme);
+        this.currentTheme = theme;
+    }
+    
+    loadTheme() {
+        return localStorage.getItem(this.storageKey) || 'light';
+    }
+    
+    applyTheme() {
+        document.body.classList.toggle('dark-mode', this.currentTheme === 'dark');
+        this.updateThemeToggle();
+    }
+    
+    updateThemeToggle() {
+        const icon = document.querySelector('.theme-icon');
+        const text = document.querySelector('.theme-text');
+        
+        if (this.currentTheme === 'dark') {
+            icon.textContent = '☀️';
+            text.textContent = 'Light Mode';
+        } else {
+            icon.textContent = '🌙';
+            text.textContent = 'Dark Mode';
+        }
+    }
+}
+```
+
+---
+
+## Responsive Design with JavaScript
+
+### Theory
+JavaScript enhances responsive design by handling viewport changes, device-specific interactions, and dynamic layout adjustments.
+
+### Code Example:
+```javascript
+// Responsive handler
+class ResponsiveHandler {
+    constructor() {
+        this.breakpoints = {
+            mobile: 480,
+            tablet: 768,
+            desktop: 1024
+        };
+        this.init();
+    }
+    
+    init() {
+        this.handleResize();
+        window.addEventListener('resize', this.throttle(this.handleResize.bind(this), 250));
+        window.addEventListener('orientationchange', this.handleOrientationChange.bind(this));
+    }
+    
+    handleResize() {
+        const width = window.innerWidth;
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+        
+        // Close modal on resize to prevent layout issues
+        const modal = document.querySelector('.modal');
+        if (modal && !modal.classList.contains('hidden')) {
+            this.closeModal();
+        }
+    }
+    
+    throttle(func, delay) {
+        let timeoutId;
+        let lastExecTime = 0;
+        return function(...args) {
+            const currentTime = Date.now();
+            if (currentTime - lastExecTime > delay) {
+                func.apply(this, args);
+                lastExecTime = currentTime;
+            } else {
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => func.apply(this, args), delay);
+            }
+        };
+    }
+}
+```
+
+---
+
+## Touch and Mobile Interactions
+
+### Theory
+Mobile devices require special handling for touch events, preventing unwanted behaviors, and optimizing for touch interfaces.
+
+### Code Example:
+```javascript
+// Mobile interaction handler
+class MobileHandler {
+    constructor() {
+        this.lastTouchEnd = 0;
+        this.init();
+    }
+    
+    init() {
+        // Prevent double-tap zoom
+        document.addEventListener('touchend', this.preventDoubleZoom.bind(this), false);
+        
+        // Handle touch scroll prevention
+        document.addEventListener('touchmove', this.preventScroll.bind(this), { passive: false });
+    }
+    
+    preventDoubleZoom(event) {
+        const now = Date.now();
+        if (now - this.lastTouchEnd <= 300) {
+            event.preventDefault();
+        }
+        this.lastTouchEnd = now;
+    }
+    
+    preventScroll(event) {
+        const modal = document.querySelector('.modal');
+        if (modal && !modal.classList.contains('hidden')) {
+            event.preventDefault();
+        }
+    }
+}
+```
+
+---
+
+## Keyboard Accessibility
+
+### Theory
+Keyboard accessibility ensures all users can interact with modals using keyboard navigation, essential for accessibility compliance.
+
+### Code Example:
+```javascript
+// Keyboard accessibility handler
+class KeyboardAccessibility {
+    constructor(modal) {
+        this.modal = modal;
+        this.focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+        this.previousFocus = null;
+    }
+    
+    handleKeydown(event) {
+        if (event.key === 'Escape') {
+            this.closeModal();
+        } else if (event.key === 'Tab') {
+            this.trapFocus(event);
+        }
+    }
+    
+    trapFocus(event) {
+        const focusableElements = this.modal.querySelectorAll(this.focusableElements);
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+        
+        if (event.shiftKey && document.activeElement === firstElement) {
+            event.preventDefault();
+            lastElement.focus();
+        } else if (!event.shiftKey && document.activeElement === lastElement) {
+            event.preventDefault();
+            firstElement.focus();
+        }
+    }
+    
+    setInitialFocus() {
+        this.previousFocus = document.activeElement;
+        const focusableElements = this.modal.querySelectorAll(this.focusableElements);
+        if (focusableElements.length > 0) {
+            focusableElements[0].focus();
+        }
+    }
+    
+    restoreFocus() {
+        if (this.previousFocus) {
+            this.previousFocus.focus();
+        }
+    }
+}
+```
+
+---
+
+## Part 5 Interview Questions
+
+### Technical Questions
+
+1. **How do you handle multiple event listeners efficiently?**
+   - **Answer**: Use event delegation, attach listeners to parent elements, and use `removeEventListener()` for cleanup to prevent memory leaks.
+
+2. **What's the difference between `addEventListener` and inline event handlers?**
+   - **Answer**: `addEventListener` allows multiple listeners, better separation of concerns, can control capturing/bubbling, and easier to remove. Inline handlers are simpler but limited.
+
+3. **How do you create smooth CSS animations with JavaScript?**
+   - **Answer**: Use CSS transitions with class toggles, `requestAnimationFrame()` for JS animations, or Web Animations API for complex sequences.
+
+4. **What is focus trapping and why is it important?**
+   - **Answer**: Focus trapping keeps keyboard navigation within a modal, essential for accessibility. Prevents focus from moving to background elements.
+
+5. **How do you prevent body scroll when a modal is open?**
+   - **Answer**: Set `body { overflow: hidden }` when modal opens, restore on close. Handle touch events with `preventDefault()` for mobile.
+
+### Real-time Based Questions
+
+6. **How would you implement a modal that adapts to different screen sizes?**
+   - **Answer**: Use responsive CSS with viewport units, JavaScript resize handlers, and different animation types for mobile vs desktop.
+
+7. **Implement theme switching with persistence across browser sessions.**
+   - **Answer**: Use localStorage to save theme, apply classes to body element, handle system preference detection with `matchMedia()`.
+
+### Scenario-Based Questions
+
+8. **User reports modal doesn't close on mobile. How do you debug?**
+   - **Answer**: Check touch event handling, overlay click detection, escape key functionality, and viewport scaling issues.
+
+9. **How would you make a modal system accessible for screen readers?**
+   - **Answer**: Use ARIA attributes, manage focus properly, provide keyboard navigation, announce modal state changes.
+
+10. **Implement a modal queue system for multiple modals.**
+    - **Answer**: Create modal manager with queue, handle z-index stacking, manage focus between modals, coordinate animations.
+
+---
+
+## Part 5 Coding Exercises
+
+### Exercise 1: Advanced Modal System
+```javascript
+// TODO: Create modal system with multiple types (alert, confirm, custom)
+class ModalSystem {
+    show(type, options) { /* Show modal with type-specific content */ }
+    hide(modalId) { /* Hide specific modal */ }
+    queue(modalData) { /* Queue modal for display */ }
+    handleKeyboard(event) { /* Keyboard navigation */ }
+}
+```
+
+### Exercise 2: Animation Sequencer
+```javascript
+// TODO: Create animation sequencer for complex modal transitions
+class AnimationSequencer {
+    sequence(animations) { /* Run animations in sequence */ }
+    parallel(animations) { /* Run animations simultaneously */ }
+    reverse(animation) { /* Reverse animation */ }
+    pause() { /* Pause all animations */ }
+}
+```
+
+### Exercise 3: Theme Manager
+```javascript
+// TODO: Advanced theme manager with custom properties
+class ThemeManager {
+    registerTheme(name, variables) { /* Register custom theme */ }
+    switchTheme(themeName) { /* Switch to theme */ }
+    createVariation(baseTheme, changes) { /* Create theme variation */ }
+    detectSystemTheme() { /* Auto-detect system preference */ }
+}
+```
+
+### Exercise 4: Responsive Modal Handler
+```javascript
+// TODO: Handle modal behavior across different screen sizes
+class ResponsiveModal {
+    adaptToViewport() { /* Adjust modal for viewport */ }
+    handleOrientationChange() { /* Handle device rotation */ }
+    optimizeForTouch() { /* Touch-friendly interactions */ }
+    preventZoom() { /* Prevent unwanted zoom */ }
+}
+```
+
+### Exercise 5: Accessibility Manager
+```javascript
+// TODO: Comprehensive accessibility for modals
+class AccessibilityManager {
+    trapFocus(container) { /* Keep focus within container */ }
+    announceChange(message) { /* Screen reader announcements */ }
+    setupKeyboardNav() { /* Keyboard navigation */ }
+    validateContrast() { /* Check color contrast */ }
+}
+```
+
+---
+
+## Part 5 Summary
+
+This Part 5 guide covers advanced modal and UI interaction concepts:
+- ✅ Advanced event handling and delegation
+- ✅ Modal components with overlays and animations
+- ✅ Dynamic CSS class management
+- ✅ Smooth animations and transitions
+- ✅ Theme persistence with localStorage
+- ✅ Responsive design with JavaScript
+- ✅ Touch and mobile interaction handling
+- ✅ Keyboard accessibility and focus management
+
+Combined with Parts 1-4, you now have comprehensive JavaScript knowledge from fundamentals to advanced interactive UI components!
+```
+```
 ```
 
