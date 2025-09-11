@@ -360,8 +360,47 @@ console.log(h1New.parentElement.children);
 ///////////////////////////////////////////////////////////////////////
 // Key Learning Highlights
 ///////////////////////////////////////////////////////////////////////
-// - childNodes vs. children: childNodes includes all node types; children only element nodes[1][3].
-// - firstElementChild/lastElementChild: strictly go to first/last element, skipping whitespace/comments[1].
-// - parentNode/parentElement: navigate upwards, .closest() finds ancestors by selector match[7][1].
-// - previousElementSibling/nextElementSibling: traverse adjacent elements, not just nodes[6][1].
-// - Techniques combine for tree traversal, animation, interactivity, and context-aware UI[1][3][7][6].
+// - childNodes vs. children: childNodes includes all node types; children only element nodes
+// - firstElementChild/lastElementChild: strictly go to first/last element, skipping whitespace/comments
+// - parentNode/parentElement: navigate upwards, .closest() finds ancestors by selector match
+// - previousElementSibling/nextElementSibling: traverse adjacent elements, not just nodes.
+// - Techniques combine for tree traversal, animation, interactivity, and context-aware UI.
+
+///////////////////////////////////////////////////////////////////////
+// LIFECYCLE DOM EVENTS
+///////////////////////////////////////////////////////////////////////
+
+// The DOMContentLoaded event fires when the initial HTML document has been
+// completely loaded and parsed. This means the DOM tree is fully built,
+// but resources like images, CSS, and external scripts may still be loading.
+// Use this event to safely manipulate or query DOM elements once they're available.
+document.addEventListener('DOMContentLoaded', function (e) {
+  console.log('HTML parsed and DOM tree built!', e);
+});
+
+// The load event fires later, when the entire page including all dependent
+// resources such as images, stylesheets, and iframes have finished loading.
+// Use this event for code that depends on resources being fully available,
+// such as image dimensions or ready third-party libraries.
+window.addEventListener('load', function (e) {
+  console.log('Page fully loaded', e);
+});
+
+// The beforeunload event fires when the page is about to be unloaded,
+// for example, when the user navigates away or closes the tab/window.
+// You can use this to warn users about unsaved changes or confirm exiting.
+// Calling e.preventDefault() and setting e.returnValue triggers this confirmation.
+window.addEventListener('beforeunload', function (e) {
+  e.preventDefault(); // Required for some browsers for confirmation prompt
+  console.log(e); // Event object info
+  e.returnValue = ''; // Legacy way to trigger the confirmation dialog
+});
+
+///////////////////////////////////////////////////////////////////////
+// Real-Time Example Scenario:
+// - Use DOMContentLoaded to initialize UI components or attach event listeners
+//   as soon as the document is parsed for faster responsiveness.
+// - Use load event to start functionality dependent on images or other media.
+// - Use beforeunload to prevent data loss by asking the user if they want to leave
+//   a form with unsaved inputs.
+///////////////////////////////////////////////////////////////////////

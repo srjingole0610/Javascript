@@ -353,3 +353,132 @@ imgTargets.forEach(img => imgObserver.observe(img));
 ///////////////////////////////////////////////////////////////////////
 // E-commerce sites or blogs use lazy loading for product photos.
 // Users scroll, and the images load just before they appear, ensuring fast page start and bandwidth savings.
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// SLIDER COMPONENT
+/////////////////////////////////////////////////////////////////////////////////////////
+
+// Select all slide elements
+const slides = document.querySelectorAll('.slide');
+
+// Select buttons for navigating slides
+const btnLeft = document.querySelector('.slider__btn--left');
+const btnRight = document.querySelector('.slider__btn--right');
+
+// Select the container for navigation dots
+const dotContainer = document.querySelector('.dots');
+
+let currentSlide = 0;          // Track the currently active slide index
+const maxSlide = slides.length; // Total number of slides
+
+/**
+ * Move slides horizontally based on the target slide index.
+ * The target slide is moved into view by adjusting translateX of each slide.
+ * @param {number} slide - The index of the slide to show.
+ */
+function goToSlide(slide) {
+  slides.forEach((s, i) => {
+    // Position slides relative to the target slide by 100% increments
+    s.style.transform = `translateX(${100 * (i - slide)}%)`;
+  });
+}
+
+/**
+ * Create a navigation dot for each slide in the dot container.
+ * Dots have a data attribute to store the associated slide index.
+ */
+function createDots() {
+  slides.forEach(function (_, i) {
+    dotContainer.insertAdjacentHTML(
+      'beforeend',
+      `<button class="dots__dot" data-slide="${i}"></button>`,
+    );
+  });
+}
+
+/**
+ * Highlight the navigation dot corresponding to the active slide.
+ * @param {number} slide - The index of the active slide.
+ */
+function activateDot(slide) {
+  // Remove active class from all dots
+  document
+    .querySelectorAll('.dots__dot')
+    .forEach(dot => dot.classList.remove('dots__dot--active'));
+
+  // Add active class to the dot for the current slide
+  document
+    .querySelector(`.dots__dot[data-slide="${slide}"]`)
+    .classList.add('dots__dot--active');
+}
+
+/**
+ * Show the next slide, looping back to the first after the last.
+ */
+function nextSlide() {
+  currentSlide = currentSlide === maxSlide - 1 ? 0 : currentSlide + 1;
+  goToSlide(currentSlide);
+  activateDot(currentSlide);
+}
+
+/**
+ * Show the previous slide, looping to the last from the first.
+ */
+function prevSlide() {
+  currentSlide = currentSlide === 0 ? maxSlide - 1 : currentSlide - 1;
+  goToSlide(currentSlide);
+  activateDot(currentSlide);
+}
+
+/**
+ * Handle keypress events to allow arrow key navigation.
+ * @param {KeyboardEvent} e - The keyboard event triggered.
+ */
+function handleKeyPress(e) {
+  if (e.key === 'ArrowLeft') prevSlide();
+  if (e.key === 'ArrowRight') nextSlide();
+}
+
+/**
+ * Handle clicks on navigation dots to activate corresponding slide.
+ * @param {MouseEvent} e - The mouse event triggered by a click.
+ */
+function handleDotClick(e) {
+  if (e.target.classList.contains('dots__dot')) {
+    currentSlide = Number(e.target.dataset.slide);
+    goToSlide(currentSlide);
+    activateDot(currentSlide);
+  }
+}
+
+/**
+ * Initialize the slider:
+ * - create navigation dots
+ * - show the initial slide
+ * - activate the initial dot
+ * - add event listeners for buttons, keyboard, and dots
+ */
+function initSlider() {
+  createDots();
+  goToSlide(0);
+  activateDot(0);
+
+  btnRight.addEventListener('click', nextSlide);
+  btnLeft.addEventListener('click', prevSlide);
+  document.addEventListener('keydown', handleKeyPress);
+  dotContainer.addEventListener('click', handleDotClick);
+}
+
+// Initialize the slider when script runs
+initSlider();
+
+/*
+Summary:
+The goToSlide function slides the carousel horizontally by modifying the transform: translateX CSS property.
+Dots navigation is created dynamically to allow direct slide selection.
+Slide navigation supports buttons and keyboard arrow keys.
+Active states keep the UI in sync between slides and dots.
+The initialization sets up all interactivity and default UI states.
+This architecture reflects core principles of interactive sliders used widely in modern web applications
+*/
+
