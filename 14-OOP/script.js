@@ -90,7 +90,7 @@ console.log(surajAccount); // { owner: 'Suraj', balance: 1300 }
  * This makes code DRY and memory efficient, because the method is not duplicated on every instance.
  */
 Person.prototype.calcAge = function () {
-  console.log(2025 - this.birthYear);
+  console.log(new Date().getFullYear() - this.birthYear);
 };
 
 // Any Person instance will inherit and can use calcAge
@@ -125,17 +125,17 @@ console.log(suraj.hasOwnProperty('species')); // False: species is inherited via
  * Constructor function for simple bank account object.
  * Demonstrates shared methods and prototype properties for accounts.
  */
-function BankAccount(owner, initialBalance) {
+function NewBankAccount(owner, initialBalance) {
   this.owner = owner;
   this.balance = initialBalance;
 }
 // Method added to prototype, shared by all BankAccount instances
-BankAccount.prototype.deposit = function (amount) {
+NewBankAccount.prototype.deposit = function (amount) {
   this.balance += amount;
 };
-BankAccount.prototype.bankType = 'Savings'; // Shared property
+NewBankAccount.prototype.bankType = 'Savings'; // Shared property
 
-const acc1 = new BankAccount('Suraj', 1000);
+const acc1 = new NewBankAccount('Suraj', 1000);
 acc1.deposit(500);
 console.log(acc1.owner); // "Suraj"
 console.log(acc1.balance); // 1500
