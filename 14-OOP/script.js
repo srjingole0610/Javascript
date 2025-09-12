@@ -460,7 +460,7 @@ class PersonClNew {
 
   // Instance method on the prototype; available to all instances
   calcAge() {
-    console.log(2037 - this.birthYear);
+    console.log(new Date().getFullYear() - this.birthYear);
   }
 
   greet() {
@@ -512,7 +512,7 @@ console.log(TemperatureConverter.fahrenheitToCelsius(86)); // 30
 const PersonProto = {
   // Shared method for calculating age (inherited by all objects created from PersonProto)
   calcAge() {
-    console.log(2037 - this.birthYear);
+    console.log(new Date().getFullYear() - this.birthYear);
   },
 
   // Initialization method to set instance properties after object creation
