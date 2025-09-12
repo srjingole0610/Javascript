@@ -38,12 +38,12 @@ message.innerHTML =
 
 // Insert as last child of header (append - after any other content), adds only once (cannot exist in two places)
 // If you want to insert in multiple places, use cloneNode(true) to copy the node
-header.append(message);
+header1.append(message);
 // header.append(message.cloneNode(true));
 
 // Insert before or after the header (as siblings)
-// header.before(message); // Inserts message just before header
-// header.after(message); // Would add just after header
+// header1.before(message); // Inserts message just before header
+// header1.after(message); // Would add just after header
 
 // ==== REMOVING ELEMENTS ====
 // Add a click event handler to the "Got it!" button inside the cookie message
@@ -185,7 +185,7 @@ const h1 = document.querySelector('h1');
 // Function receives a MouseEvent object as its argument.
 h1.addEventListener('mouseenter', function (e) {
   alert(
-    'addEventListener: Great! You are reading the heading for first Time :D',
+    'addEventListener: Great! You are reading the heading for first time :D',
   );
 });
 

@@ -7,7 +7,7 @@
 const modal = document.querySelector('.modal'); // Selects modal dialog box
 const overlay = document.querySelector('.overlay'); // Selects overlay behind modal
 const btnCloseModal = document.querySelector('.btn--close-modal'); // Selects close button on modal
-const btnsOpenModal = document.querySelectorAll('.btn--show-modal'); // All buttons that open the moda
+const btnsOpenModal = document.querySelectorAll('.btn--show-modal'); // All buttons that open the modal
 const buttonScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1');
 
