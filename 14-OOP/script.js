@@ -576,3 +576,425 @@ bike.accelerate(); // Honda is going at 100 km/h
 // - Useful for clean inheritance where shared methods reside in the prototype object.
 // - init methods let you set instance-specific properties after creation (similar to constructors).
 // - Real-world use cases: Vehicles, Animals, Shapes, UI components, and any entity hierarchy requiring inheritance.
+
+//////////////////////////////////////////////////////////////////////////
+// INHERITANCE BETWEEN CLASSES : CONSTRUCTOR FUNCTIONS
+//////////////////////////////////////////////////////////////////////////
+
+// --- 1. Base "Parent" Constructor Function ---
+const PersonInh = function (firstName, birthYear) {
+  this.firstName = firstName;
+  this.birthYear = birthYear;
+};
+
+// Add methods to PersonInh's prototype so they are shared by all instances
+PersonInh.prototype.calcAge = function () {
+  console.log(new Date().getFullYear() - this.birthYear);
+};
+
+// --- 2. Child Constructor Function ---
+const StudentInh = function (firstName, birthYear, course) {
+  // Call the parent constructor, binding 'this' to the child instance
+  PersonInh.call(this, firstName, birthYear); // Inherits parent's properties
+  this.course = course; // Child's own property
+};
+
+// Set up inheritance of methods (prototype chain)
+StudentInh.prototype = Object.create(PersonInh.prototype);
+
+// Add child-specific methods to StudentInh
+StudentInh.prototype.introduce = function () {
+  console.log(`My name is ${this.firstName} and I study ${this.course}`);
+};
+
+// --- 3. Instantiation and Property Access ---
+const mike = new StudentInh('Mike', 2000, 'Computer Science');
+console.log(mike);
+mike.introduce();
+mike.calcAge(); // Inherited method
+
+// Check the prototype chain (mike -> StudentInh.prototype -> PersonInh.prototype -> Object.prototype)
+console.log(mike.__proto__);
+console.log(mike.__proto__.__proto__);
+
+// instanceof checks
+console.log(mike instanceof StudentInh); // true
+console.log(mike instanceof PersonInh); // true
+console.log(mike instanceof Object); // true
+
+// Ensure constructor reference is correct for StudentInh instances
+StudentInh.prototype.constructor = StudentInh;
+console.dir(StudentInh.prototype.constructor);
+
+//////////////////////////////////////////////////////////////////////////
+// Real-Time Example: Vehicle and Car Constructor Function Inheritance
+//////////////////////////////////////////////////////////////////////////
+
+// --- Parent Constructor Function ---
+function Vehicle(make, year) {
+  this.make = make;
+  this.year = year;
+}
+
+Vehicle.prototype.start = function () {
+  console.log(`${this.make} (${this.year}) is starting.`);
+};
+
+// --- Child Constructor Function ---
+function Car(make, year, model) {
+  Vehicle.call(this, make, year); // inherit make and year
+  this.model = model; // add own property
+}
+
+// Inherit all methods from Vehicle
+Car.prototype = Object.create(Vehicle.prototype);
+
+// Extend or add Car-specific behavior
+Car.prototype.drive = function () {
+  console.log(`${this.make} ${this.model} is driving.`);
+};
+
+const toyotaCar = new Car('Toyota', 2022, 'Corolla');
+toyotaCar.start(); // Inherited from Vehicle
+toyotaCar.drive(); // Child-specific
+
+console.log(toyotaCar instanceof Car); // true
+console.log(toyotaCar instanceof Vehicle); // true
+
+//////////////////////////////////////////////////////////////////////////
+// Key Learning Points
+//////////////////////////////////////////////////////////////////////////
+// - Child constructors call parent constructors with .call() to inherit instance properties[4][1].
+// - Child prototype is set to Object.create(parent.prototype) to inherit methods[7][1].
+// - Methods and properties can be added or overridden in child prototypes.
+// - instanceof checks for custom types and inheritance.
+// - Used to build object hierarchies like vehicles/cars, users/admins, products/warranties, etc.
+
+//////////////////////////////////////////////////////////////////////////
+// INHERITANCE BETWEEN CLASSES : ES6 CLASSES
+//////////////////////////////////////////////////////////////////////////
+
+// ---- Parent Class ----
+class PersonClES6 {
+  /**
+   * Constructor for Person.
+   * @param {string} fullName - The person's full name.
+   * @param {number} birthYear - The person's birth year.
+   */
+  constructor(fullName, birthYear) {
+    this.fullName = fullName;
+    this.birthYear = birthYear;
+  }
+
+  // Shared instance method
+  calcAge() {
+    console.log(new Date().getFullYear() - this.birthYear);
+  }
+
+  // Another shared method
+  greet() {
+    console.log(`Hello ${this.fullName}`);
+  }
+
+  // Static method (callable ONLY on class itself)
+  static hey() {
+    console.log('Hey there 👋');
+  }
+}
+
+// ---- Child Class (inherits from PersonClES6) ----
+class StudentClES6 extends PersonClES6 {
+  /**
+   * Child class constructor must call super(...).
+   * @param {string} fullName - Inherited from parent.
+   * @param {number} birthYear - Inherited from parent.
+   * @param {string} course - The student's course.
+   */
+  constructor(fullName, birthYear, course) {
+    super(fullName, birthYear); // Calls parent's constructor, sets inherited properties
+    this.course = course; // Child's own property
+  }
+
+  // Child's own method
+  introduce() {
+    console.log(`My name is ${this.fullName} and I study ${this.course}`);
+  }
+
+  // Override the parent's calcAge method
+  calcAge() {
+    console.log(
+      `I'm ${
+        new Date().getFullYear() - this.birthYear
+      } years old, but as a student I feel more like ${
+        new Date().getFullYear() - this.birthYear + 10
+      }`,
+    );
+  }
+}
+
+// Create a Student instance
+const martha = new StudentClES6('Martha Jones', 2012, 'Computer Science');
+martha.introduce(); // Child method
+martha.calcAge(); // Overridden method
+StudentClES6.hey(); // Static method (on class itself only)
+console.log(martha);
+console.log(martha instanceof StudentClES6); // true
+console.log(martha instanceof PersonClES6); // true
+console.log(martha instanceof Object); // true
+console.dir(StudentClES6.prototype.constructor);
+console.dir(StudentClES6.prototype.constructor === StudentClES6); // true
+
+//////////////////////////////////////////////////////////////////////////
+// Real-Time Example:  Animal - Dog - Cat Hierarchy
+//////////////////////////////////////////////////////////////////////////
+// ES6 Classes: Animal - Dog - Cat Hierarchy
+
+// Generic parent class for all animals
+class Animal {
+  constructor(name, energy) {
+    this.name = name;
+    this.energy = energy;
+  }
+
+  eat(amount) {
+    console.log(`${this.name} is eating.`);
+    this.energy += amount;
+  }
+
+  sleep(length) {
+    console.log(`${this.name} is sleeping.`);
+    this.energy += length;
+  }
+
+  play(length) {
+    console.log(`${this.name} is playing.`);
+    this.energy -= length;
+  }
+}
+
+// Dog class inherits from Animal
+class Dog extends Animal {
+  constructor(name, energy, breed) {
+    super(name, energy); // Animal's constructor
+    this.breed = breed; // Dog-specific property
+  }
+
+  bark() {
+    console.log('Woof Woof!');
+    this.energy -= 0.1;
+  }
+}
+
+// Cat class inherits from Animal
+class Cat extends Animal {
+  constructor(name, energy, declawed) {
+    super(name, energy);
+    this.declawed = declawed; // Cat-specific property
+  }
+
+  meow() {
+    console.log('Meow!');
+    this.energy -= 0.1;
+  }
+}
+
+// Real-time usage example:
+const fido = new Dog('Fido', 5, 'Labrador');
+fido.eat(2); // Fido is eating. (energy: 7)
+fido.play(1); // Fido is playing. (energy: 6)
+fido.bark(); // Woof Woof!
+
+const whiskers = new Cat('Whiskers', 8, false);
+whiskers.sleep(3); // Whiskers is sleeping. (energy: 11)
+whiskers.meow(); // Meow!
+
+console.log(fido instanceof Dog); // true
+console.log(fido instanceof Animal); // true
+console.log(whiskers instanceof Cat); // true
+console.log(whiskers instanceof Animal); // true
+
+/*
+Key points:
+- Dog and Cat extend shared Animal functionality (eat, sleep, play) and add their own methods.
+- The hierarchy provides organized, maintainable, and reusable logic for game characters and simulation models.
+- Used in games, animation libraries, CMS widgets, product types, and more for scalable architectures.
+*/
+
+//////////////////////////////////////////////////////////////////////////
+// Key Learning Points
+//////////////////////////////////////////////////////////////////////////
+// - Use extends for class inheritance: subclass inherits all parent's methods[1][5][2][7].
+// - Use super() to call parent constructor and methods[5][1].
+// - Methods (including overrides) on subclass use prototype chaining.
+// - Static methods are called only on the class, not instances.
+// - Modern applications model people, students, vehicles, products using ES6 class inheritance for scalability and code reuse.
+
+//////////////////////////////////////////////////////////////////////////
+// INHERITANCE BETWEEN CLASSES : OBJECT.CREATE
+//////////////////////////////////////////////////////////////////////////
+
+// Base prototype object with shared methods and initialization logic
+const PersonProtoNew = {
+  // Shared method to calculate age
+  calcAge() {
+    console.log(new Date().getFullYear() - this.birthYear);
+  },
+
+  // Initialization method to set name and birth year
+  init(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  },
+};
+
+// Create individual object micah inheriting from PersonProtoNew
+const micah = Object.create(PersonProtoNew);
+
+// Create student prototype that inherits from PersonProtoNew
+const studentProto = Object.create(PersonProtoNew);
+
+// Enhance studentProto with own init method (calls parent init)
+studentProto.init = function (firstName, birthYear, course) {
+  PersonProtoNew.init.call(this, firstName, birthYear);
+  this.course = course; // Student-specific property
+};
+
+// Add new method introduce specific to studentProto
+studentProto.introduce = function () {
+  console.log(`My name is ${this.firstName} and I study ${this.course}`);
+};
+
+// Create individual henry from studentProto
+const henry = Object.create(studentProto);
+henry.init('Henry', 1991, 'Computer Science');
+
+console.log(henry); // Shows henry's properties
+henry.calcAge(); // Inherited method from PersonProtoNew
+henry.introduce(); // Student-specific method from studentProto
+
+//////////////////////////////////////////////////////////////////////////
+// Real-Time Example: Shapes and Rectangles Hierarchy with Object.create
+//////////////////////////////////////////////////////////////////////////
+
+const ShapeProto = {
+  init(type) {
+    this.type = type;
+  },
+  describe() {
+    console.log(`This is a ${this.type}`);
+  },
+};
+
+const RectangleProto = Object.create(ShapeProto);
+
+RectangleProto.init = function (width, height) {
+  ShapeProto.init.call(this, 'Rectangle'); // call parent init
+  this.width = width;
+  this.height = height;
+};
+
+RectangleProto.area = function () {
+  return this.width * this.height;
+};
+
+RectangleProto.describeArea = function () {
+  this.describe();
+  console.log(`Area: ${this.area()}`);
+};
+
+const myRectangle = Object.create(RectangleProto);
+myRectangle.init(5, 10);
+myRectangle.describeArea(); // Outputs the type and area
+
+//////////////////////////////////////////////////////////////////////////
+// Key Learning Points:
+//////////////////////////////////////////////////////////////////////////
+// - Object.create(proto) creates a new object with specified prototype inheritance[3][6].
+// - Shared methods live in prototype objects to avoid duplication and allow reuse.
+// - Child prototypes can extend and override parent prototype methods and properties.
+// - init methods mimic constructor behavior for setting instance data after creation.
+// - Useful for game objects, UI components, shapes, and any hierarchical data modeling.
+
+//////////////////////////////////////////////////////////////////////////
+// REAL TIME CLASS EXAMPLE: HDFC BANK ACCOUNT
+//////////////////////////////////////////////////////////////////////////
+
+class HDFCBankAccount {
+  // The constructor runs automatically when we create a new account object
+  constructor(owner, currency, pin) {
+    this.owner = owner; // Account holder's name
+    this.currency = currency; // Currency type (EUR, INR, USD, etc.)
+    this.pin = pin; // Security PIN (keeping it basic here)
+    this.movements = []; // Array to track deposits & withdrawals
+    this.locale = navigator.language; // Gets user’s browser locale/language
+
+    console.log(`Thanks for opening an account, ${owner}`);
+  }
+
+  // ---------------------------
+  // PUBLIC INTERFACE METHODS
+  // ---------------------------
+
+  // To retrieve all deposits/withdrawals (account history)
+  getMovements() {
+    return this.movements;
+  }
+
+  // Deposit money into account
+  deposit(val) {
+    this.movements.push(val); // Add deposit value to movements array
+    console.log(
+      `Deposited ${val}, new balance is ${this.movements.reduce(
+        (a, b) => a + b,
+        0,
+      )}`,
+    );
+    return this; // Enables method chaining: ex -> acc.deposit(100).withdraw(50)
+  }
+
+  // Withdraw money (internally calls deposit with negative value)
+  withdraw(val) {
+    this.movements.push(-val);
+    console.log(
+      `Withdrawn ${val}, new balance is ${this.movements.reduce(
+        (a, b) => a + b,
+        0,
+      )}`,
+    );
+    return this; // Allow method chaining
+  }
+
+  // Loan request simulation
+  requestLoan(val) {
+    if (this.approveLoan(val)) {
+      // Check if loan request is approved
+      this.deposit(val); // Add loan amount into account
+      console.log(`Loan approved`);
+    }
+    return this; // Again, for chaining
+  }
+
+  // INTERNAL method (normally should be private, here just for learning)
+  approveLoan(val) {
+    return true; // Basic logic: approve all loans (real bank wouldn’t!)
+  }
+}
+
+// ---------------------------
+// USAGE EXAMPLE
+// ---------------------------
+
+// Create a new object (new account)
+const jonasAcc = new HDFCBankAccount('Jonas', 'EUR', 1111);
+
+// Performing account transactions
+jonasAcc.deposit(250); // Deposit €250
+jonasAcc.withdraw(140); // Withdraw €140
+jonasAcc.deposit(300); // Deposit €300
+jonasAcc.requestLoan(1000); // Request & approve €1000 loan
+
+// Print movements (account history of deposits/withdrawals)
+console.log(jonasAcc.getMovements()); // [250, -140, 300, 1000]
+
+// Print the whole account object
+console.log(jonasAcc);
