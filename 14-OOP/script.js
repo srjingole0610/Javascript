@@ -1002,78 +1002,74 @@ console.log(jonasAcc);
 //////////////////////////////////////////////////////////////////////////
 // ENCAPSULATION: PRIVATE CLASS FIELDS AND METHODS (Real-time Example)
 //////////////////////////////////////////////////////////////////////////
-
 class AXISBankAccount {
-  // Public fields (accessed from outside)
-  locale = navigator.language; // Stores system/browser language/region
-  bankName = 'AXIS Bank'; // Common for all accounts
+  // Public fields
+  locale = navigator.language;
+  bankName = 'AXIS Bank';
 
-  // Private fields (encapsulation: NOT accessible outside the class)
-  #movements = []; // Tracks all credit/debit transactions
-  #pin; // Pin is private so it cannot be accessed/modified directly
+  // Private fields
+  #movements = [];
+  #pin;
 
   constructor(owner, currency, pin) {
-    this.owner = owner; // Account holder's name
-    this.currency = currency; // Currency type
-    this.#pin = pin; // Encapsulated pin is stored securely
+    this.owner = owner;
+    this.currency = currency;
+    this.#pin = pin;
     console.log(
-      `Thanks for opening an account with ${this.bankName}, ${owner}`,
+      `Thanks for opening an account with ${this.bankName}, ${owner}`
     );
+  }
+
+  // ---------------------------
+  // Private helper method
+  // ---------------------------
+  #calculateBalance() {
+    return this.#movements.reduce((a, b) => a + b, 0);
   }
 
   // ---------------------------
   // Public methods
   // ---------------------------
-
-  // Deposit money → push into movements
   deposit(val) {
     this.#movements.push(val);
     console.log(
-      `Deposited ${val} ${
-        this.currency
-      }. Current Balance: ${this.#movements.reduce((a, b) => a + b, 0)} ${
-        this.currency
-      }`,
+      `Deposited ${val} ${this.currency}. Current Balance: ${this.#calculateBalance()} ${this.currency}`
     );
-    return this; // enables method chaining
+    return this;
   }
 
-  // Withdraw money → push negative value
   withdraw(val) {
     this.#movements.push(-val);
     console.log(
-      `Withdrawn ${val} ${
-        this.currency
-      }. Current Balance: ${this.#movements.reduce((a, b) => a + b, 0)} ${
-        this.currency
-      }`,
+      `Withdrawn ${val} ${this.currency}. Current Balance: ${this.#calculateBalance()} ${this.currency}`
     );
-    return this; // enables chaining
+    return this;
   }
 
-  // Public method for clients → Bank statement
   getMovements() {
-    return this.#movements;
+    return [...this.#movements];
   }
 
   // ---------------------------
   // Private method (internal check)
   // ---------------------------
   #approveLoan(val) {
-    // In real life, this would check credit score, salary, etc.
     console.log(`Verifying loan request of ${val} ${this.currency}...`);
-    return true; // Simplified: always approves
+    return true; // Simplified
   }
 
   // Public method → Requests loan
   requestLoan(val) {
     if (this.#approveLoan(val)) {
-      this.deposit(val); // Add approved loan into account
-      console.log(`Loan of ${val} ${this.currency} approved ✅`);
+      this.#movements.push(val); // Directly update movements
+      console.log(
+        `Loan of ${val} ${this.currency} approved ✅. Current Balance: ${this.#calculateBalance()} ${this.currency}`
+      );
     }
     return this;
   }
 }
+
 
 // ---------------------------
 // REAL TIME USAGE EXAMPLE
