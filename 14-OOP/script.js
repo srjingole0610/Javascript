@@ -998,3 +998,126 @@ console.log(jonasAcc.getMovements()); // [250, -140, 300, 1000]
 
 // Print the whole account object
 console.log(jonasAcc);
+
+//////////////////////////////////////////////////////////////////////////
+// ENCAPSULATION: PRIVATE CLASS FIELDS AND METHODS (Real-time Example)
+//////////////////////////////////////////////////////////////////////////
+
+class AXISBankAccount {
+  // Public fields (accessed from outside)
+  locale = navigator.language; // Stores system/browser language/region
+  bankName = 'AXIS Bank'; // Common for all accounts
+
+  // Private fields (encapsulation: NOT accessible outside the class)
+  #movements = []; // Tracks all credit/debit transactions
+  #pin; // Pin is private so it cannot be accessed/modified directly
+
+  constructor(owner, currency, pin) {
+    this.owner = owner; // Account holder's name
+    this.currency = currency; // Currency type
+    this.#pin = pin; // Encapsulated pin is stored securely
+    console.log(
+      `Thanks for opening an account with ${this.bankName}, ${owner}`,
+    );
+  }
+
+  // ---------------------------
+  // Public methods
+  // ---------------------------
+
+  // Deposit money → push into movements
+  deposit(val) {
+    this.#movements.push(val);
+    console.log(
+      `Deposited ${val} ${
+        this.currency
+      }. Current Balance: ${this.#movements.reduce((a, b) => a + b, 0)} ${
+        this.currency
+      }`,
+    );
+    return this; // enables method chaining
+  }
+
+  // Withdraw money → push negative value
+  withdraw(val) {
+    this.#movements.push(-val);
+    console.log(
+      `Withdrawn ${val} ${
+        this.currency
+      }. Current Balance: ${this.#movements.reduce((a, b) => a + b, 0)} ${
+        this.currency
+      }`,
+    );
+    return this; // enables chaining
+  }
+
+  // Public method for clients → Bank statement
+  getMovements() {
+    return this.#movements;
+  }
+
+  // ---------------------------
+  // Private method (internal check)
+  // ---------------------------
+  #approveLoan(val) {
+    // In real life, this would check credit score, salary, etc.
+    console.log(`Verifying loan request of ${val} ${this.currency}...`);
+    return true; // Simplified: always approves
+  }
+
+  // Public method → Requests loan
+  requestLoan(val) {
+    if (this.#approveLoan(val)) {
+      this.deposit(val); // Add approved loan into account
+      console.log(`Loan of ${val} ${this.currency} approved ✅`);
+    }
+    return this;
+  }
+}
+
+// ---------------------------
+// REAL TIME USAGE EXAMPLE
+// ---------------------------
+
+// Create new account
+const micahAcc = new AXISBankAccount('Micah', 'INR', 4321);
+
+// Transactions
+micahAcc.deposit(550); // Deposit ₹550
+micahAcc.withdraw(240); // Withdraw ₹240
+micahAcc.deposit(350); // Deposit ₹350
+micahAcc.requestLoan(1200); // Loan request (approved)
+
+// View movements (encapsulated array)
+console.log('Movements:', micahAcc.getMovements());
+console.log(micahAcc);
+
+// ---------------------------
+// METHOD CHAINING (like online banking in one session)
+// ---------------------------
+micahAcc
+  .deposit(400)
+  .withdraw(100)
+  .requestLoan(500)
+  .deposit(3000)
+  .withdraw(1000)
+  .withdraw(250)
+  .deposit(500);
+
+console.log('🔹 Final Statement:', micahAcc.getMovements());
+
+// ---------------------------
+// Trying to access private fields or methods (WILL FAIL!)
+// ---------------------------
+// console.log(micahAcc.#pin);           ❌ ERROR
+// console.log(micahAcc.#movements);     ❌ ERROR
+// console.log(micahAcc.#approveLoan()); ❌ ERROR
+
+/*
+Key Learnings from Encapsulation
+Private fields (#movements, #pin) are hidden from outside usage, ensuring security.
+Private methods (#approveLoan) ensure certain logic can only be executed internally.
+Public methods are the only way an outside consumer (user of the class) can interact with the account.
+Method chaining using return this makes transactions more fluent and readable (like using an online banking portal).
+Trying to access account.#pin will throw an error, proving encapsulation in action.
+*/
