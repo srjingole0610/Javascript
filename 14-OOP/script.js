@@ -943,16 +943,25 @@ class HDFCBankAccount {
   // Deposit money into account
   deposit(val) {
     this.movements.push(val); // Add deposit value to movements array
+    console.log(
+      `Deposited ${val}, new balance is ${this.movements.reduce(
+        (a, b) => a + b,
+        0,
+      )}`,
+    );
     return this; // Enables method chaining: ex -> acc.deposit(100).withdraw(50)
-    // Note: anything written after "return" will NOT execute (console.log below is unreachable)
-    console.log(`Deposited ${val}, new balance is ${this.balance}`);
   }
 
   // Withdraw money (internally calls deposit with negative value)
   withdraw(val) {
-    this.deposit(-val); // Just reuse deposit method with a negative number
+    this.movements.push(-val);
+    console.log(
+      `Withdrawn ${val}, new balance is ${this.movements.reduce(
+        (a, b) => a + b,
+        0,
+      )}`,
+    );
     return this; // Allow method chaining
-    console.log(`Withdrawn ${val}, new balance is ${this.balance}`);
   }
 
   // Loan request simulation
