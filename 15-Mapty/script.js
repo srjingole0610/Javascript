@@ -72,14 +72,14 @@ class ThemeManager {
     });
   }
 
-  // Simulated storage retrieval (in real apps, would use localStorage)
+  // Get theme from localStorage, with fallback to null if not set
   getStoredTheme() {
-    return this.storedTheme;
+    return localStorage.getItem('theme');
   }
 
-  // Simulated storage setter
+  // Save theme preference to localStorage
   setStoredTheme(theme) {
-    this.storedTheme = theme;
+    localStorage.setItem('theme', theme);
   }
 
   // Detect system preferred theme
@@ -127,20 +127,21 @@ class ThemeManager {
   }
 }
 
-// Wait until DOM is loaded before running theme logic
-document.addEventListener('DOMContentLoaded', () => {
-  new ThemeManager();
-});
+// // Wait until DOM is loaded before running theme logic
+// document.addEventListener('DOMContentLoaded', () => {
+//   new ThemeManager();
+// });
 
 ////////////////////////////////////////////////////////////////////////////
 // FORM ACCESSIBILITY ENHANCEMENTS
 ////////////////////////////////////////////////////////////////////////////
 
 document.addEventListener('DOMContentLoaded', () => {
+  new ThemeManager();
   const typeSelect = document.getElementById('type');
-  const cadenceRow = document.querySelector(
-    '.form__row:has(.form__input--cadence)',
-  );
+  const cadenceRow = document
+    .querySelector('.form__input--cadence')
+    .closest('.form__row');
   const elevationRow = document.querySelector('.form__row--hidden'); // Hidden initially
 
   // Show/hide fields based on workout type
@@ -172,29 +173,19 @@ document.addEventListener('DOMContentLoaded', () => {
 ////////////////////////////////////////////////////////////////////////////
 
 // Check if browser supports Geolocation API
-if (navigator.geolocation)
+if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(
     function (position) {
       // ------------------------
       // SUCCESS CALLBACK
       // ------------------------
-      // "position" contains the user's geolocation info
-      console.log(position);
 
       // Extract latitude & longitude from position object
       const latitude = position.coords.latitude;
       const longitude = position.coords.longitude;
 
-      console.log(`Latitude: ${latitude}`);
-      console.log(`Longitude: ${longitude}`);
-
       // Store as an array [lat, lng] for Leaflet map
       const coords = [latitude, longitude];
-
-      // ------------------------
-      // GOOGLE MAP LINK (for debugging/verification)
-      // ------------------------
-      console.log(`https://www.google.com/maps/@${latitude},${longitude}`);
 
       // ------------------------
       // LEAFLET MAP IMPLEMENTATION
@@ -203,12 +194,11 @@ if (navigator.geolocation)
       // setView(coords, zoomLevel)
       const map = L.map('map').setView(coords, 14);
 
-      // Add map layer → Using Google Maps tiles via Leaflet
-      L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+      // Add map layer → Using openstreetmap tiles via Leaflet
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 20, // Max zoom allowed
-        subdomains: ['mt0', 'mt1', 'mt2', 'mt3'], // Google tile subdomains
         attribution:
-          '&copy; <a href="https://www.google.com/maps">Google Maps</a>',
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(map);
 
       // ------------------------
@@ -228,3 +218,4 @@ if (navigator.geolocation)
       alert('Could not get your position ❌');
     },
   );
+}
