@@ -150,7 +150,6 @@ a:focus {
   margin-bottom: 3rem;
   filter: drop-shadow(0 2px 4px var(--color-shadow));
   transition: var(--transition);
-  color: var(--color-primary);
 }
 
 /* Logo hover effect */
