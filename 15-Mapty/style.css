@@ -1,221 +1,496 @@
+/* Root variables for theming */
 :root {
-  --color-brand--1: #ffb545;
-  --color-brand--2: #00c46a;
+  /* Light mode colors */
+  --color-primary: #6366f1;    /* Main brand color */
+  --color-secondary: #10b981;  /* Secondary brand color */
+  --color-accent: #f59e0b;     /* Accent color for highlights */
 
-  --color-dark--1: #2d3439;
-  --color-dark--2: #42484d;
-  --color-light--1: #aaa;
-  --color-light--2: #ececec;
-  --color-light--3: rgb(214, 222, 224);
+  /* Background colors */
+  --color-bg-primary: #ffffff;   /* Main background */
+  --color-bg-secondary: #f8fafc; /* Secondary background */
+  --color-bg-tertiary: #f1f5f9;  /* Tertiary background */
+
+  /* Text colors */
+  --color-text-primary: #0f172a;   /* Main text color */
+  --color-text-secondary: #475569; /* Secondary text color */
+  --color-text-muted: #94a3b8;     /* Muted/subtle text */
+
+  /* UI element colors */
+  --color-border: #e2e8f0;              /* Border color */
+  --color-shadow: rgba(0, 0, 0, 0.1);   /* Shadow color */
+
+  /* Status colors */
+  --color-success: #10b981; /* Success state */
+  --color-warning: #f59e0b; /* Warning state */
+  --color-error: #ef4444;   /* Error state */
+
+  /* Layout variables */
+  --sidebar-width: 42rem;
+  --border-radius: 0.75rem;
+  --border-radius-sm: 0.5rem;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Smooth transition effect */
 }
 
+/* Dark theme overrides */
+[data-theme='dark'] {
+  /* Dark mode colors */
+  --color-bg-primary: #0f172a;     /* Dark background */
+  --color-bg-secondary: #1e293b;   /* Dark secondary background */
+  --color-bg-tertiary: #334155;    /* Dark tertiary background */
+
+  /* Dark mode text colors */
+  --color-text-primary: #f8fafc;   /* Light text for dark mode */
+  --color-text-secondary: #cbd5e1; /* Secondary text for dark mode */
+  --color-text-muted: #64748b;     /* Muted text for dark mode */
+
+  /* Dark mode UI elements */
+  --color-border: #334155;              /* Dark mode borders */
+  --color-shadow: rgba(0, 0, 0, 0.3);   /* Darker shadows */
+}
+
+/* Reset default styles */
 * {
   margin: 0;
   padding: 0;
-  box-sizing: inherit;
-}
-
-html {
-  font-size: 62.5%;
   box-sizing: border-box;
 }
 
+/* Base font size (10px) for easier rem calculations */
+html {
+  font-size: 62.5%;
+}
+
+/* Base body styles */
 body {
-  font-family: 'Manrope', sans-serif;
-  color: var(--color-light--2);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--color-text-primary);
   font-weight: 400;
   line-height: 1.6;
   height: 100vh;
-  overscroll-behavior-y: none;
-
-  background-color: #fff;
-  padding: 2.5rem;
-
+  overflow: hidden;
+  background-color: var(--color-bg-primary);
   display: flex;
+  transition: var(--transition);
 }
 
-/* GENERAL */
-a:link,
-a:visited {
-  color: var(--color-brand--1);
-}
-
-/* SIDEBAR */
-.sidebar {
-  flex-basis: 50rem;
-  background-color: var(--color-dark--1);
-  padding: 3rem 5rem 4rem 5rem;
-  display: flex;
-  flex-direction: column;
-}
-
-.logo {
-  height: 5.2rem;
-  align-self: center;
-  margin-bottom: 4rem;
-}
-
-.workouts {
-  list-style: none;
-  /* height: 77vh; */
-  flex-grow: 1;
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
-
-.workouts::-webkit-scrollbar {
-  width: 0;
-}
-
-.workout {
-  background-color: var(--color-dark--2);
-  border-radius: 5px;
-  padding: 1.5rem 2.25rem;
-  margin-bottom: 1.75rem;
+/* Theme toggle button styling */
+.theme-toggle {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  z-index: 1000;
+  background: var(--color-bg-secondary);
+  border: 2px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: 1rem;
   cursor: pointer;
-
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  gap: 0.75rem 1.5rem;
-}
-.workout--running {
-  border-left: 5px solid var(--color-brand--2);
-}
-.workout--cycling {
-  border-left: 5px solid var(--color-brand--1);
-}
-
-.workout__title {
-  font-size: 1.7rem;
-  font-weight: 600;
-  grid-column: 1 / -1;
-}
-
-.workout__details {
-  display: flex;
-  align-items: baseline;
-}
-
-.workout__icon {
-  font-size: 1.8rem;
-  margin-right: 0.2rem;
-  height: 0.28rem;
-}
-
-.workout__value {
-  font-size: 1.5rem;
-  margin-right: 0.5rem;
-}
-
-.workout__unit {
-  font-size: 1.1rem;
-  color: var(--color-light--1);
-  text-transform: uppercase;
-  font-weight: 800;
-}
-
-.form {
-  background-color: var(--color-dark--2);
-  border-radius: 5px;
-  padding: 1.5rem 2.75rem;
-  margin-bottom: 1.75rem;
-
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5rem 2.5rem;
-
-  /* Match height and activity boxes */
-  height: 9.25rem;
-  transition: all 0.5s, transform 1ms;
-}
-
-.form.hidden {
-  transform: translateY(-30rem);
-  height: 0;
-  padding: 0 2.25rem;
-  margin-bottom: 0;
-  opacity: 0;
-}
-
-.form__row {
+  transition: var(--transition);
+  box-shadow: 0 4px 6px -1px var(--color-shadow);
   display: flex;
   align-items: center;
+  gap: 0.5rem;
 }
 
+/* Hover effect for theme toggle */
+.theme-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px -3px var(--color-shadow);
+}
+
+/* Focus state for accessibility */
+.theme-toggle:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Theme toggle icon */
+.theme-icon {
+  font-size: 2rem;
+  transition: var(--transition);
+}
+
+/* Theme toggle text */
+.theme-text {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+/* Link styles */
+a:link,
+a:visited {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+a:hover,
+a:focus {
+  color: var(--color-secondary);
+  outline: none;
+}
+
+/* Sidebar layout */
+.sidebar {
+  flex-basis: var(--sidebar-width);
+  background-color: var(--color-bg-secondary);
+  border-right: 1px solid var(--color-border);
+  padding: 3rem 3rem 2rem 3rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 4px 0 6px -1px var(--color-shadow);
+  transition: var(--transition);
+}
+
+/* Logo styling */
+.logo {
+  height: 5rem;
+  align-self: center;
+  margin-bottom: 3rem;
+  filter: drop-shadow(0 2px 4px var(--color-shadow));
+  transition: var(--transition);
+  color: var(--color-primary);
+}
+
+/* Logo hover effect */
+.logo:hover {
+  transform: scale(1.05);
+}
+
+/* Workouts list container */
+.workouts {
+  list-style: none;
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 1rem;
+  margin-right: -1rem;
+}
+
+/* Custom scrollbar styling */
+.workouts::-webkit-scrollbar {
+  width: 6px;
+}
+
+.workouts::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 3px;
+}
+
+.workouts::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+  transition: var(--transition);
+}
+
+.workouts::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* Individual workout card styling */
+.workout {
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: 2rem 2.5rem;
+  margin-bottom: 1.5rem;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 1rem 1.5rem;
+  transition: var(--transition);
+  box-shadow: 0 1px 3px 0 var(--color-shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Workout type indicator bar */
+.workout::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  transition: var(--transition);
+}
+
+/* Running workout indicator */
+.workout--running::before {
+  background: linear-gradient(135deg, var(--color-secondary), #059669);
+}
+
+/* Cycling workout indicator */
+.workout--cycling::before {
+  background: linear-gradient(135deg, var(--color-accent), #d97706);
+}
+
+/* Workout card hover effects */
+.workout:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px -5px var(--color-shadow);
+  border-color: var(--color-primary);
+}
+
+/* Workout card focus state */
+.workout:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Workout title styling */
+.workout__title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  grid-column: 1 / -1;
+  margin-bottom: 0.5rem;
+  color: var(--color-text-primary);
+}
+
+/* Workout details container */
+.workout__details {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Workout icon styling */
+.workout__icon {
+  font-size: 2rem;
+  height: 2rem;
+  width: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Workout value styling */
+.workout__value {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+/* Workout unit styling */
+.workout__unit {
+  font-size: 1.2rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* Form styling */
+.form {
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: 2rem 2.5rem;
+  margin-bottom: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem 2rem;
+  height: auto;
+  min-height: 12rem;
+  transition: var(--transition);
+  box-shadow: 0 4px 6px -1px var(--color-shadow);
+}
+
+/* Hidden form state */
+.form.hidden {
+  transform: translateY(-100%);
+  opacity: 0;
+  height: 0;
+  min-height: 0;
+  padding: 0 2.5rem;
+  margin-bottom: 0;
+  pointer-events: none;
+}
+
+/* Form row layout */
+.form__row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Hidden form row */
 .form__row--hidden {
   display: none;
 }
 
+/* Form label styling */
 .form__label {
-  flex: 0 0 50%;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.5rem;
 }
 
-.form__input {
+/* Form input styling */
+.form__input,
+.form__input--type {
   width: 100%;
-  padding: 0.3rem 1.1rem;
+  padding: 1rem 1.2rem;
   font-family: inherit;
   font-size: 1.4rem;
-  border: none;
-  border-radius: 3px;
-  background-color: var(--color-light--3);
-  transition: all 0.2s;
+  border: 2px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  background-color: var(--color-bg-tertiary);
+  color: var(--color-text-primary);
+  transition: var(--transition);
 }
 
-.form__input:focus {
+/* Form input focus state */
+.form__input:focus,
+.form__input--type:focus {
   outline: none;
-  background-color: #fff;
+  border-color: var(--color-primary);
+  background-color: var(--color-bg-primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 
+/* Form input placeholder */
+.form__input::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* Hidden form button */
 .form__btn {
   display: none;
 }
 
+/* Copyright section */
 .copyright {
-  margin-top: auto;
-  font-size: 1.3rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-border);
+  font-size: 1.2rem;
   text-align: center;
-  color: var(--color-light--1);
+  color: var(--color-text-muted);
+  line-height: 1.5;
 }
 
+/* Twitter link styling */
 .twitter-link:link,
 .twitter-link:visited {
-  color: var(--color-light--1);
-  transition: all 0.2s;
+  color: var(--color-primary);
+  font-weight: 500;
+  transition: var(--transition);
 }
 
 .twitter-link:hover,
 .twitter-link:active {
-  color: var(--color-light--2);
+  color: var(--color-secondary);
 }
 
-/* MAP */
+/* Map container */
 #map {
   flex: 1;
-  height: 100%;
-  background-color: var(--color-light--1);
+  height: 100vh;
+  background: linear-gradient(
+    135deg,
+    var(--color-bg-tertiary),
+    var(--color-bg-secondary)
+  );
+  transition: var(--transition);
 }
 
-/* Popup width is defined in JS using options */
+/* Leaflet popup styling */
 .leaflet-popup .leaflet-popup-content-wrapper {
-  background-color: var(--color-dark--1);
-  color: var(--color-light--2);
-  border-radius: 5px;
-  padding-right: 0.6rem;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 10px 25px -5px var(--color-shadow);
 }
 
 .leaflet-popup .leaflet-popup-content {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
+  margin: 0;
 }
 
 .leaflet-popup .leaflet-popup-tip {
-  background-color: var(--color-dark--1);
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
 }
 
+/* Running popup specific styling */
 .running-popup .leaflet-popup-content-wrapper {
-  border-left: 5px solid var(--color-brand--2);
+  border-left: 4px solid var(--color-secondary);
 }
+
+/* Cycling popup specific styling */
 .cycling-popup .leaflet-popup-content-wrapper {
-  border-left: 5px solid var(--color-brand--1);
+  border-left: 4px solid var(--color-accent);
+}
+
+/* Responsive design for mobile devices */
+@media (max-width: 768px) {
+  body {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    flex-basis: auto;
+    height: 40vh;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  #map {
+    height: 60vh;
+  }
+
+  .theme-toggle {
+    top: 1rem;
+    right: 1rem;
+    padding: 0.75rem;
+  }
+
+  .theme-text {
+    display: none;
+  }
+}
+
+/* Focus and accessibility improvements */
+*:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Transition effects for interactive elements */
+button,
+select,
+input,
+a {
+  transition: var(--transition);
+}
+
+/* Smooth scrolling behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --color-border: #000000;
+    --color-shadow: rgba(0, 0, 0, 0.5);
+  }
+
+  [data-theme='dark'] {
+    --color-border: #ffffff;
+  }
 }
