@@ -76,17 +76,12 @@ class Cycling extends Workout {
   }
 }
 
-const run1 = new Running([51.509, -0.08], 5, 23, 178);
-const cycling1 = new Cycling([51.509, -0.08], 27, 95, 523);
-console.log(run1, cycling1);
-
 // Main application class that handles map functionality and workout tracking
 class App {
   #map;
   #mapZoomLevel = 13;
   #mapEvent;
   #workouts = [];
-  #markers = [];
 
   constructor() {
     this._getPosition();
@@ -98,13 +93,11 @@ class App {
 
   _moveToPopup(e) {
     const workoutEl = e.target.closest('.workout');
-    console.log(workoutEl);
     if (!workoutEl) return;
 
     const workout = this.#workouts.find(
       workout => workout.id === workoutEl.dataset.id,
     );
-    console.log(workout);
 
     this.#map.setView(workout.coords, this.#mapZoomLevel, {
       animate: true,
@@ -115,7 +108,7 @@ class App {
 
     // The click method is not part of the original project requirements for this function,
     // but if you need it, it will now work because the workout object is a class instance.
-    // workout.click(); 
+    // workout.click();
   }
 
   // Get user's current geolocation position using browser API
@@ -183,27 +176,10 @@ class App {
     // If workout is running, create running object
     // Helper function to validate numeric inputs
     const validateInputs = (...inputs) => {
-      // Check for empty inputs first
-      // Check for empty inputs first
-      console.log('Validating inputs:', inputs); // Debug log for input values
-      if (
-        inputs.some(
-          input =>
-            input === '' ||
-            input === undefined ||
-            input === null ||
-            isNaN(input) ||
-            input === 0,
-        )
-      ) {
-        console.log('Found empty input'); // Debug log for empty input check
-        return { isValid: false, message: 'Please fill in all fields!' };
-      } // Then check for positive numbers
+      // Check if all inputs are valid positive numbers
       if (!inputs.every(input => Number.isFinite(input) && input > 0)) {
-        console.log('Found invalid number'); // Debug log for number validation
         return { isValid: false, message: 'Inputs must be positive numbers!' };
       }
-      console.log('All inputs valid'); // Debug log for valid case
       return { isValid: true, message: '' };
     };
 
@@ -211,10 +187,9 @@ class App {
 
     if (type === 'running') {
       const cadence = +inputCadence.value;
-      console.log('Running workout values:', { distance, duration, cadence }); // Debug log for running values
+
       const validation = validateInputs(distance, duration, cadence);
       if (!validation.isValid) {
-        console.log('Validation failed:', validation.message); // Debug log for validation failure
         return alert(validation.message);
       }
       workout = new Running(
@@ -228,10 +203,9 @@ class App {
     // If workout is cycling, create cycling object
     if (type === 'cycling') {
       const elevation = +inputElevation.value;
-      console.log('Cycling workout values:', { distance, duration, elevation }); // Debug log for cycling values
+
       const validation = validateInputs(distance, duration, elevation);
       if (!validation.isValid) {
-        console.log('Validation failed:', validation.message); // Debug log for validation failure
         return alert(validation.message);
       }
       workout = new Cycling(
@@ -244,11 +218,9 @@ class App {
 
     // Add new workout object to workout array
     this.#workouts.push(workout);
-    console.log(this.#workouts);
-    console.log(workout);
 
     // Display workout on map as a marker
-    this._renderWorkoutMarker(workout, type);
+    this._renderWorkoutMarker(workout);
     //Render workout on list
     this._renderWorkout(workout);
 
@@ -344,25 +316,37 @@ class App {
   _setLocalStorage() {
     localStorage.setItem('workouts', JSON.stringify(this.#workouts));
   }
-    _getLocalStorage() {
+  _getLocalStorage() {
     const data = JSON.parse(localStorage.getItem('workouts'));
     if (!data) return;
- 
+
     // Re-instantiate objects to restore prototype chain
     this.#workouts = data.map(work => {
       let workout;
       if (work.type === 'running') {
-        workout = new Running(work.coords, work.distance, work.duration, work.cadence);
+        workout = new Running(
+          work.coords,
+          work.distance,
+          work.duration,
+          work.cadence,
+        );
       }
       if (work.type === 'cycling') {
-        workout = new Cycling(work.coords, work.distance, work.duration, work.elevationGain);
+        workout = new Cycling(
+          work.coords,
+          work.distance,
+          work.duration,
+          work.elevationGain,
+        );
       }
       // Restore original id and date
       workout.id = work.id;
       workout.date = new Date(work.date);
+      // Fix description to use the correct stored date
+      workout._setDescription();
       return workout;
     });
- 
+
     this.#workouts.forEach(work => {
       this._renderWorkout(work);
     });
@@ -372,7 +356,6 @@ class App {
     localStorage.removeItem('workouts');
     location.reload();
   }
-
 }
 
 ////////////////////////////////////////////////////////////////////////////
