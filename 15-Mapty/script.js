@@ -1,6 +1,6 @@
 'use strict';
 
-// Example: Month names array (not used directly here, but could be useful for showing workout dates)
+// Array of month names for date formatting in workout displays
 const months = [
   'January',
   'February',
@@ -16,7 +16,7 @@ const months = [
   'December',
 ];
 
-// Selecting elements from the DOM for the workout form
+// DOM element selections for workout form inputs and containers
 const form = document.querySelector('.form');
 const containerWorkouts = document.querySelector('.workouts');
 const inputType = document.querySelector('.form__input--type');
@@ -25,45 +25,48 @@ const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
 
+// Global variables for map instance and click event data
+let map, mapEvent;
+
 ////////////////////////////////////////////////////////////////////////////
-// THEME MANAGER: Handles dark/light theme switching
+// THEME MANAGER: Handles dark/light theme switching and persistence
 ////////////////////////////////////////////////////////////////////////////
 
 class ThemeManager {
   constructor() {
-    // UI elements for button, icon, and text
+    // Initialize theme toggle UI elements
     this.themeToggle = document.getElementById('themeToggle');
     this.themeIcon = document.getElementById('themeIcon');
     this.themeText = document.getElementById('themeText');
 
-    // Load stored theme if available, otherwise fallback to 'light'
+    // Get stored theme preference or default to light theme
     this.currentTheme = this.getStoredTheme() || 'light';
 
-    this.init(); // Call initialization method
+    this.init(); // Initialize theme manager
   }
 
-  // Initialization logic
+  // Set up theme manager event listeners and initial state
   init() {
-    // Apply the theme on page load
+    // Apply saved/default theme on page load
     this.applyTheme(this.currentTheme);
     this.updateToggleUI();
 
-    // Add click event listener to toggle button
+    // Handle theme toggle button clicks
     this.themeToggle.addEventListener('click', () => this.toggleTheme());
 
-    // Detect system theme changes (if user switches OS level dark/light mode)
+    // Listen for system theme preference changes
     window
       .matchMedia('(prefers-color-scheme: dark)')
       .addEventListener('change', e => {
         if (!this.getStoredTheme()) {
-          // Only auto-detect if user hasn’t set theme manually
+          // Auto-adjust theme only if user hasn't manually set preference
           this.currentTheme = e.matches ? 'dark' : 'light';
           this.applyTheme(this.currentTheme);
           this.updateToggleUI();
         }
       });
 
-    // Add keyboard support for accessibility (Enter and Space key)
+    // Add keyboard accessibility for theme toggle
     this.themeToggle.addEventListener('keydown', e => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -72,24 +75,24 @@ class ThemeManager {
     });
   }
 
-  // Get theme from localStorage, with fallback to null if not set
+  // Retrieve theme preference from localStorage
   getStoredTheme() {
     return localStorage.getItem('theme');
   }
 
-  // Save theme preference to localStorage
+  // Save theme preference to localStorage for persistence
   setStoredTheme(theme) {
     localStorage.setItem('theme', theme);
   }
 
-  // Detect system preferred theme
+  // Detect system-level theme preference
   getSystemTheme() {
     return window.matchMedia('(prefers-color-scheme: dark)').matches
       ? 'dark'
       : 'light';
   }
 
-  // Actually apply theme by toggling attribute on <html>
+  // Apply theme by setting data-theme attribute on root element
   applyTheme(theme) {
     if (theme === 'dark') {
       document.documentElement.setAttribute('data-theme', 'dark');
@@ -98,13 +101,13 @@ class ThemeManager {
     }
   }
 
-  // Update button UI (icon, text, aria attributes)
+  // Update theme toggle button UI elements and accessibility attributes
   updateToggleUI() {
     const isDark = this.currentTheme === 'dark';
-    this.themeIcon.textContent = isDark ? '☀️' : '🌙'; // Change icon
-    this.themeText.textContent = isDark ? 'Light Mode' : 'Dark Mode'; // Change label
+    this.themeIcon.textContent = isDark ? '☀️' : '🌙';
+    this.themeText.textContent = isDark ? 'Light Mode' : 'Dark Mode';
 
-    // ARIA attributes for accessibility
+    // Update ARIA attributes for accessibility
     this.themeToggle.setAttribute(
       'aria-label',
       isDark ? 'Switch to light mode' : 'Switch to dark mode',
@@ -112,14 +115,14 @@ class ThemeManager {
     this.themeToggle.setAttribute('aria-pressed', isDark.toString());
   }
 
-  // Toggle logic between light and dark
+  // Toggle between light and dark themes with animation
   toggleTheme() {
     this.currentTheme = this.currentTheme === 'light' ? 'dark' : 'light';
     this.applyTheme(this.currentTheme);
     this.setStoredTheme(this.currentTheme);
     this.updateToggleUI();
 
-    // Small animation effect on toggle click
+    // Add scale animation on theme toggle
     this.themeToggle.style.transform = 'scale(0.95)';
     setTimeout(() => {
       this.themeToggle.style.transform = '';
@@ -127,29 +130,27 @@ class ThemeManager {
   }
 }
 
-// // Wait until DOM is loaded before running theme logic
-// document.addEventListener('DOMContentLoaded', () => {
-//   new ThemeManager();
-// });
-
 ////////////////////////////////////////////////////////////////////////////
-// FORM ACCESSIBILITY ENHANCEMENTS
+// FORM ACCESSIBILITY ENHANCEMENTS: Improve form usability and keyboard navigation
 ////////////////////////////////////////////////////////////////////////////
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Initialize theme manager
   new ThemeManager();
+  
+  // Get form elements for workout type switching
   const typeSelect = document.getElementById('type');
   const cadenceRow = document
     .querySelector('.form__input--cadence')
     .closest('.form__row');
-  const elevationRow = document.querySelector('.form__row--hidden'); // Hidden initially
+  const elevationRow = document.querySelector('.form__row--hidden');
 
-  // Show/hide fields based on workout type
+  // Toggle form fields based on workout type selection
   if (typeSelect) {
     typeSelect.addEventListener('change', e => {
       if (e.target.value === 'cycling') {
-        cadenceRow?.classList.add('form__row--hidden'); // Hide cadence
-        elevationRow?.classList.remove('form__row--hidden'); // Show elevation
+        cadenceRow?.classList.add('form__row--hidden');
+        elevationRow?.classList.remove('form__row--hidden');
       } else {
         cadenceRow?.classList.remove('form__row--hidden');
         elevationRow?.classList.add('form__row--hidden');
@@ -157,65 +158,96 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Enable keyboard navigation for workout items
+  // Add keyboard navigation support for workout items
   document.querySelectorAll('.workout').forEach(workout => {
     workout.addEventListener('keydown', e => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        workout.click(); // Simulate click on Enter/Space press
+        workout.click();
       }
     });
   });
 });
 
 ////////////////////////////////////////////////////////////////////////////
-// GEOLOCATION API + LEAFLET MAP INTEGRATION
+// GEOLOCATION AND MAP: Handle location services and map interactions
 ////////////////////////////////////////////////////////////////////////////
 
-// Check if browser supports Geolocation API
+// Initialize map with user's location if geolocation is supported
 if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(
     function (position) {
-      // ------------------------
-      // SUCCESS CALLBACK
-      // ------------------------
-
-      // Extract latitude & longitude from position object
+      // Extract coordinates from geolocation position
       const latitude = position.coords.latitude;
       const longitude = position.coords.longitude;
-
-      // Store as an array [lat, lng] for Leaflet map
       const coords = [latitude, longitude];
 
-      // ------------------------
-      // LEAFLET MAP IMPLEMENTATION
-      // ------------------------
-      // Initialize map inside the HTML element with id="map"
-      // setView(coords, zoomLevel)
-      const map = L.map('map').setView(coords, 14);
+      // Initialize Leaflet map centered on user location
+      map = L.map('map').setView(coords, 14);
 
-      // Add map layer → Using openstreetmap tiles via Leaflet
+      // Add OpenStreetMap tile layer
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 20, // Max zoom allowed
+        maxZoom: 20,
         attribution:
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(map);
 
-      // ------------------------
-      // ADDING A MARKER
-      // ------------------------
-      L.marker(coords) // Marker placed at user’s location
-        .addTo(map) // Add marker to map
-        // Popup message bound to marker → opens on click or programmatically
-        .bindPopup('📍 You are here! <br> (Popup is CSS customizable).')
-        .openPopup(); // Open popup immediately
+      // Handle map clicks to show workout form
+      map.on('click', function (mapE) {
+        mapEvent = mapE;
+        form.classList.remove('hidden');
+        inputDistance.focus();
+      });
     },
     function () {
-      // ------------------------
-      // ERROR CALLBACK
-      // ------------------------
-      // If user denies permission OR error occurs
+      // Handle geolocation errors
       alert('Could not get your position ❌');
     },
   );
 }
+
+// Handle workout form submission and marker creation
+const handleSubmit = function (e) {
+  e.preventDefault();
+
+  // Clear all input fields after submission
+  inputDistance.value =
+    inputDuration.value =
+    inputCadence.value =
+    inputElevation.value =
+      '';
+  inputDistance.focus();
+
+  // Create and add marker at clicked location
+  const { lat, lng } = mapEvent.latlng;
+  L.marker([lat, lng])
+    .addTo(map)
+    .bindPopup(
+      L.popup({
+        autoClose: false,
+        maxWidth: '300',
+        minWidth: '200',
+        closeOnClick: false,
+        className: 'running-popup',
+        closeButton: true,
+        autoPan: true,
+        offset: [0, -30],
+        keepInView: true,
+        animation: true,
+        interactive: true,
+      }).setContent(`Lat: ${lat.toFixed(4)}, Lng: ${lng.toFixed(4)}`),
+    )
+    .openPopup();
+};
+
+// Toggle between running/cycling input fields
+const handleInputType = function (e) {
+  e.preventDefault();
+  inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
+  inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
+};
+
+
+// Add event listeners for form interactions
+inputType.addEventListener('change', handleInputType);
+form.addEventListener('submit', handleSubmit);
