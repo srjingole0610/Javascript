@@ -1,28 +1,28 @@
 /* Root variables for theming */
 :root {
   /* Light mode colors */
-  --color-primary: #6366f1;    /* Main brand color */
-  --color-secondary: #10b981;  /* Secondary brand color */
-  --color-accent: #f59e0b;     /* Accent color for highlights */
+  --color-primary: #6366f1; /* Main brand color */
+  --color-secondary: #10b981; /* Secondary brand color */
+  --color-accent: #f59e0b; /* Accent color for highlights */
 
   /* Background colors */
-  --color-bg-primary: #ffffff;   /* Main background */
+  --color-bg-primary: #ffffff; /* Main background */
   --color-bg-secondary: #f8fafc; /* Secondary background */
-  --color-bg-tertiary: #f1f5f9;  /* Tertiary background */
+  --color-bg-tertiary: #f1f5f9; /* Tertiary background */
 
   /* Text colors */
-  --color-text-primary: #0f172a;   /* Main text color */
+  --color-text-primary: #0f172a; /* Main text color */
   --color-text-secondary: #475569; /* Secondary text color */
-  --color-text-muted: #94a3b8;     /* Muted/subtle text */
+  --color-text-muted: #94a3b8; /* Muted/subtle text */
 
   /* UI element colors */
-  --color-border: #e2e8f0;              /* Border color */
-  --color-shadow: rgba(0, 0, 0, 0.1);   /* Shadow color */
+  --color-border: #e2e8f0; /* Border color */
+  --color-shadow: rgba(0, 0, 0, 0.1); /* Shadow color */
 
   /* Status colors */
   --color-success: #10b981; /* Success state */
   --color-warning: #f59e0b; /* Warning state */
-  --color-error: #ef4444;   /* Error state */
+  --color-error: #ef4444; /* Error state */
 
   /* Layout variables */
   --sidebar-width: 42rem;
@@ -34,18 +34,18 @@
 /* Dark theme overrides */
 [data-theme='dark'] {
   /* Dark mode colors */
-  --color-bg-primary: #0f172a;     /* Dark background */
-  --color-bg-secondary: #1e293b;   /* Dark secondary background */
-  --color-bg-tertiary: #334155;    /* Dark tertiary background */
+  --color-bg-primary: #0f172a; /* Dark background */
+  --color-bg-secondary: #1e293b; /* Dark secondary background */
+  --color-bg-tertiary: #334155; /* Dark tertiary background */
 
   /* Dark mode text colors */
-  --color-text-primary: #f8fafc;   /* Light text for dark mode */
+  --color-text-primary: #f8fafc; /* Light text for dark mode */
   --color-text-secondary: #cbd5e1; /* Secondary text for dark mode */
-  --color-text-muted: #64748b;     /* Muted text for dark mode */
+  --color-text-muted: #64748b; /* Muted text for dark mode */
 
   /* Dark mode UI elements */
-  --color-border: #334155;              /* Dark mode borders */
-  --color-shadow: rgba(0, 0, 0, 0.3);   /* Darker shadows */
+  --color-border: #334155; /* Dark mode borders */
+  --color-shadow: rgba(0, 0, 0, 0.3); /* Darker shadows */
 }
 
 /* Reset default styles */
@@ -138,7 +138,8 @@ a:focus {
   padding: 3rem 3rem 2rem 3rem;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-y: auto;      /* allow vertical scrolling */
+  overflow-x: hidden;    /* prevent horizontal cut-off */
   box-shadow: 4px 0 6px -1px var(--color-shadow);
   transition: var(--transition);
 }
@@ -161,10 +162,13 @@ a:focus {
 .workouts {
   list-style: none;
   flex-grow: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow-y: auto;         /* vertical scrolling */
+  overflow-x: hidden;       /* prevent side clipping */
   padding-right: 1rem;
-  margin-right: -1rem;
+  margin-right: 0;          /* removed negative margin */
+  max-width: 100%;
+  word-wrap: break-word;
+  white-space: normal;
 }
 
 /* Custom scrollbar styling */
@@ -196,12 +200,14 @@ a:focus {
   margin-bottom: 1.5rem;
   cursor: pointer;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 1rem 1.5rem;
   transition: var(--transition);
   box-shadow: 0 1px 3px 0 var(--color-shadow);
   position: relative;
-  overflow: hidden;
+  overflow: visible;        /* make sure text/icons aren’t clipped */
+  word-break: break-word;   /* break long words nicely */
+  white-space: normal;      /* allow wrapping */
 }
 
 /* Workout type indicator bar */
@@ -213,6 +219,7 @@ a:focus {
   bottom: 0;
   width: 4px;
   transition: var(--transition);
+  background-color: var(--color-accent, #00ff99); /* fallback */
 }
 
 /* Running workout indicator */
