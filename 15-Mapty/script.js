@@ -40,7 +40,7 @@ class ThemeManager {
     this.themeText = document.getElementById('themeText');
 
     // Get stored theme preference or default to light theme
-    this.currentTheme = this.getStoredTheme() || 'light';
+    this.currentTheme = this.getStoredTheme() || this.getSystemTheme();
 
     this.init(); // Initialize theme manager
   }
@@ -137,26 +137,6 @@ class ThemeManager {
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize theme manager
   new ThemeManager();
-  
-  // Get form elements for workout type switching
-  const typeSelect = document.getElementById('type');
-  const cadenceRow = document
-    .querySelector('.form__input--cadence')
-    .closest('.form__row');
-  const elevationRow = document.querySelector('.form__row--hidden');
-
-  // Toggle form fields based on workout type selection
-  if (typeSelect) {
-    typeSelect.addEventListener('change', e => {
-      if (e.target.value === 'cycling') {
-        cadenceRow?.classList.add('form__row--hidden');
-        elevationRow?.classList.remove('form__row--hidden');
-      } else {
-        cadenceRow?.classList.remove('form__row--hidden');
-        elevationRow?.classList.add('form__row--hidden');
-      }
-    });
-  }
 
   // Add keyboard navigation support for workout items
   document.querySelectorAll('.workout').forEach(workout => {
@@ -246,7 +226,6 @@ const handleInputType = function (e) {
   inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
   inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
 };
-
 
 // Add event listeners for form interactions
 inputType.addEventListener('change', handleInputType);
